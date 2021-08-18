@@ -1,0 +1,242 @@
+{
+     "job_templates": [
+          {
+               "name": "Deploy Workshop",
+               "description": "",
+               "job_type": "run",
+               "playbook": "provisioner/provision_lab.yml",
+               "scm_branch": "",
+               "forks": 0,
+               "limit": "",
+               "verbosity": 0,
+               "extra_vars": "---\nec2_name_prefix: demo-workshop\n# creates student_total of workbenches for the workshop\nstudent_total: \"2\"\n# Set the right workshop type, like networking, rhel or f5 (see above)\nworkshop_type: windows\n# Required for podman authentication to registry.redhat.io\nredhat_username: \"{{ redhat.svcuser }}\"\nredhat_password: \"{{ redhat.svcpass }}\"\n# for rhel 8\n#ansible_python_interpreter: /usr/libexec/platform-python\n# set this to your dns\nworkshop_dns_zone: prod.maskedadmins.com\n# for the redhat cdn api access, go to https://access.redhat.com/management/api\noffline_token: \"{{ redhat.offline_token }}\"\n# Where to provision (Don't change: only testing ec2)\ninstance_loc: ec2\n# region where the nodes will live\nec2_region: us-east-1\n# name prefix for all the VMs\n# OPTIONAL VARIABLES\n# creates 2 windows instances per student instead of default 1\ndoubleup: false\n# password for Ansible control node, defaults to ansible\nadmin_password: \"ansible123\"\n# adds a form that prompts for name and email to allocate student credentials\nattendance: true\n# automatically installs Tower to control node\ncontrollerinstall: true\ncreate_cluster: false\ncode_server: true",
+               "job_tags": "",
+               "force_handlers": false,
+               "skip_tags": "",
+               "start_at_task": "",
+               "timeout": 0,
+               "use_fact_cache": false,
+               "host_config_key": "",
+               "ask_scm_branch_on_launch": false,
+               "ask_diff_mode_on_launch": false,
+               "ask_variables_on_launch": false,
+               "ask_limit_on_launch": false,
+               "ask_tags_on_launch": false,
+               "ask_skip_tags_on_launch": false,
+               "ask_job_type_on_launch": false,
+               "ask_verbosity_on_launch": false,
+               "ask_inventory_on_launch": false,
+               "ask_credential_on_launch": false,
+               "survey_enabled": true,
+               "become_enabled": true,
+               "diff_mode": false,
+               "allow_simultaneous": false,
+               "custom_virtualenv": null,
+               "job_slice_count": 1,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Demo Inventory",
+                    "type": "inventory"
+               },
+               "project": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Workshops",
+                    "type": "project"
+               },
+               "related": {
+                    "labels": [],
+                    "credentials": [
+                         {
+                              "organization": null,
+                              "name": "AWS creds",
+                              "credential_type": {
+                                   "name": "Amazon Web Services",
+                                   "kind": "cloud",
+                                   "type": "credential_type"
+                              },
+                              "type": "credential"
+                         }
+                    ],
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "survey_spec": {
+                         "name": "",
+                         "description": "",
+                         "spec": [
+                              {
+                                   "question_name": "Name of Workshop",
+                                   "question_description": "No spaces, used as a prefix in fqdn name",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "ec2_name_prefix",
+                                   "min": 0,
+                                   "max": 1024,
+                                   "default": "demo-workshop2",
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "How many students",
+                                   "question_description": "Number",
+                                   "required": true,
+                                   "type": "integer",
+                                   "variable": "student_total",
+                                   "min": 0,
+                                   "max": 100,
+                                   "default": 2,
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "Workshop Type",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "workshop_type",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "windows",
+                                   "choices": "rhel\nwindows\nnetwork\nsecurity\nf5\nrhel_90",
+                                   "new_question": true
+                              }
+                         ]
+                    }
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Deploy Workshop",
+                    "type": "job_template"
+               }
+          },
+          {
+               "name": "Destroy Workshop",
+               "description": "",
+               "job_type": "run",
+               "playbook": "provisioner/teardown_lab.yml",
+               "scm_branch": "",
+               "forks": 0,
+               "limit": "",
+               "verbosity": 0,
+               "extra_vars": "---\nec2_name_prefix: demo-workshop\n# creates student_total of workbenches for the workshop\nstudent_total: \"2\"\n# Set the right workshop type, like networking, rhel or f5 (see above)\nworkshop_type: windows\n# Required for podman authentication to registry.redhat.io\nredhat_username: \"{{ redhat.svcuser }}\"\nredhat_password: \"{{ redhat.svcpass }}\"\n# for rhel 8\n#ansible_python_interpreter: /usr/libexec/platform-python\n# set this to your dns\nworkshop_dns_zone: prod.maskedadmins.com\n# for the redhat cdn api access, go to https://access.redhat.com/management/api\noffline_token: \"{{ redhat.offline_token }}\"\n# Where to provision (Don't change: only testing ec2)\ninstance_loc: ec2\n# region where the nodes will live\nec2_region: us-east-1\n# name prefix for all the VMs\n# OPTIONAL VARIABLES\n# creates 2 windows instances per student instead of default 1\ndoubleup: false\n# password for Ansible control node, defaults to ansible\nadmin_password: \"ansible123\"\n# adds a form that prompts for name and email to allocate student credentials\nattendance: true\n# automatically installs Tower to control node\ncontrollerinstall: true\ncreate_cluster: false\ncode_server: true",
+               "job_tags": "",
+               "force_handlers": false,
+               "skip_tags": "",
+               "start_at_task": "",
+               "timeout": 0,
+               "use_fact_cache": false,
+               "host_config_key": "",
+               "ask_scm_branch_on_launch": false,
+               "ask_diff_mode_on_launch": false,
+               "ask_variables_on_launch": false,
+               "ask_limit_on_launch": false,
+               "ask_tags_on_launch": false,
+               "ask_skip_tags_on_launch": false,
+               "ask_job_type_on_launch": false,
+               "ask_verbosity_on_launch": false,
+               "ask_inventory_on_launch": false,
+               "ask_credential_on_launch": false,
+               "survey_enabled": true,
+               "become_enabled": true,
+               "diff_mode": false,
+               "allow_simultaneous": false,
+               "custom_virtualenv": null,
+               "job_slice_count": 1,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Demo Inventory",
+                    "type": "inventory"
+               },
+               "project": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Workshops",
+                    "type": "project"
+               },
+               "related": {
+                    "labels": [],
+                    "credentials": [
+                         {
+                              "organization": null,
+                              "name": "AWS creds",
+                              "credential_type": {
+                                   "name": "Amazon Web Services",
+                                   "kind": "cloud",
+                                   "type": "credential_type"
+                              },
+                              "type": "credential"
+                         }
+                    ],
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "survey_spec": {
+                         "name": "",
+                         "description": "",
+                         "spec": [
+                              {
+                                   "question_name": "Name of Workshop",
+                                   "question_description": "No spaces, used as a prefix in fqdn name",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "ec2_name_prefix",
+                                   "min": 0,
+                                   "max": 1024,
+                                   "default": "demo-workshop2",
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "How many students",
+                                   "question_description": "Number",
+                                   "required": true,
+                                   "type": "integer",
+                                   "variable": "student_total",
+                                   "min": 0,
+                                   "max": 100,
+                                   "default": 2,
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "Workshop Type",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "workshop_type",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "windows",
+                                   "choices": "rhel\nwindows\nnetwork\nsecurity\nf5\nrhel_90",
+                                   "new_question": true
+                              }
+                         ]
+                    }
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Destroy Workshop",
+                    "type": "job_template"
+               }
+          }
+     ]
+}

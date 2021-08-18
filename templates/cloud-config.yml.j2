@@ -1,0 +1,55 @@
+
+#cloud-config
+# for reference:
+# http://cloudinit.readthedocs.org/en/latest/topics/examples.html
+# https://access.redhat.com/articles/rhel-atomic-cloud-init-faq
+preserve_hostname: false
+system_info:
+  default_user:
+    name: {{ aws.user }}
+groups:
+  - {{ aws.user }}
+users:
+  - name: cloud-user
+    primary-group: cloud-user
+    groups: wheel
+    se-linux-user: unconfined_u
+    lock-passwd: false
+    sudo: ALL=(ALL) NOPASSWD:ALL
+{% if aws.user_pubkey != 'None' %}
+    ssh-authorized-keys:
+      - "{{ aws.pubkey }}"
+{% endif %}
+  - name: root
+    lock-passwd: false
+    expire: false
+{% if aws.root_password != 'None') %}
+ssh_pwauth: true
+chpasswd:
+  list: |
+    root:{{ aws.root_password }}
+{% endif %}
+write_files:
+  # set the remote user to not require a tty for ansible
+  - path: /etc/sudoers.d/999-{{ aws.user }}
+    permissions: '0440'
+    content: |
+      Defaults:{{ aws.user }} !requiretty
+	# set ansible facts about the machine
+  - path: /etc/ansible/facts.d/awsroles.fact
+    permissions: '0444'
+    content: |
+      {% for awsrole in awsroles %}
+      [{{ awsrole.section }}]
+      {% for var in awsrole.vars %}
+      {{ var.name }}={{ var.value }}
+      {% endfor %}{% endfor %}
+
+  - path: /tmp/firstboot.sh
+    permissions: '0755'
+    owner: root:root
+    content: |
+		  {{ lookup('template','templates/firstboot.sh.j2') }}
+runcmd:
+ # this runs whatever the script at firstboot
+ - /tmp/firstboot.sh

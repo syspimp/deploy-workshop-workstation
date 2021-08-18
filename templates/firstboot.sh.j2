@@ -1,0 +1,27 @@
+#!/bin/bash
+# managed by cloud-config
+# this exists to give aws networking time to come up before phoning home
+if [ -d /var/log/firstboot ]
+then
+   echo "*** firstboot.sh already run"
+   echo "*** firstboot.sh delete /var/log/firstboot to run again"
+   exit 0
+fi
+
+mkdir /var/log/firstboot
+
+# this is an example of using callback provisioning.
+# sometimes the AWS inventory is locked due to a long running Job
+# and that causes a callback request to fail
+# this loop will attempt to contact the Tower API forever
+# until it gets a successful msg returned
+#while [[ ! -e /var/log/firstboot/.success ]]
+#do
+#  curl -s -k --data 'host_config_key={{ tower.callback_key }}' \
+#  https://{{ tower.server }}:443/api/v2/job_templates/{{ tower.callback_jobid }}/callback/ | \
+#  grep msg || \
+#  touch /var/log/firstboot/.success
+#  sleep 60
+#done
+
+exit 0

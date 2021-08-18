@@ -1,0 +1,177 @@
+---
+# Creates a new instance with provisioning userdata using Cloud-Init
+# Uses a while loop to sit and wait until a success response from tower/awx callback
+# Set the tower job id and callback key here, group_vars, or in tower/awx
+# Creates a fact in /etc/ansible/facts.d to determines which role to apply
+# Updates the tower/awx inventory
+- name: launch an instance in ec2
+  hosts: localhost
+  gather_facts: no
+  vars:
+    aws_vpc_name: "{{ workshop.name }} vpc"
+    aws_vpc_cidr: "11.22.33.0/24"
+    aws_security_group_allow_cidr: "0.0.0.0/0"
+    aws_role: deploy-workshop-workstation
+    aws_ostype: rhel8
+    aws_vmname: "{{ workshop.name }}-workstation"
+    aws_assign_public_ip: yes
+    aws_volume_size: 150
+    aws_security_group_name: "{{ workshop.name }}-sg-ansible"
+    aws_security_group_allow_cidr: "0.0.0.0/0"
+    rhel6_ami_id: ami-1643ff7e
+    centos7_ami_id: ami-0affd4508a5d2481b
+    rhel7_ami_id: ami-0315fe0b0bfdfedda
+    rhel8_ami_id: ami-058f90e71a7d69115
+    aws_instance_type: t3.medium
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ aws.keyid }}"
+    AWS_SECRET_KEY: "{{ aws.secret }}"
+  tasks:
+
+    - name: Set the VM name
+      set_fact:
+        aws_instance_tags:
+          Name: "{{ aws_vmname }}"
+
+    - name: Set the AMI to CentOS7
+      set_fact:
+        aws_image_ami: "{{ centos7_ami_id }}"
+      when: "'centos7' in aws_ostype"
+
+    - name: Set the AMI to RHEL6
+      set_fact:
+        aws_image_ami: "{{ rhel6_ami_id }}"
+      when: "'rhel6' in aws_ostype"
+
+    - name: Set the AMI to RHEL7
+      set_fact:
+        aws_image_ami: "{{ rhel7_ami_id }}"
+      when: "'rhel7' in aws_ostype"
+
+    - name: Set the AMI to RHEL8
+      set_fact:
+        aws_image_ami: "{{ rhel8_ami_id }}"
+      when: "'rhel8' in aws_ostype"
+
+    - name: Set the VM roles
+      set_fact:
+        awsroles:
+          - section: default
+            vars:
+            - name: role
+              value: "{{ aws_role }}"
+    
+    - name: create VPC
+      ec2_vpc_net:
+        name: "{{ aws_vpc_name }}"
+        cidr_block: "{{ aws_vpc_cidr }}"
+        region: "{{ aws.region }}"
+        state: present
+      register: vpc
+    
+    - name: associate subnet to the VPC
+      ec2_vpc_subnet:
+       state: present
+       vpc_id: "{{ vpc.vpc_id }}"
+       region: "{{ aws.region }}"
+       cidr: "{{ subnet_cidr }}"
+       map_public: yes
+       resource_tags:
+         Name: "{{ subnet_name }}"
+      register: subnet
+     
+    - name: create IGW
+      ec2_vpc_igw:
+       vpc_id: "{{ vpc.vcp_id }}"
+       region: "{{ aws.region }}"
+       state: "present"
+       tags:
+         Name: "{{ igw_name }}"
+      register: igw
+      
+    - name: Route IGW
+       ec2_vpc_route_table:
+        vpc_id: "{{ vpc.vcp_id }}"
+        region: "{{ aws.region }}"
+        subnets:
+          - "{{ subnet.subnet.id }}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ igw.gateway_id  }}"
+        tags:
+          Name: "{{ route_name }}"
+     
+     - name: Create Security Group
+       ec2_group:
+        name: "{{ workshop.name }} SG"
+        description: "{{ workshop.name }} Security Group, created by ansible"
+        vpc_id: "{{ vpc.vpc_id }}"
+        region: "{{ aws.region }}"
+        rules:
+          - proto: tcp
+            from_port: 1
+            to_port: 65535
+            cidr_ip: "{{ aws_security_group_allow_cidr }}"
+          - proto: udp
+            from_port: 161
+            to_port: 161
+            cidr_ip: "{{ aws_security_group_allow_cidr }}"
+          - proto: udp
+            from_port: 30514
+            to_port: 30514
+            cidr_ip: "{{ aws_security_group_allow_cidr }}"
+       register: security_group
+    
+    - name: create a new ec2 key pair
+       ec2_key:
+        name: "{{ workshop.name }}_keypair"
+        region: "{{ aws.region }}"
+       register: keypair
+     
+    - name: Copy EC2 Private Key locally so it can be later on used to SSH into the instance
+      copy:
+        content: "{{ keypair.key.private_key }}"
+        dest: "{{ ec2_key_directory }}key.ppk"
+      when: keypair.changed == true
+     
+    - name: launch an ec2 instance in a vpc subnet
+      register: ec2results
+      ec2:
+        key_name: "{{ keypair.key.name }}"
+        instance_type: "{{ aws.instance_type }}"
+        image: "{{ aws_image_ami }}"
+        wait: yes
+        group_id: "{{ security_group.group_id }}"
+        count: 1
+        vpc_subnet_id:  "{{ subnet.subnet_id }}"
+        assign_public_ip: yes
+        region: "{{ aws.region }}"
+        instance_tags: "{{ aws_instance_tags }}"
+        volumes:
+          - device_name: /dev/sda1
+            volume_type: gp2
+            volume_size: "{{ aws.volume_size }}"
+            delete_on_termination: true
+        user_data: |
+          {{ lookup('template', './templates/cloud-config.yml.j2') }}
+
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: launched
+      loop: "{{ ec2results.instances }}"
+
+    - name: Wait for SSH to come up
+      delegate_to: "{{ item.public_dns_name }}"
+      wait_for_connection:
+        delay: 60
+        timeout: 320
+      loop: "{{ ec2results.instances }}"
+
+- name: Configure instance(s)
+  hosts: launched
+  become: True
+  gather_facts: True
+  roles:
+    - deploy-workshop-workstation
+

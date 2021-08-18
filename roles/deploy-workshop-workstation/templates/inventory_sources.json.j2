@@ -1,0 +1,61 @@
+{
+     "inventory_sources": [
+          {
+               "name": "Aws Inventory Source",
+               "description": "",
+               "source": "ec2",
+               "source_path": "",
+               "source_script": null,
+               "source_vars": "",
+               "enabled_var": "",
+               "enabled_value": "",
+               "host_filter": "(.*){{ workshop.name }}(.*)",
+               "overwrite": false,
+               "overwrite_vars": false,
+               "custom_virtualenv": null,
+               "timeout": 0,
+               "verbosity": 1,
+               "update_on_launch": false,
+               "update_cache_timeout": 0,
+               "source_project": null,
+               "update_on_project_update": false,
+               "credential": {
+                    "organization": null,
+                    "name": "AWS creds",
+                    "credential_type": {
+                         "name": "Amazon Web Services",
+                         "kind": "cloud",
+                         "type": "credential_type"
+                    },
+                    "type": "credential"
+               },
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "AWS workshop hosts",
+                    "type": "inventory"
+               },
+               "related": {
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": []
+               },
+               "natural_key": {
+                    "name": "Aws Inventory Source",
+                    "inventory": {
+                         "organization": {
+                              "name": "Default",
+                              "type": "organization"
+                         },
+                         "name": "AWS workshop hosts",
+                         "type": "inventory"
+                    },
+                    "type": "inventory_source"
+               }
+          }
+     ]
+}
+

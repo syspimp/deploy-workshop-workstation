@@ -1,0 +1,196 @@
+---
+- name: "grab the latest tower tarball"
+  unarchive:
+    src: https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz
+    dest: /opt/
+    remote_src: yes
+  become: yes
+
+- name: "update the tower setup inventory file"
+  template:
+    src: tower-inventory.j2
+    dest: /opt/ansible-tower-setup-3.8.3-2/inventory
+  become: yes
+
+- name: "run the tower installer"
+  shell: |
+    cd /opt/ansible-tower-setup-*
+    ./setup.sh && touch /opt/.tower-setup
+  become: yes
+  args:
+    creates: /opt/.tower-setup
+
+- name: "upgrade boto3 for awx user for workshop deployments"
+  shell: |
+    source /var/lib/awx/venv/ansible/bin/activate
+    umask 0022
+    pip3 install --upgrade boto3
+    deactivate
+    touch /opt/.tower-setup2
+  become: yes
+  args:
+    creates: /opt/.tower-setup2
+
+#- name: Load manifest into variable
+#  local_action:
+#    module: slurp
+#    src: "{{ playbook_dir }}/roles/deploy-workshop-workstation/files/manifest.zip"
+#  register: manifest_file
+#  become: false
+
+- name: Load manifest into variable
+  slurp:
+    src: "/home/cloud-user/workshops/provisioner/manifest.zip"
+  register: manifest_file
+
+- name: Post manifest file
+  uri:
+    url: https://{{ inventory_hostname }}/api/v2/config/
+    method: POST
+    user: admin
+    password: "{{ workshop.default_password }}"
+    body: '{ "eula_accepted": true, "manifest": "{{ manifest_file.content }}" }'
+    body_format: json
+    validate_certs: false
+    force_basic_auth: true
+
+- name: "list the installed pip dependencies"
+  shell: |
+    source /var/lib/awx/venv/ansible/bin/activate
+    umask 0022
+    pip3 list
+  register: piplist
+
+- name: "install needed pip dependencies"
+  shell: |
+    source /var/lib/awx/venv/ansible/bin/activate
+    umask 0022
+    pip3 install {{ item }}
+  when: item not in piplist.stdout
+  loop: "{{ workshop_deps.pipmods }}"
+
+#- name: "install needed ansible collections"
+#  shell: |
+#    source /var/lib/awx/venv/ansible/bin/activate
+#    umask 0022
+#    ansible-galaxy collection install -p /usr/share/ansible/collections community.{{ item }}
+#  args:
+#    creates: /usr/share/ansible/collections/ansible_collections/community/general
+#  become: yes
+#  loop:
+#  - general
+#  - aws
+
+- name: "clone the github repo"
+  shell: |
+    source /var/lib/awx/venv/ansible/bin/activate
+    umask 0022
+    cd /var/lib/awx/projects/
+    if [[ ! -e /var/lib/awx/projects/workshops ]]
+    then
+      git clone https://github.com/ansible/workshops
+    fi
+  become: yes
+  args:
+    executable: /bin/bash
+    creates: /var/lib/awx/projects/workshops
+
+- name: "place the extra vars template"
+  template:
+    src: workshop.yml.j2
+    dest: "/var/lib/awx/projects/workshops/provisioner/workshop-{{ workshop.name }}"
+  become: yes
+
+#- name: "create aws directory to store creds"
+#  file:
+#    path: /var/lib/awx/.aws
+#    state: directory
+#    owner: awx
+#    group: awx
+#  become: yes
+#
+#- name: "copy the aws credential template"
+#  template:
+#    src: aws-credentials.j2
+#    dest: /var/lib/awx/.aws/credentials
+#    owner: awx
+#    group: awx
+#    mode: '0400'
+#  become: yes
+#
+- name: "add the workshop provisioner to awx projects and copy in manifest.zip"
+  shell: |
+    source /var/lib/awx/venv/ansible/bin/activate
+    umask 0022
+    cd /var/lib/awx/projects/workshops
+    cp /home/cloud-user/workshops/provisioner/manifest.zip /var/lib/awx/projects/workshops/provisioner/
+    chown -R awx.awx /var/lib/awx/projects/
+    restorecon -rV /var/lib/awx/projects/
+    deactivate
+    touch /opt/.tower-setup3
+  become: yes
+  args:
+    creates: /opt/.tower-setup3
+
+#- name: "install the awx/tower cli"
+#  shell: |
+#    pip3 install https://releases.ansible.com/ansible-tower/cli/ansible-tower-cli-latest.tar.gz && \
+#    touch /opt/.tower-setup4
+#  become: yes
+#  args:
+#    creates: /opt/.tower-setup4
+
+- name: "create the workshop objects"
+  template:
+    src: "{{ item }}.json.j2"
+    dest: "/opt/ansible-tower-setup-3.8.3-2/import-{{ item }}.json"
+  become: yes
+  loop:
+  - projects
+  - credentials
+  - job_templates
+  - inventory
+  - inventory_sources
+
+- name: "import the workshop objects"
+  shell: |
+    $(TOWER_USERNAME=admin TOWER_PASSWORD={{ workshop.default_password }} awx login -k -f human)
+    awx -k import < /opt/ansible-tower-setup-3.8.3-2/import-{{ item }}.json
+  #become: yes
+  loop:
+  - projects
+  - credentials
+  - job_templates
+  - inventory
+  - inventory_sources
+  args:
+    creates: /opt/.tower-setup6
+
+- name: "Reboot."
+  shell: |
+    shutdown -r +1 || true
+  become: true
+  args:
+    executable: /bin/bash
+
+- name: "Wait 5 to 11 mins for host to reboot"
+  wait_for:
+    port: 22
+    host: "{{ ansible_ssh_host | default(inventory_hostname) }}"
+    search_regex: OpenSSH
+    delay: 120
+    timeout: 660
+  delegate_to: localhost
+  become: false
+
+- name: "idempotency for workshop"
+  shell: touch /opt/.tower-setup6
+  become: yes
+
+- name: "Finished! Tower instructions"
+  debug:
+    msg: "Visit https://{{ inventory_hostname }}/ using user/pass admin/{{ workshop.default_password }}. There are two Job Templates, Deploy Workshop and Destroy Workshop pre-configured."
+
+- name: "Finished! CLI instructions"
+  debug:
+    msg: "ssh to root@{{ inventory_hostname }}, cd to /home/cloud-user/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."

@@ -1,0 +1,77 @@
+## https://github.com/ansible/workshops/tree/devel/provisioner#requirements
+## don't forget to go to https://access.redhat.com/management/subscription_allocations 
+
+# Step 1. go to https://access.redhat.com/management/subscription_allocations 
+# to create a new Satellite 6.8 manifest. Add Ansible Automation Platform entitlements to it.
+# download/export the new manifest, name it manifest.zip and place in the files/ directory
+
+# Step 2. configure your workshop details
+workshop:
+  # this is used as a filter/prefix for your workshop
+  name: demo-workshop
+  # how many participants for the workshop
+  how_many_students: 2
+  # choose from rhel, security, windows, etc
+  type: windows
+  # you will need to own and manage this domain in aws router 53
+  dns_zone: example.com
+  # password used for all workshop logins
+	default_password: ansible123
+  # do you want to install tower on the system?
+  towerinstall: yes
+
+# you don't have to modify these
+# used as convenience for aws section
+rhel6_ami_id: ami-1643ff7e
+centos7_ami_id: ami-0affd4508a5d2481b
+rhel7_ami_id: ami-0315fe0b0bfdfedda
+rhel8_ami_id: ami-058f90e71a7d69115
+
+# Step 3. Configure your aws info
+aws:
+  # required
+  # visit https://console.aws.amazon.com/iam/home?region=us-east-1#/security_credentials to create a pair
+  keyid:
+	secret:
+	# modify the aws region as needed
+	region: us-east-1
+  # Optional: all below this line for aws, you may change as desired 
+  # you can customize your remote user and key user, optional
+	user: cloud-user
+  # paste in your custom public key here to add to aws instance, or leave to None to use the aws key only
+  user_pubkey: None
+  # set a password that will need to be changed on first login, or leave to None for ssh key access only
+	root_password: None
+  # aws instance_type, no need to change
+	instance_type: t3.medium
+  # size of disk for workstation, change as needed or not
+	volume_size: 150
+  # leave at rhel8
+	ami: "{{ rhel8_ami_id }}"
+
+# Step 4. configure your redhat creds
+redhat:
+  # required
+  # go to https://access.redhat.com/terms-based-registry/#/accounts to create a service account/password
+  svcuser: "12345|your-name-here"
+  svcpass: |
+	  abcd.paste.long.block.of.text.here.svcpass.xyz
+  # go to https://access.redhat.com/management/api to create an offline token for redhat api access
+	offline_token: |
+	  abcd.paste.long.block.of.text.here.token.xyz
+
+# Step 5. encrypt these files with a password
+# to protect your personal information
+# ansible-vault encrypt group_vars/all
+# ansible-vault encrypt files/manifest.zip
+
+# Step 6. deploy the workshop workstation
+# chmod +x ./deploy.sh
+# ./deploy.sh
+
+# variables for example awx/tower/aap job templates
+# no need to modify
+tower:
+  server: localhost
+  callback_key: none
+	callback_jobid: 0
