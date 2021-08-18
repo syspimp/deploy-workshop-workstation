@@ -8,7 +8,9 @@ This should get you started on a RHEL8 system:
 
 `subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms`
 
-`yum install git ansible python3`
+`yum install git ansible python3-pip`
+
+`python3-pip install boto boto3`
 
 `git clone https://github.com/syspimp/deploy-workshop-workstation`
 
