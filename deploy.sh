@@ -117,7 +117,7 @@ function helper {
   echo "Please type a password to use to vault encrypt your sensitive information."
   echo "Do NOT use a password you use for anything else."
   read -p "Vault Password: " vault_pass
-  echo -e "#\!/bin/bash\necho $vault_pass" > ./vault_secret
+  echo -e "#!/bin/bash\necho $vault_pass" > ./vault_secret
   chmod 0700 ./vault_secret
   echo "Thanks! Saved in ./vault_secret."
   echo
