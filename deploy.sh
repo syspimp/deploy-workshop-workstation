@@ -1,5 +1,6 @@
 #!/bin/bash
-check_manifest {
+clear
+function check_manifest {
   if [ ! -e "roles/deploy-workshop-workstation/files/manifest.zip" ]
   then
     echo "Ansible Automation Platform uses Satellite-style entitlements manifests"
@@ -17,7 +18,7 @@ check_manifest {
   return 0
 }
 
-check_workshop {
+function check_workshop {
   grep 'workshop:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
@@ -40,7 +41,7 @@ check_workshop {
   return 0
 }
 
-check_aws {
+function check_aws {
   grep 'keyid:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
@@ -57,7 +58,7 @@ check_aws {
   return 0
 }
 
-check_redhat {
+function check_redhat {
   grep 'svcuser:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
@@ -79,7 +80,7 @@ check_redhat {
   return 0
 }
 
-encrypt_files {
+function encrypt_files {
   echo "I will now encrypt your sensitive info in group_vars/all." 
   ansible-vault --vault-password-file ./vault-secret encrypt group_vars/all
   echo "If you need to edit in the future, use the command: "
@@ -89,7 +90,7 @@ encrypt_files {
   return 0
 }
 
-helper {
+function helper {
   echo "I am the helper program. I will guide you to get everything setup and deployed."
   echo
   echo "The ansible playbooks in this repo will:"
