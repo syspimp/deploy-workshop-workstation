@@ -89,9 +89,9 @@ function check_redhat {
 
 function encrypt_files {
   echo "I will now encrypt your sensitive info in group_vars/all." 
-  ansible-vault encrypt --vault-password-file ./vault-secret group_vars/all
+  ansible-vault encrypt --vault-password-file ./vault_secret group_vars/all
   echo "If you need to edit in the future, use the command: "
-  echo "ansible-vault --vault-password-file ./vault-secret edit group_vars/all"
+  echo "ansible-vault --vault-password-file ./vault_secret edit group_vars/all"
   echo "Step 5 Done!"
   echo
   return 0
