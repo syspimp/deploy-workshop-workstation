@@ -23,7 +23,7 @@ users:
   - name: root
     lock-passwd: false
     expire: false
-{% if aws.root_password != 'None') %}
+{% if aws.root_password != 'None' %}
 ssh_pwauth: true
 chpasswd:
   list: |
