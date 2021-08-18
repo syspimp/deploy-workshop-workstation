@@ -126,7 +126,7 @@ function helper {
 
 helper
 check_manifest
-while $? -ne 0
+while [[ "$?" -ne 0 ]]
 do
   check_manifest
 done
