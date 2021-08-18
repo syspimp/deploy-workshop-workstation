@@ -66,13 +66,17 @@ function check_redhat {
   if [ $? -ne 1 ]
   then
     echo "Redhat Service Accounts are a way to access the redhat api without using your customer portal credentials."
-    echo "Visit https://access.redhat.com/terms-based-registry/#/accounts to create a service account/password"
-    echo "You will also need to generate an offline token by visiting the url below"
-    echo "https://access.redhat.com/management/api"
-    echo "When you have the svc account/password and offline token, press enter."
+    echo
+    echo "Step 1 of 2: Visit https://access.redhat.com/terms-based-registry/#/accounts to create a service account/password"
+    echo "When you have the svc account/password, press enter."
     read
     read -p "Redhat Service Account User (looks like: 12345|your-name-here): " svcuser
     read -p "Redhat Service Accout Password: " svcpass
+    echo "Step 2 of 2: You will also need to generate an offline token by visiting the url below"
+    echo
+    echo "https://access.redhat.com/management/api"
+    echo "When you have generated the offline token, press enter."
+    read
     read -p "Redhat Offline Token: " token
     sed -i -e "s/12345|your-name-here/$svcuser/g"	group_vars/all
     sed -i -e "s/abcd.paste.long.block.of.text.here.svcpass.xyz/$svcpass/g"	group_vars/all
