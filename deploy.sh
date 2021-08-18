@@ -24,6 +24,7 @@ function check_workshop {
   then
     echo "Give the workshop details."
     echo "Workshop types are windows,rhel,security,etc"
+    echo "Press enter when ready"
     read
     read -p "Workshop Name: " wrkname
     sed -i -e "s/name: demo-workshop/name: $wrkname/g"	group_vars/all
@@ -47,6 +48,8 @@ function check_aws {
   then
     echo "If you don't have one, you will need to visit url below to create AWS access keys."
     echo "When you have the access key and secret, press enter."
+    echo
+    echo "https://console.aws.amazon.com/iam/home?region=us-east-1#/security_credentials"
     read
     read -p "AWS Key ID: " aws_key
     read -p "AWS Secret Key: " aws_secret
