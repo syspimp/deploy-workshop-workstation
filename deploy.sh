@@ -135,4 +135,4 @@ check_redhat
 encrypt_files
 echo "Step 6: Ready to deploy! Press enter to launch and configure your Workstation."
 read
-ansible-playbook --vault-password-file launch-workshop-workstation.yml
+ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml
