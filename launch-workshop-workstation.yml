@@ -90,17 +90,17 @@
       register: igw
       
     - name: Route IGW
-       ec2_vpc_route_table:
-        vpc_id: "{{ vpc.vcp_id }}"
-        region: "{{ aws.region }}"
-        subnets:
-          - "{{ subnet.subnet.id }}"
-        routes:
-          - dest: 0.0.0.0/0
-            gateway_id: "{{ igw.gateway_id  }}"
-        tags:
-          Name: "{{ route_name }}"
-     
+      ec2_vpc_route_table:
+       vpc_id: "{{ vpc.vcp_id }}"
+       region: "{{ aws.region }}"
+       subnets:
+         - "{{ subnet.subnet.id }}"
+       routes:
+         - dest: 0.0.0.0/0
+           gateway_id: "{{ igw.gateway_id  }}"
+       tags:
+         Name: "{{ route_name }}"
+    
      - name: Create Security Group
        ec2_group:
         name: "{{ workshop.name }} SG"
