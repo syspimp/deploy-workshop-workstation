@@ -1,7 +1,9 @@
 What
+
 This will deploy a workstation ready to deploy workshops via cli or ansible tower.
 
 How
+
 This should get you started on a RHEL8 system:
 
 `subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms`
