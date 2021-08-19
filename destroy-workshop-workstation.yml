@@ -64,7 +64,7 @@
             - name: role
               value: "{{ aws_role }}"
 
-    - name: terminat ec2 instance in a vpc subnet
+    - name: terminate ec2 instance in a vpc subnet
       amazon.aws.ec2:
         instance_tags:
           Name: "{{ workshop.name }}-workstation"

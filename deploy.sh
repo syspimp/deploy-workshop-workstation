@@ -22,6 +22,15 @@ function check_workshop {
   grep 'workshop:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
+    if [[ -e 'group_vars-all.orig' ]]
+    then
+      echo "You are rerunning the script. I need to restore the group_vars/all back to the original"
+      echo "If you don't want this, Ctrl-C now. Otherwise, press enter to continue"
+      read
+      cp -f group_vars-all.orig group_vars/all
+    else
+      cp group_vars/all group_vars-all.orig
+    fi
     echo "Give the workshop details."
     echo "Workshop types are windows,rhel,security,etc"
     echo "Press enter when ready"
