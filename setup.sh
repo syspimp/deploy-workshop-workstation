@@ -36,15 +36,15 @@ function check_workshop {
     echo "Press enter when ready"
     read
     read -p "Workshop Name: " wrkname
-    sed -i -e "s/name: demo-workshop/name: $wrkname/g"	group_vars/all
+    sed -i -e "s/name: demo-workshop/name: $wrkname/g" group_vars/all
     read -p "Workshop Type: " wrktype
-    sed -i -e "s/type: windows/type: $wrktype/g"	group_vars/all
+    sed -i -e "s/type: windows/type: $wrktype/g" group_vars/all
     read -p "Number of Students for this workshop: " wrkstudents
-    sed -i -e "s/number_of_students: 2/number_of_students: $wrkstudents/g"	group_vars/all
+    sed -i -e "s/number_of_students: 2/number_of_students: $wrkstudents/g" group_vars/all
     read -p "DNS Zone to use: " wrkzone
-    sed -i -e "s/dns_zone: example.com/dns_zone: $wrkzone/g"	group_vars/all
+    sed -i -e "s/dns_zone: example.com/dns_zone: $wrkzone/g" group_vars/all
     read -p "Default Password for students: " wrkpass
-    sed -i -e "s/default_password: ansible123/default_password: $wrkpass/g"	group_vars/all
+    sed -i -e "s/default_password: ansible123/default_password: $wrkpass/g" group_vars/all
   fi
   echo "Step 2 Done!"
   echo
@@ -62,8 +62,8 @@ function check_aws {
     read
     read -p "AWS Key ID: " aws_key
     read -p "AWS Secret Key: " aws_secret
-    sed -i -e "s/^  keyid:/  keyid:  $aws_key/g"	group_vars/all
-    sed -i -e "s/^  secret:/  secret:  $aws_secret/g"	group_vars/all
+    sed -i -e "s/^  keyid:/  keyid:  $aws_key/g" group_vars/all
+    sed -i -e "s/^  secret:/  secret:  $aws_secret/g" group_vars/all
   fi
   echo "Step 3 Done!"
   echo
@@ -87,9 +87,9 @@ function check_redhat {
     echo "When you have generated the offline token, press enter."
     read
     read -p "Redhat Offline Token: " token
-    sed -i -e "s/12345|your-name-here/$svcuser/g"	group_vars/all
-    sed -i -e "s/abcd.paste.long.block.of.text.here.svcpass.xyz/$svcpass/g"	group_vars/all
-    sed -i -e "s/abcd.paste.long.block.of.text.here.token.xyz/$token/g"	group_vars/all
+    sed -i -e "s/12345|your-name-here/$svcuser/g" group_vars/all
+    sed -i -e "s/abcd.paste.long.block.of.text.here.svcpass.xyz/${svcpass}/g" group_vars/all
+    sed -i -e "s/abcd.paste.long.block.of.text.here.token.xyz/${token}/g" group_vars/all
   fi
   echo "Step 4 Done!"
   echo

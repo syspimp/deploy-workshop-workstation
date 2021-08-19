@@ -139,8 +139,21 @@
       copy:
         content: "{{ keypair.key.private_key }}"
         dest: "{{ ec2_key_directory }}key.ppk"
+        mode: 0600
       when: keypair.changed == true
      
+    - name: See if workstation instance exists already
+      community.aws.ec2_instance_info:
+        region: "{{ aws.region }}"
+        filters:
+          "tag:Name": "{{ workshop.name }}-workstation"
+          instance-state-name: [ "running"]
+      register: wrkshop_instances
+
+    - name: debug instances
+      debug:
+        var: wrkshop_instances
+ 
     - name: launch an ec2 instance in a vpc subnet
       register: ec2results
       ec2:
@@ -161,25 +174,40 @@
             delete_on_termination: true
         user_data: |
           {{ lookup('template', './templates/cloud-config.yml.j2') }}
+      when: wrkshop_instances.instances|length == 0
+
+    - name: Save the public ip from the old deployment
+      set_fact:
+        public_ip: "{{ wrkshop_instances.instances[0].public_ip_address }}"
+      when: wrkshop_instances.instances|length == 1
+
+    - name: Save the public ip from the new deployment
+      set_fact:
+        public_ip: "{{ ec2results.instances[0].public_ip }}"
+      when: wrkshop_instances.instances|length == 0
 
     - name: Add new instance to host group
       add_host:
-        hostname: "{{ item.public_ip }}"
+        hostname: "{{ public_ip }}"
         groupname: launched
-      loop: "{{ ec2results.instances }}"
 
-    - name: Wait for SSH to come up
+    - name: "Wait 5 to 11 mins for host to reboot"
+      wait_for:
+        port: 22
+        host: "{{ public_ip }}"
+        search_regex: OpenSSH
+        delay: 120
+        timeout: 660
       delegate_to: localhost
-      #delegate_to: "{{ item.public_dns_name }}"
-      wait_for_connection:
-        host: "{{ item.public_ip }}"
-        delay: 60
-        timeout: 320
-      loop: "{{ ec2results.instances }}"
+      become: false
+      when: wrkshop_instances.instances|length == 0
 
 - name: Configure instance(s)
   hosts: launched
   become: True
+  vars:
+    ansible_user: ec2-user
+    ansible_ssh_private_key_file: keys/key.ppk
   gather_facts: True
   roles:
     - deploy-workshop-workstation
@@ -190,5 +218,5 @@
   gather_facts: no
   tasks:
   - name: Deployment Complete
-    debug: msg="Your new workstation is running on ip https://{{ ec2results.instances[0].public_ip }} user is admin, password is {{ workshop.default_password }}"
+    debug: msg="Your new workstation is running on ip https://{{ public_ip }} user is admin, password is {{ workshop.default_password }}"
 

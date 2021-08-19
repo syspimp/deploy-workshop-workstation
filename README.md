@@ -16,8 +16,8 @@ This should get you started on a RHEL8 system:
 
 `cd deploy-workshop-workstation`
 
-`chmod +x ./deploy.sh`
+`chmod +x ./setup.sh`
 
-`./deploy.sh`
+`./setup.sh`
 
 Answer the questions and 5 mins later your VM is configuring itself.
