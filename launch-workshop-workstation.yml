@@ -13,7 +13,7 @@
     aws_subnet_name: "{{ workshop.name }} subnet"
     aws_igw_name: "{{ workshop.name }} igw"
     aws_route_name: "{{ workshop.name }} route"
-    ec2_key_directory: keys
+    ec2_key_directory: keys/
     aws_role: deploy-workshop-workstation
     aws_ostype: rhel8
     aws_vmname: "{{ workshop.name }}-workstation"
@@ -169,8 +169,10 @@
       loop: "{{ ec2results.instances }}"
 
     - name: Wait for SSH to come up
-      delegate_to: "{{ item.public_dns_name }}"
+      delegate_to: localhost
+      #delegate_to: "{{ item.public_dns_name }}"
       wait_for_connection:
+        host: "{{ item.public_ip }}"
         delay: 60
         timeout: 320
       loop: "{{ ec2results.instances }}"
