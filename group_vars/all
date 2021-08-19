@@ -16,7 +16,7 @@ workshop:
   # you will need to own and manage this domain in aws router 53
   dns_zone: example.com
   # password used for all workshop logins
-	default_password: ansible123
+  default_password: ansible123
   # do you want to install tower on the system?
   towerinstall: yes
 
