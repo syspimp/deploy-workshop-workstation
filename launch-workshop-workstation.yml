@@ -191,7 +191,7 @@
         hostname: "{{ public_ip }}"
         groupname: launched
 
-    - name: "Wait 5 to 11 mins for host to reboot"
+    - name: "Wait 2 to 11 mins for host to boot"
       wait_for:
         port: 22
         host: "{{ public_ip }}"
