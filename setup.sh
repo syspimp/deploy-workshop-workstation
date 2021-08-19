@@ -62,8 +62,9 @@ function check_aws {
     read
     read -p "AWS Key ID: " aws_key
     read -p "AWS Secret Key: " aws_secret
-    sed -i -e "s/^  keyid:/  keyid:  $aws_key/g" group_vars/all
-    sed -i -e "s/^  secret:/  secret:  $aws_secret/g" group_vars/all
+    ESCAPED_REPLACE=$(printf '%s\n' "${aws_secret}" | sed -e 's/[\/&]/\\&/g')
+    sed -i -e "s/^  keyid:/  keyid: $aws_key/g" group_vars/all
+    sed -i -e "s/^  secret:/  secret: ${ESCAPED_REPLACE}/g" group_vars/all
   fi
   echo "Step 3 Done!"
   echo

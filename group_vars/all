@@ -43,7 +43,7 @@ aws:
   # set a password that will need to be changed on first login, or leave to None for ssh key access only
   root_password: None
   # aws instance_type, no need to change
-  instance_type: t3.medium
+  instance_type: t3.large
   # size of disk for workstation, change as needed or not
   volume_size: 150
   # leave at rhel8

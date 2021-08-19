@@ -210,7 +210,7 @@
     ansible_ssh_private_key_file: keys/key.ppk
   gather_facts: True
   roles:
-    - deploy-workshop-workstation
+    - { role: deploy-workshop-workstation, publicip: "{{ public_ip }}" }
 
 - name: Complete
   hosts: localhost
