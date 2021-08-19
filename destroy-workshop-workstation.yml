@@ -1,0 +1,136 @@
+---
+# Creates a new instance with provisioning userdata using Cloud-Init
+# Uses a while loop to sit and wait until a success response from tower/awx callback
+# Set the tower job id and callback key here, group_vars, or in tower/awx
+# Creates a fact in /etc/ansible/facts.d to determines which role to apply
+# Updates the tower/awx inventory
+- name: launch an instance in ec2
+  hosts: localhost
+  gather_facts: no
+  vars:
+    aws_vpc_name: "{{ workshop.name }} vpc"
+    aws_vpc_cidr: "11.22.33.0/24"
+    aws_subnet_name: "{{ workshop.name }} subnet"
+    aws_igw_name: "{{ workshop.name }} igw"
+    aws_route_name: "{{ workshop.name }} route"
+    ec2_key_directory: keys
+    aws_role: deploy-workshop-workstation
+    aws_ostype: rhel8
+    aws_vmname: "{{ workshop.name }}-workstation"
+    aws_assign_public_ip: yes
+    aws_volume_size: 150
+    aws_security_group_name: "{{ workshop.name }}-sg-ansible"
+    aws_security_group_allow_cidr: "0.0.0.0/0"
+    rhel6_ami_id: ami-1643ff7e
+    centos7_ami_id: ami-0affd4508a5d2481b
+    rhel7_ami_id: ami-0315fe0b0bfdfedda
+    rhel8_ami_id: ami-058f90e71a7d69115
+    aws_instance_type: t3.medium
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ aws.keyid }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aws.secret }}"
+  tasks:
+
+    - name: Set the VM name
+      set_fact:
+        aws_instance_tags:
+          Name: "{{ aws_vmname }}"
+
+    - name: Set the AMI to CentOS7
+      set_fact:
+        aws_image_ami: "{{ centos7_ami_id }}"
+      when: "'centos7' in aws_ostype"
+
+    - name: Set the AMI to RHEL6
+      set_fact:
+        aws_image_ami: "{{ rhel6_ami_id }}"
+      when: "'rhel6' in aws_ostype"
+
+    - name: Set the AMI to RHEL7
+      set_fact:
+        aws_image_ami: "{{ rhel7_ami_id }}"
+      when: "'rhel7' in aws_ostype"
+
+    - name: Set the AMI to RHEL8
+      set_fact:
+        aws_image_ami: "{{ rhel8_ami_id }}"
+      when: "'rhel8' in aws_ostype"
+
+    - name: Set the VM roles
+      set_fact:
+        awsroles:
+          - section: default
+            vars:
+            - name: role
+              value: "{{ aws_role }}"
+
+    - name: terminat ec2 instance in a vpc subnet
+      amazon.aws.ec2:
+        instance_tags:
+          Name: "{{ workshop.name }}-workstation"
+        state: absent
+
+    - name: get vpc subnet info
+      amazon.aws.ec2_vpc_subnet_info:
+        filters:
+          "tag:Name": "{{ aws_subnet_name }}"
+      register: subnet
+     
+    - name: get the vpc id
+      amazon.aws.ec2_vpc_net_info:
+        name: "{{ aws_vpc_name }}"
+        region: "{{ aws.region }}"
+      register: vpc
+
+    - name: Gather information about any VPC route table with a tag key Name
+      community.aws.ec2_vpc_route_table_info:
+        filters:
+          "tag:Name": "{{ aws_route_name }}"
+      register: route_table
+ 
+    - name: Delete Route table for IGW
+      ec2_vpc_route_table:
+       state: absent
+       vpc_id: "{{ vpc.vpc.id }}"
+       region: "{{ aws.region }}"
+       route_table_id: "{{ route_table.id }}"
+       lookup: id
+
+    - name: disassociate subnet to the VPC
+      ec2_vpc_subnet:
+       state: absent
+       vpc_id: "{{ vpc.vpc.id }}"
+       region: "{{ aws.region }}"
+       cidr: "{{ aws_vpc_cidr }}"
+       map_public: yes
+       resource_tags:
+         Name: "{{ aws_subnet_name }}"
+      
+    - name: destroy IGW
+      ec2_vpc_igw:
+       region: "{{ aws.region }}"
+       vpc_id: "{{ vpc.vpc.id }}"
+       state: absent
+       tags:
+         Name: "{{ aws_igw_name }}"
+
+    - name: Destroy Security Group
+      ec2_group:
+       state: absent
+       name: "{{ workshop.name }} SG"
+       region: "{{ aws.region }}"
+   
+    - name: Destroy ec2 key pair
+      ec2_key:
+        state: absent
+        name: "{{ workshop.name }}_keypair"
+        region: "{{ aws.region }}"
+      register: keypair
+     
+    - name: Destroy the VPC
+      ec2_vpc_net:
+        name: "{{ aws_vpc_name }}"
+        region: "{{ aws.region }}"
+        state: absent
+      register: vpc
+
