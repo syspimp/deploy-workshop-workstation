@@ -100,7 +100,7 @@ function encrypt_files {
   echo "I will now encrypt your sensitive info in group_vars/all." 
   ansible-vault encrypt --vault-password-file ./vault_secret group_vars/all
   echo "If you need to edit in the future, use the command: "
-  echo "ansible-vault --vault-password-file ./vault_secret edit group_vars/all"
+  echo "ansible-vault edit --vault-password-file ./vault_secret group_vars/all"
   echo "Step 5 Done!"
   echo
   return 0
@@ -154,4 +154,5 @@ echo "Step 6: Ready to deploy! Press enter to launch and configure your Workstat
 read
 echo "Installing ansible collections ..."
 ansible-galaxy install -r ./requirements.yml
+echo "Executing: ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml"
 ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml
