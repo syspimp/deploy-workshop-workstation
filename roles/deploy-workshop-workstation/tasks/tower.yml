@@ -40,7 +40,7 @@
 
 - name: Load manifest into variable
   slurp:
-    src: "/home/cloud-user/workshops/provisioner/manifest.zip"
+    src: "/home/ec2-user/workshops/provisioner/manifest.zip"
   register: manifest_file
 
 - name: Post manifest file
@@ -123,7 +123,7 @@
     source /var/lib/awx/venv/ansible/bin/activate
     umask 0022
     cd /var/lib/awx/projects/workshops
-    cp /home/cloud-user/workshops/provisioner/manifest.zip /var/lib/awx/projects/workshops/provisioner/
+    cp /home/ec2-user/workshops/provisioner/manifest.zip /var/lib/awx/projects/workshops/provisioner/
     chown -R awx.awx /var/lib/awx/projects/
     restorecon -rV /var/lib/awx/projects/
     deactivate
@@ -193,4 +193,4 @@
 
 - name: "Finished! CLI instructions"
   debug:
-    msg: "ssh to root@{{ inventory_hostname }}, cd to /home/cloud-user/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."
+    msg: "ssh to ec2-user@{{ inventory_hostname }}, cd to /home/ec2-user/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."

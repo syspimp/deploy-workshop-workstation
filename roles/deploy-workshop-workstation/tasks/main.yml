@@ -64,27 +64,27 @@
 - name: "clone the github repo"
   shell: git clone https://github.com/ansible/workshops
   args:
-    creates: /home/cloud-user/workshops
+    creates: /home/ec2-user/workshops
 
 - name: "place the extra vars template"
   template:
     src: workshop.yml.j2
-    dest: "/home/cloud-user/workshops/provisioner/workshop-{{ workshop.name }}.yml"
+    dest: "/home/ec2-user/workshops/provisioner/workshop-{{ workshop.name }}.yml"
 
 - name: "create aws directory to store creds"
   file:
-    path: /home/cloud-user/.aws
+    path: /home/ec2-user/.aws
     state: directory
 
 - name: "copy the aws credential template"
   template:
     src: aws-credentials.j2
-    dest: /home/cloud-user/.aws/credentials
+    dest: /home/ec2-user/.aws/credentials
 
 - name: "copy up the entitlement manifest"
   copy:
     src: manifest.zip
-    dest: /home/cloud-user/workshops/provisioner/manifest.zip
+    dest: /home/ec2-user/workshops/provisioner/manifest.zip
 
 - name: "Updating MOTD"
   template: 
@@ -102,7 +102,7 @@
 
 - name: "Finished!"
   debug:
-    msg: "Log in, cd to /home/cloud-user/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."
+    msg: "Log in, cd to /home/ec2-user/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."
 
 - name: "Install Tower to deploy from GUI, if desired"
   include: "tower.yml"

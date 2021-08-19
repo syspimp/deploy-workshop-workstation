@@ -37,7 +37,7 @@ aws:
   region: us-east-1
   # Optional: all below this line for aws, you may change as desired 
   # you can customize your remote user and key user, optional
-  user: cloud-user
+  user: ec2-user
   # paste in your custom public key here to add to aws instance, or leave to None to use the aws key only
   user_pubkey: None
   # set a password that will need to be changed on first login, or leave to None for ssh key access only
