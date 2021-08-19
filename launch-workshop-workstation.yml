@@ -184,3 +184,11 @@
   roles:
     - deploy-workshop-workstation
 
+- name: Complete
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - name: Deployment Complete
+    debug: msg="Your new workstation is running on ip https://{{ ec2results.instances[0].public_ip }} user is admin, password is {{ workshop.default_password }}"
+
