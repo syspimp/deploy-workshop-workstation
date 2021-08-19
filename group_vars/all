@@ -52,6 +52,8 @@ aws:
 # Step 4. configure your redhat creds
 redhat:
   # required
+  cdnuser: notacdnuser
+  cdnpass: notacdnpass
   # go to https://access.redhat.com/terms-based-registry/#/accounts to create a service account/password
   svcuser: "12345|your-name-here"
   svcpass: |
@@ -66,8 +68,8 @@ redhat:
 # ansible-vault encrypt files/manifest.zip
 
 # Step 6. deploy the workshop workstation
-# chmod +x ./deploy.sh
-# ./deploy.sh
+# chmod +x ./setup.sh
+# ./setup.sh
 
 # variables for example awx/tower/aap job templates
 # no need to modify

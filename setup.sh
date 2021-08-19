@@ -74,6 +74,12 @@ function check_redhat {
   grep 'svcuser:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
+    echo "Enter your Redhat Customer Portal creds. Don't worry we will encrypt them. We will need to register the workstation."
+    read -p "Redhat Customer Portal username: " cdnuser
+    read -p "Redhat Customer Portal password: " cdnpass
+    sed -i -e "s/notacdnuser/${cdnuser}/g" group_vars/all
+    sed -i -e "s/notacdnpass/${cdnpass}/g" group_vars/all
+    echo
     echo "Redhat Service Accounts are a way to access the redhat api without using your customer portal credentials."
     echo
     echo "Step 1 of 2: Visit https://access.redhat.com/terms-based-registry/#/accounts to create a service account/password"
@@ -87,7 +93,7 @@ function check_redhat {
     echo "When you have generated the offline token, press enter."
     read
     read -p "Redhat Offline Token: " token
-    sed -i -e "s/12345|your-name-here/$svcuser/g" group_vars/all
+    sed -i -e "s/12345|your-name-here/${svcuser}/g" group_vars/all
     sed -i -e "s/abcd.paste.long.block.of.text.here.svcpass.xyz/${svcpass}/g" group_vars/all
     sed -i -e "s/abcd.paste.long.block.of.text.here.token.xyz/${token}/g" group_vars/all
   fi

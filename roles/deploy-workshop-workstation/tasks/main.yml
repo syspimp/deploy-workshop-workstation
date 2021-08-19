@@ -14,7 +14,7 @@
       msg: "subscribing to the cnd"
       
   - name: "[rescue] subscribe to the cdn"
-    shell: subscription-manager register --auto-attach --username "{{ rh_satellite_user }}" --password "{{ rh_satellite_pass }}"
+    shell: subscription-manager register --auto-attach --username "{{ redhat.cdnuser }}" --password "{{ redhat.cdnpass }}"
     become: yes
 
 - name: "list the enabled repos"
