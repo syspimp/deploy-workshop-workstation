@@ -9,9 +9,9 @@
   - ansible_distribution_major_version == '8'
 
   rescue:
-  - name: "[rescue] we will need to subscribe to the cdn."
+  - name: "[rescue] we will need to subscribe to the redat cdn."
     debug:
-      msg: "subscribing to the cnd"
+      msg: "subscribing to the redhat cdn"
       
   - name: "[rescue] subscribe to the cdn"
     shell: subscription-manager register --auto-attach --username "{{ redhat.cdnuser }}" --password "{{ redhat.cdnpass }}"
