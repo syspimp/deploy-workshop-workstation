@@ -143,4 +143,6 @@ check_redhat
 encrypt_files
 echo "Step 6: Ready to deploy! Press enter to launch and configure your Workstation."
 read
+echo "Installing ansible collections ..."
+ansible-galaxy install -r ./requirements.yml
 ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml
