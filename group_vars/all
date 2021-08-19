@@ -32,22 +32,22 @@ aws:
   # required
   # visit https://console.aws.amazon.com/iam/home?region=us-east-1#/security_credentials to create a pair
   keyid:
-	secret:
-	# modify the aws region as needed
-	region: us-east-1
+  secret:
+  # modify the aws region as needed
+  region: us-east-1
   # Optional: all below this line for aws, you may change as desired 
   # you can customize your remote user and key user, optional
-	user: cloud-user
+  user: cloud-user
   # paste in your custom public key here to add to aws instance, or leave to None to use the aws key only
   user_pubkey: None
   # set a password that will need to be changed on first login, or leave to None for ssh key access only
-	root_password: None
+  root_password: None
   # aws instance_type, no need to change
-	instance_type: t3.medium
+  instance_type: t3.medium
   # size of disk for workstation, change as needed or not
-	volume_size: 150
+  volume_size: 150
   # leave at rhel8
-	ami: "{{ rhel8_ami_id }}"
+  ami: "{{ rhel8_ami_id }}"
 
 # Step 4. configure your redhat creds
 redhat:
@@ -55,10 +55,10 @@ redhat:
   # go to https://access.redhat.com/terms-based-registry/#/accounts to create a service account/password
   svcuser: "12345|your-name-here"
   svcpass: |
-	  abcd.paste.long.block.of.text.here.svcpass.xyz
+    abcd.paste.long.block.of.text.here.svcpass.xyz
   # go to https://access.redhat.com/management/api to create an offline token for redhat api access
-	offline_token: |
-	  abcd.paste.long.block.of.text.here.token.xyz
+  offline_token: |
+    abcd.paste.long.block.of.text.here.token.xyz
 
 # Step 5. encrypt these files with a password
 # to protect your personal information
@@ -74,4 +74,4 @@ redhat:
 tower:
   server: localhost
   callback_key: none
-	callback_jobid: 0
+  callback_jobid: 0
