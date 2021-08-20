@@ -1,32 +1,29 @@
-What
+# What
 
-This will deploy a workstation ready to deploy workshops via cli or ansible tower in your aws account. It will setup a vpc, subnet, ssh keys, dns records, launch a new workstation running the latest Ansible Automation Platform/Tower, setup Job Templates for the ansible/workshops, and auto-deploy the workshop for you.  Log into AAP/Tower to get the urls for your project.  You can also deploy workshops on the command line.
+This will '''deploy a workstation ready to deploy workshops via cli or ansible tower''' in your aws account. It will setup a vpc, subnet, ssh keys, dns records, launch a new workstation running the latest Ansible Automation Platform/Tower, setup Job Templates for the ansible/workshops, and auto-deploy the workshop for you.  Log into AAP/Tower to get the urls for your project.  You can also deploy workshops on the command line.
 
 It takes 5 mins worth of work to have a fully usable AAP/Tower.
 
-REQUIRED: You will need to have an AWS ec2 account and DNS zone setup in AWS Route 53. The setup script will guide you through most of the process but setting up a domain name in AWS is beyond the scope of this project.  Here is a link that will help you acquire a domain name in aws, or move your domain to aws: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html
+**REQUIRED**: You will need to have an AWS ec2 account and DNS zone setup in AWS Route 53. The setup script will guide you through most of the process but setting up a domain name in AWS is beyond the scope of this project.  Here is a link that will help you acquire a domain name in aws, or move your domain to aws: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html
 
-How
+# How
 
 This should get you started on a RHEL8 system:
 
-`subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms`
-
-`yum install git ansible python3-pip`
-
-`python3-pip install boto boto3`
-
-`git clone https://github.com/syspimp/deploy-workshop-workstation`
-
-`cd deploy-workshop-workstation`
-
-`chmod +x ./setup.sh`
-
-`./setup.sh`
+```shell
+subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
+yum install git ansible python3-pip
+python3-pip install boto boto3
+git clone https://github.com/syspimp/deploy-workshop-workstation
+cd deploy-workshop-workstation
+chmod +x ./setup.sh
+./setup.sh
+```
 
 Answer the questions and 5 mins later your VM is configuring itself.  Some trimmed output is below:
 
-`I am the helper program. I will guide you to get everything setup and deployed.
+```shell
+I am the helper program. I will guide you to get everything setup and deployed.
 
 The ansible playbooks in this repo will:
 - create vpc, subnet, gateway, security group, and a workstation vm
@@ -195,3 +192,4 @@ ok: [54.175.167.26]
 PLAY RECAP ***************************************************************************************************************************************************
 54.175.167.26              : ok=34   changed=13   unreachable=0    failed=0    skipped=2    rescued=0    ignored=0
 localhost                  : ok=14   changed=1    unreachable=0    failed=0    skipped=7    rescued=0    ignored=0`
+```
