@@ -21,8 +21,10 @@ chmod +x ./setup.sh
 ```
 
 Answer the questions and 5 mins later your VM is configuring itself.  Some trimmed output is below:
-
+# Example output
 ```shell
+$ ./setup.sh
+
 I am the helper program. I will guide you to get everything setup and deployed.
 
 The ansible playbooks in this repo will:
