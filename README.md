@@ -1,6 +1,6 @@
 # What
 
-This will '''deploy a workstation ready to deploy workshops via cli or ansible tower''' in your aws account. It will setup a vpc, subnet, ssh keys, dns records, launch a new workstation running the latest Ansible Automation Platform/Tower, setup Job Templates for the ansible/workshops, and auto-deploy the workshop for you.  Log into AAP/Tower to get the urls for your project.  You can also deploy workshops on the command line.
+This will **deploy a workstation ready to deploy workshops via cli or ansible tower** in your aws account. It will setup a vpc, subnet, ssh keys, dns records, launch a new workstation running the latest Ansible Automation Platform/Tower, setup Job Templates for the ansible/workshops, and auto-deploy the workshop for you.  Log into AAP/Tower to get the urls for your project.  You can also deploy workshops on the command line.
 
 It takes 5 mins worth of work to have a fully usable AAP/Tower.
 
