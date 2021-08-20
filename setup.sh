@@ -115,7 +115,9 @@ function helper {
     echo "If you want to edit your credentials or workshop setup in the group_vars/all file, then run"
     echo "'./edit-groupvars.sh'"
     echo
-    echo "To continue, I need to restore the group_vars/all back to the original"
+    echo "To continue, I need to restore the group_vars/all back to the original "
+    echo "and if the manifest has been encrypted, you should use the same vault password."
+    echo
     echo "If you don't want this, Ctrl-C now. Otherwise, press enter to continue"
     read
     cp -f group_vars-all.orig group_vars/all
