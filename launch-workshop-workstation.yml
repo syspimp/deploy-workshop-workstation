@@ -202,7 +202,7 @@
       become: false
       when: wrkshop_instances.instances|length == 0
 
-- name: Configure instance(s)
+- name: Configure workshop workstation
   hosts: launched
   become: True
   vars:
@@ -210,13 +210,42 @@
     ansible_ssh_private_key_file: keys/key.ppk
   gather_facts: True
   roles:
-    - { role: deploy-workshop-workstation, publicip: "{{ public_ip }}" }
+    - deploy-workshop-workstation
 
-- name: Complete
-  hosts: localhost
-  connection: local
+- name: Deploy the workshop
+  hosts: launched
   gather_facts: no
+  become: no
   tasks:
-  - name: Deployment Complete
-    debug: msg="Your new workstation is running on ip https://{{ public_ip }} user is admin, password is {{ workshop.default_password }}"
-
+    - name: Kick off the deployment from tower
+      uri:
+        url: https://{{ inventory_hostname }}/api/v2/job_templates/1/launch/
+        validate_certs: no
+        method: POST
+        user: "admin"
+        password: "{{ workshop.default_pass }}"
+        force_basic_auth: yes
+        status_code: [201,202]
+        body_format: json
+        body: >
+          { 
+             "extra_vars": {
+               "name": "{{ workshop.name }}",
+               "ec2_name_prefix": "{{ workshop.name }}",
+               "student_total": "{{ workshop.number_of_students }}",
+               "workshop_type": "{{ workshop.type }}",
+               "redhat_username": "{{ redhat.svcuser| trim }}",
+               "redhat_password": "{{ redhat.svcpass| trim }}",
+               "workshop_dns_zone": "{{ workshop.dns_zone }}",
+               "offline_token": "{{ redhat.offline_token | trim }}",
+               "instance_loc": "ec2",
+               "ec2_region": "{{ aws.region }}",
+               "doubleup": "false",
+               "admin_password": "{{ workshop.default_password }}",
+               "attendance": "true",
+               "controllerinstall": "true",
+               "create_cluster": "false",
+               "code_server": "true"
+             }
+          }
+      delegate_to: localhost
