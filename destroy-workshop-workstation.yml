@@ -124,6 +124,9 @@
     - name: "wait a minute, give it time to delete"
       pause:
         minutes: 1
+      when:
+      - vpc.vpcs|length > 0
+      - route_table.route_tables|length > 0
 
     - name: disassociate subnet to the VPC
       ec2_vpc_subnet:
