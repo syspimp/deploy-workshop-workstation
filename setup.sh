@@ -194,6 +194,8 @@ function helper {
   return 0
 }
 
+## main program start
+cat roles/deploy-workshop-workstation/templates/motd.j2
 helper
 echo '_.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~.'
 echo
