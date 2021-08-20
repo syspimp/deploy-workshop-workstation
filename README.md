@@ -141,7 +141,7 @@ When you have the access key and secret, press enter.
 
 https://console.aws.amazon.com/iam/home?region=us-east-1#/security_credentials
 
-AWS Key ID: AKIAJ2BKR4AF3UKDXBQQ
+AWS Key ID: AKIA...[snip]...KDXBQQ
 AWS Secret Key: Itzn27...[snip]...sw/SkGo+DIi
 Step 3 Done!
 
