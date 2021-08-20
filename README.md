@@ -20,7 +20,45 @@ chmod +x ./setup.sh
 ./setup.sh
 ```
 
-Answer the questions and 5 mins later your VM is configuring itself.  Some trimmed output is below:
+Answer the questions and 5 mins later your VM is configuring itself.  Some trimmed output is below this discussion.
+
+# Utilities description
+*clean-workshop-configuration.sh*
+
+This removes the group\_vars/all, ssh keys, and manifest. Restores to a clean environment
+
+*edit-groupvars.sh*
+
+This comman is wrapper to edit the encypted group\_vars/all
+
+*restore-workshop.sh*
+
+This restores a backed up workshop configuration
+
+*setup.sh*
+
+This configures group\_vars/all and launches the deployment
+
+*stop-running-vms.sh*
+
+This stops all vms in the workstation and workshop vpcs.
+
+*destroy-workstation.sh*
+
+This deletes/removes the workstation. Use after destroying the workshop or you may have cruft in your aws environment.
+
+*rerun-ansible.sh*
+
+Run this to reconfigure your workstation with ansible after you have already run ./setup.sh.
+
+*save-workshop.sh*
+
+This will backup your workshop configuration to saved/
+
+*start-stopped-vms.sh*
+
+This will start all of your stopped vms in the workstation and workshop vpcs.
+
 # Example output
 ```shell
 $ ./setup.sh
