@@ -63,6 +63,18 @@ This will start all of your stopped vms in the workstation and workshop vpcs.
 ```shell
 $ ./setup.sh
 
+                                                                  
+                               88 88                              
+                               88 88                       ,d     
+                               88 88                       88     
+8b,dPPYba,  ,adPPYba,  ,adPPYb,88 88,dPPYba,  ,adPPYYba, MM88MMM  
+88P'   "Y8 a8P_____88 a8"    `Y88 88P'    "8a ""     `Y8   88     
+88         8PP""""""" 8b       88 88       88 ,adPPPPP88   88     
+88         "8b,   ,aa "8a,   ,d88 88       88 88,    ,88   88,    
+88          `"Ybbd8"'  `"8bbdP"Y8 88       88 `"8bbdP"Y8   "Y888  
+                                                                  
+                                                                  
+
 I am the helper program. I will guide you to get everything setup and deployed.
 
 The ansible playbooks in this repo will:
@@ -75,7 +87,7 @@ The ansible playbooks in this repo will:
 WORKSHOP DEPENDENCY: You will need a domain name configured in your AWS Route53 for the workshop deployment to succeed. You can still install just the workstation.
 
 There are six steps. It shouldn't take you more than 5 mins:
-1. Create manifest.zip file containing Ansible Automation Platform subscriptions and place it in ./files/
+1. Create manifest.zip file containing Ansible Automation Platform subscriptions and place it in roles/deploy-workshop-workstation/files/manifest.zip
 2. Collect your workshop details
 3. Collect AWS credentials
 4. Collect Redhat service account credentials
@@ -88,8 +100,11 @@ Ready? Press enter to continue.
 
 Please type a password to use to vault encrypt your sensitive information.
 Do NOT use a password you use for anything else.
-Vault Password: 4nything.3lse
+Vault Password: for.github.readme
 Thanks! Saved in ./vault_secret.
+
+_.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~.
+
 
 Provide the workshop details.
 Workshop types are:
@@ -104,45 +119,56 @@ Workshop types are:
 The defaults will be displayed in [brackets]. Hit enter to accept.
 Press enter when ready
 
-Workshop Name [syspimp-workshop]: sears-catalog
+Workshop Name [\$USER-workshop]: 
 Workshop Type [windows]: 
 Number of Students for this workshop [2]: 
 Required: AWS DNS Zone to use [none]: example.com
 Default Password for students [ansible123]: 
 Do you want to autolaunch this workshop when tower is installed [yes]? (yes or no) 
-Step 2 Done!
+Step 1 Done!
+
+_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_
 
 I will now encrypt the manifest.
-ERROR! input is already encrypted
-Step 1 Done!
+Encryption successful
+Step 2 Done!
+
+//\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\
+
 
 If you don't have one, you will need to visit url below to create AWS access keys.
 When you have the access key and secret, press enter.
 
 https://console.aws.amazon.com/iam/home?region=us-east-1#/security_credentials
 
-AWS Key ID: ABCDEFGHIJKKDXBQQ
-AWS Secret Key: 1234567890gTWXPDmIi
+AWS Key ID: AKIAJ2BKR4AF3UKDXBQQ
+AWS Secret Key: Itzn27...[snip]...sw/SkGo+DIi
 Step 3 Done!
 
+[($)]          [($)]          [($)]          [($)]          [($)]          [($)]          [($)]          [($)]          [($)]
+
+
 Enter your Redhat Customer Portal creds. Don't worry we will encrypt them. We will need to register the workstation.
-Redhat Customer Portal username: syspimp@localhost
-Redhat Customer Portal password: shadowman
+Redhat Customer Portal username: syspimp@local
+Redhat Customer Portal password: SuperSecretPassword
 
 Redhat Service Accounts are a way to access the redhat api without using your customer portal credentials.
 
 Step 1 of 2: Visit https://access.redhat.com/terms-based-registry/#/accounts to create a service account/password
 When you have the svc account/password, press enter.
 
-Redhat Service Account User (looks like: 12345|your-name-here): 12345|workshop-demo
-Redhat Service Accout Password: eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiIx...[snip]...POjvWskGdNuZTHAicKXdruLY3Z4s3DmqnxPRLwIoH3iiSi6azplmEUHqXOMXXXhQmhVplu3-HP5hweVF5DT-7HEaguIid9fb3Z1L7N5ICOp0Qoux5lFyu6sK-2YRIkfLusjUkPsDCePdI2X3YZRAqVRs1BJbDmdGENcj8unbmLtu0Peq05kE
+Redhat Service Account User (looks like: 12345|your-name-here): 123456|workshop-demo
+Redhat Service Accout Password: eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiIxNzQwO...[snip]...Rs1BJbDmdGENcj8unbmLtu0Peq05kE
 Step 2 of 2: You will also need to generate an offline token by visiting the url below
 
 https://access.redhat.com/management/api
 When you have generated the offline token, press enter.
 
-Redhat Offline Token: eyJhbGciOiJIUzI1NiIsInR5cCIgOi...[snip]...oib2ZmbGluZV9hY2Nlc3MifQ.yAnsdSOSmLenRGMXC3jICmwc5XzzBRlc4KWqknpTqeA
+Redhat Offline Token: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldU...[snip]...LenRGMXC3jICmwc5XzzBRlc4KWqknpTqeA
 Step 4 Done!
+
+=^_^=          =^_^=          =^_^=          =^_^=          =^_^=          =^_^=          =^_^=          =^_^=          =^_^=
+
 
 I will now encrypt your sensitive info in group_vars/all.
 Encryption successful
@@ -150,37 +176,39 @@ If you need to edit in the future, use the command:
 ansible-vault edit --vault-password-file ./vault_secret group_vars/all
 Step 5 Done!
 
+<3             <3             <3             <3             <3             <3             <3             <3             <3
+
 Step 6: Ready to deploy! Press enter to launch and configure your Workstation.
 
 Installing ansible collections ...
 Executing: ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml
-[WARNING]: While constructing a mapping from /home/dataylor/git/deploy-workshop-workstation/roles/deploy-workshop-
-workstation/tasks/tower.yml, line 155, column 3, found a duplicate dict key (args). Using last defined value only.
+[WARNING]: While constructing a mapping from /home/syspimp/git/deploy-workshop-workstation/roles/deploy-workshop-workstation/tasks/tower.yml, line 155,
+column 3, found a duplicate dict key (args). Using last defined value only.
 
-PLAY [launch an instance in ec2] *******************************************************************************************************
+PLAY [launch an instance in ec2] *****************************************************************************************************************************
 
-TASK [Set the VM name] *****************************************************************************************************************
+TASK [Set the VM name] ***************************************************************************************************************************************
 ok: [localhost]
 
-TASK [Set the AMI to CentOS7] **********************************************************************************************************
+TASK [Set the AMI to CentOS7] ********************************************************************************************************************************
 skipping: [localhost]
 
-TASK [Set the AMI to RHEL6] ************************************************************************************************************
+TASK [Set the AMI to RHEL6] **********************************************************************************************************************************
 skipping: [localhost]
 
-TASK [Set the AMI to RHEL7] ************************************************************************************************************
+TASK [Set the AMI to RHEL7] **********************************************************************************************************************************
 skipping: [localhost]
 
-TASK [Set the AMI to RHEL8] ************************************************************************************************************
+TASK [Set the AMI to RHEL8] **********************************************************************************************************************************
 ok: [localhost]
 
-TASK [Set the VM roles] ****************************************************************************************************************
+TASK [Set the VM roles] **************************************************************************************************************************************
 ok: [localhost]
 
-TASK [create VPC] **********************************************************************************************************************
+TASK [create VPC] ********************************************************************************************************************************************
 changed: [localhost]
 
-TASK [debug vpc] ***********************************************************************************************************************
+TASK [debug vpc] *********************************************************************************************************************************************
 ok: [localhost] => 
   vpc:
     changed: true
@@ -188,41 +216,66 @@ ok: [localhost] =>
     vpc:
       cidr_block: 11.22.33.0/24
       cidr_block_association_set:
-      - association_id: vpc-cidr-assoc-0f565c64256d09dba
+      - association_id: vpc-cidr-assoc-0b45771c3757cc88f
         cidr_block: 11.22.33.0/24
         cidr_block_state:
           state: associated
       classic_link_enabled: false
       dhcp_options_id: dopt-a95a4dcc
-      id: vpc-0c50f85e3237a4fa1
+      id: vpc-0f17d3faa33ce594a
       instance_tenancy: default
       is_default: false
       owner_id: '698223370459'
       state: available
       tags:
-        Name: sears-catalog vpc
+        Name: dataylor-workshop vpc
 
-TASK [associate subnet to the VPC] *****************************************************************************************************
+TASK [associate subnet to the VPC] ***************************************************************************************************************************
 changed: [localhost]
 
-TASK [create IGW] **********************************************************************************************************************
+TASK [create IGW] ********************************************************************************************************************************************
 changed: [localhost]
 
-TASK [Route IGW] ***********************************************************************************************************************
+TASK [Route IGW] *********************************************************************************************************************************************
 changed: [localhost]
 
-TASK [Create Security Group] ***********************************************************************************************************
+TASK [Create Security Group] *********************************************************************************************************************************
 changed: [localhost]
 
-TASK [create a new ec2 key pair] *******************************************************************************************************
+TASK [create a new ec2 key pair] *****************************************************************************************************************************
 changed: [localhost]
 
-TASK [Copy EC2 Private Key locally so it can be later on used to SSH into the instance] ************************************************
+TASK [Copy EC2 Private Key locally so it can be later on used to SSH into the instance] **********************************************************************
 changed: [localhost]
 
-TASK [See if workstation instance exists already] **************************************************************************************
+TASK [See if workstation instance exists already] ************************************************************************************************************
 ok: [localhost]
+
+TASK [debug instances] ***************************************************************************************************************************************
+ok: [localhost] => 
+  wrkshop_instances:
+    changed: false
+    failed: false
+    instances: []
+
+TASK [launch an ec2 instance in a vpc subnet] ****************************************************************************************************************
+changed: [localhost]
+
+TASK [Save the public ip from the old deployment] ************************************************************************************************************
+skipping: [localhost]
+
+TASK [Save the public ip from the new deployment] ************************************************************************************************************
+ok: [localhost]
+
+TASK [Add new instance to host group] ************************************************************************************************************************
+changed: [localhost]
+
+TASK [Wait 2 to 11 mins for host to boot] ********************************************************************************************************************
+
+
 [.......]
+
+
 TASK [deploy-workshop-workstation : Wait 5 to 11 mins for host to reboot] ************************************************************************************
 skipping: [54.175.167.26]
 
