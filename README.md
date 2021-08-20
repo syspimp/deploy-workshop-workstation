@@ -66,10 +66,10 @@ Workshop types are:
 The defaults will be displayed in [brackets]. Hit enter to accept.
 Press enter when ready
 
-Workshop Name [syspimp-workshop]: 
+Workshop Name [syspimp-workshop]: sears-catalog
 Workshop Type [windows]: 
 Number of Students for this workshop [2]: 
-Required: AWS DNS Zone to use [none]: 
+Required: AWS DNS Zone to use [none]: example.com
 Default Password for students [ansible123]: 
 Do you want to autolaunch this workshop when tower is installed [yes]? (yes or no) 
 Step 2 Done!
@@ -203,5 +203,5 @@ ok: [54.175.167.26]
 
 PLAY RECAP ***************************************************************************************************************************************************
 54.175.167.26              : ok=34   changed=13   unreachable=0    failed=0    skipped=2    rescued=0    ignored=0
-localhost                  : ok=14   changed=1    unreachable=0    failed=0    skipped=7    rescued=0    ignored=0`
+localhost                  : ok=14   changed=1    unreachable=0    failed=0    skipped=7    rescued=0    ignored=0
 ```
