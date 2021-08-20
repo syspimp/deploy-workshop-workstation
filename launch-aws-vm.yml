@@ -1,5 +1,7 @@
 ---
 # Creates a new instance with provisioning userdata using Cloud-Init
+# Once you run ./setup.sh and your group_vars/all is configured, run
+# ansible-playbook -e "aws_vmname=my_cool_vm_name" launch-aws-vm.yml
 - name: launch an instance in ec2
   hosts: localhost
   gather_facts: no
@@ -134,15 +136,15 @@
     - name: Copy EC2 Private Key locally so it can be later on used to SSH into the instance
       copy:
         content: "{{ keypair.key.private_key }}"
-        dest: "{{ ec2_key_directory }}key.ppk"
+        dest: "{{ ec2_key_directory }}{{ aws_vmname}}-key.ppk"
         mode: 0600
       when: keypair.changed == true
      
-    - name: See if workstation instance exists already
+    - name: See if vm instance exists already
       community.aws.ec2_instance_info:
         region: "{{ aws.region }}"
         filters:
-          "tag:Name": "{{ workshop.name }}-workstation"
+          "tag:Name": "{{ aws_name }}"
           instance-state-name: [ "running"]
       register: wrkshop_instances
 
@@ -198,50 +200,6 @@
       become: false
       when: wrkshop_instances.instances|length == 0
 
-- name: Configure workshop workstation
-  hosts: launched
-  become: True
-  vars:
-    ansible_user: ec2-user
-    ansible_ssh_private_key_file: keys/key.ppk
-  gather_facts: True
-  roles:
-    - deploy-workshop-workstation
-
-- name: Deploy the workshop
-  hosts: launched
-  gather_facts: no
-  become: no
-  tasks:
-    - name: Kick off the deployment from tower
-      uri:
-        url: https://{{ inventory_hostname }}/api/v2/job_templates/9/launch/
-        validate_certs: no
-        method: POST
-        user: "admin"
-        password: "{{ workshop.default_password }}"
-        force_basic_auth: yes
-        status_code: [201,202]
-        body_format: json
-        body: >
-          { 
-             "extra_vars": {
-               "ec2_name_prefix": "{{ workshop.name }}",
-               "student_total": {{ workshop.how_many_students|int }},
-               "workshop_type": "{{ workshop.type }}",
-               "redhat_username": "{{ redhat.svcuser| trim }}",
-               "redhat_password": "{{ redhat.svcpass| trim }}",
-               "workshop_dns_zone": "{{ workshop.dns_zone }}",
-               "offline_token": "{{ redhat.offline_token | trim }}",
-               "instance_loc": "ec2",
-               "ec2_region": "{{ aws.region }}",
-               "doubleup": "false",
-               "admin_password": "{{ workshop.default_password }}",
-               "attendance": "true",
-               "controllerinstall": "true",
-               "create_cluster": "false",
-               "code_server": "true"
-             }
-          }
-      delegate_to: localhost
-      when: workshop.auto_launch|bool == true
+    - name: "Finished!"
+      debug:
+        msg: "Your sshkey is keys/key.ppk. ssh -i keys/key.ppk ec2-user@{{ inventory_hostname }}"

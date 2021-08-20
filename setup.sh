@@ -3,10 +3,13 @@ clear
 function check_manifest {
   if [ ! -e "roles/deploy-workshop-workstation/files/manifest.zip" ]
   then
+    echo
     echo "Ansible Automation Platform uses Satellite-style entitlements manifests"
     echo "You need to visit the url below to create a Satellite 6.8 manifest. Add Ansible Automation Platform subscriptions to it."
-    echo "Download/export the manifest, name it manifest.zip and place it in ./roles/deploy-workshop-workstation/files/manifest.zip"
+    echo
+    echo "Download/export the manifest, name it manifest.zip and COPY it to ./roles/deploy-workshop-workstation/files/manifest.zip"
     echo "https://access.redhat.com/management/subscription_allocations"
+    echo
     echo "Press enter when this is complete. I'll check again. Or Ctrl-C and start again when ready."
     read
     return 1
@@ -22,21 +25,49 @@ function check_workshop {
   grep 'workshop:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
+    echo
     echo "Provide the workshop details."
     echo -e "Workshop types are:\n- windows,\n- rhel,\n- rhel_90 (rhel in 90 minutes),\n- security,"
     echo -e "- network,\n- f5,\n- smart_mgmt,\n- demo (installs all ansible demos but fails at the end)"
+    echo "The defaults will be displayed in [brackets]. Hit enter to accept."
     echo "Press enter when ready"
     read
-    read -p "Workshop Name: " wrkname
+    read -p "Workshop Name [${USER}-workshop]: " wrkname
+    if [[ -z "$wrkname" ]]
+    then
+      wrkname="${USER}-workshop"
+    fi
     sed -i -e "s/name: demo-workshop/name: $wrkname/g" group_vars/all
-    read -p "Workshop Type: " wrktype
+    read -p "Workshop Type [windows]: " wrktype
+    if [[ -z "$wrkype" ]]
+    then
+      wrktype="windows"
+    fi
     sed -i -e "s/type: windows/type: $wrktype/g" group_vars/all
-    read -p "Number of Students for this workshop: " wrkstudents
+    read -p "Number of Students for this workshop [2]: " wrkstudents
+    if [[ -z "$wrkstudents" ]]
+    then
+      wrkstudents="2"
+    fi
     sed -i -e "s/number_of_students: 2/number_of_students: $wrkstudents/g" group_vars/all
-    read -p "DNS Zone to use: " wrkzone
+    read -p "Required: AWS DNS Zone to use [none]: " wrkzone
+    #if [[ -z "$wrkzone" ]]
+    #then
+    #  wrkzone="example.com"
+    #fi
     sed -i -e "s/dns_zone: example.com/dns_zone: $wrkzone/g" group_vars/all
-    read -p "Default Password for students: " wrkpass
+    read -p "Default Password for students [ansible123]: " wrkpass
+    if [[ -z "$wrkpass" ]]
+    then
+      wrkpass="ansible123"
+    fi
     sed -i -e "s/default_password: ansible123/default_password: $wrkpass/g" group_vars/all
+    read -p "Do you want to autolaunch this workshop when tower is installed [yes]? (yes or no) " autolaunch
+    if [[ -z "$autolaunch" ]]
+    then
+      autolaunch="yes"
+    fi
+    sed -i -e "s/auto_launch: yes/auto_launch: $autolaunch/g" group_vars/all
   fi
   echo "Step 2 Done!"
   echo
@@ -47,6 +78,7 @@ function check_aws {
   grep 'keyid:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
+    echo
     echo "If you don't have one, you will need to visit url below to create AWS access keys."
     echo "When you have the access key and secret, press enter."
     echo
@@ -67,6 +99,7 @@ function check_redhat {
   grep 'svcuser:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
+    echo
     echo "Enter your Redhat Customer Portal creds. Don't worry we will encrypt them. We will need to register the workstation."
     read -p "Redhat Customer Portal username: " cdnuser
     read -p "Redhat Customer Portal password: " cdnpass
@@ -96,6 +129,7 @@ function check_redhat {
 }
 
 function encrypt_files {
+  echo
   echo "I will now encrypt your sensitive info in group_vars/all." 
   ansible-vault encrypt --vault-password-file ./vault_secret group_vars/all
   echo "If you need to edit in the future, use the command: "
@@ -108,6 +142,7 @@ function encrypt_files {
 function helper {
   if [ -e "./group_vars-all.orig" ]
   then
+    echo
     echo "You are rerunning the setup.sh script. If you want to run the ansible playbook "
     echo "without changing the workshop setup or your credentials, then run "
     echo "'./rerun-ansible.sh'"
@@ -125,6 +160,7 @@ function helper {
   else
     cp group_vars/all group_vars-all.orig
   fi
+  echo
   echo "I am the helper program. I will guide you to get everything setup and deployed."
   echo
   echo "The ansible playbooks in this repo will:"
@@ -137,7 +173,7 @@ function helper {
   echo "WORKSHOP DEPENDENCY: You will need a domain name configured in your AWS Route53 for the workshop deployment to succeed. You can still install just the workstation."
   echo 
   echo "There are six steps. It shouldn't take you more than 5 mins:"
-  echo "1. Create manifest.zip file containing Ansible Automation Platform subscriptions and place it in ./files/"
+  echo "1. Create manifest.zip file containing Ansible Automation Platform subscriptions and place it in roles/deploy-workshop-workstation/files/manifest.zip"
   echo "2. Collect your workshop details"
   echo "3. Collect AWS credentials"
   echo "4. Collect Redhat service account credentials"
@@ -183,7 +219,7 @@ then
   echo "./destroy.sh && ./rerun-ansible.sh"
   echo
   echo "If you need to edit your configuration, run:"
-  echo "edit-groupvars.sh"
+  echo "./edit-groupvars.sh"
 else
   echo "Success! A workshop is being built for you at the URL in the ansible output above."
   echo "When you are finished with the workshop, delete everything by running:"

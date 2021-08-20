@@ -171,6 +171,7 @@
   shell: |
     shutdown -r +1 || true
   become: true
+  register: rebootstatus
   args:
     executable: /bin/bash
     creates: /opt/.tower-setup6
@@ -188,7 +189,9 @@
     timeout: 660
   delegate_to: localhost
   become: false
-
+  when:
+  - rebootstatus is defined
+  - rebootstatus.changed|bool == true
 
 - name: "Finished! Tower instructions"
   debug:
@@ -196,4 +199,4 @@
 
 - name: "Finished! CLI instructions"
   debug:
-    msg: "ssh to ec2-user@{{ inventory_hostname }}, cd to /home/ec2-user/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."
+    msg: "Your sshkey is keys/key.ppk. ssh -i keys/key.ppk ec2-user@{{ inventory_hostname }}, cd to /home/ec2-user/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."

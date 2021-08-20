@@ -9,7 +9,7 @@
                "forks": 0,
                "limit": "",
                "verbosity": 0,
-               "extra_vars": "---\nec2_name_prefix: demo-workshop\n# creates student_total of workbenches for the workshop\nstudent_total: \"2\"\n# Set the right workshop type, like networking, rhel or f5 (see above)\nworkshop_type: windows\n# Required for podman authentication to registry.redhat.io\nredhat_username: \"{{ redhat.svcuser| trim }}\"\nredhat_password: \"{{ redhat.svcpass| trim }}\"\n# for rhel 8\n#ansible_python_interpreter: /usr/libexec/platform-python\n# set this to your dns\nworkshop_dns_zone: prod.maskedadmins.com\n# for the redhat cdn api access, go to https://access.redhat.com/management/api\noffline_token: \"{{ redhat.offline_token | trim }}\"\n# Where to provision (Don't change: only testing ec2)\ninstance_loc: ec2\n# region where the nodes will live\nec2_region: us-east-1\n# name prefix for all the VMs\n# OPTIONAL VARIABLES\n# creates 2 windows instances per student instead of default 1\ndoubleup: false\n# password for Ansible control node, defaults to ansible\nadmin_password: \"ansible123\"\n# adds a form that prompts for name and email to allocate student credentials\nattendance: true\n# automatically install Tower to control node\ncontrollerinstall: true\ncreate_cluster: false\ncode_server: true",
+               "extra_vars": "---\nec2_name_prefix: demo-workshop\n# creates student_total of workbenches for the workshop\nstudent_total: \"2\"\n# Set the right workshop type, like networking, rhel or f5 (see above)\nworkshop_type: windows\n# Required for podman authentication to registry.redhat.io\nredhat_username: \"{{ redhat.svcuser| trim }}\"\nredhat_password: \"{{ redhat.svcpass| trim }}\"\n# for rhel 8\n#ansible_python_interpreter: /usr/libexec/platform-python\n# set this to your dns\nworkshop_dns_zone: \"{{ workshop.dns_zone }}\"\n# for the redhat cdn api access, go to https://access.redhat.com/management/api\noffline_token: \"{{ redhat.offline_token | trim }}\"\n# Where to provision (Don't change: only testing ec2)\ninstance_loc: ec2\n# region where the nodes will live\nec2_region: us-east-1\n# name prefix for all the VMs\n# OPTIONAL VARIABLES\n# creates 2 windows instances per student instead of default 1\ndoubleup: false\n# password for Ansible control node, defaults to ansible\nadmin_password: \"ansible123\"\n# adds a form that prompts for name and email to allocate student credentials\nattendance: true\n# automatically install Tower to control node\ncontrollerinstall: true\ncreate_cluster: false\ncode_server: true",
                "job_tags": "",
                "force_handlers": false,
                "skip_tags": "",
@@ -128,7 +128,7 @@
                "forks": 0,
                "limit": "",
                "verbosity": 0,
-               "extra_vars": "---\nec2_name_prefix: demo-workshop\n# creates student_total of workbenches for the workshop\nstudent_total: \"2\"\n# Set the right workshop type, like networking, rhel or f5 (see above)\nworkshop_type: windows\n# Required for podman authentication to registry.redhat.io\nredhat_username: \"{{ redhat.svcuser | trim }}\"\nredhat_password: \"{{ redhat.svcpass | trim }}\"\n# for rhel 8\n#ansible_python_interpreter: /usr/libexec/platform-python\n# set this to your dns\nworkshop_dns_zone: prod.maskedadmins.com\n# for the redhat cdn api access, go to https://access.redhat.com/management/api\noffline_token: \"{{ redhat.offline_token | trim }}\"\n# Where to provision (Don't change: only testing ec2)\ninstance_loc: ec2\n# region where the nodes will live\nec2_region: us-east-1\n# name prefix for all the VMs\n# OPTIONAL VARIABLES\n# creates 2 windows instances per student instead of default 1\ndoubleup: false\n# password for Ansible control node, defaults to ansible\nadmin_password: \"ansible123\"\n# adds a form that prompts for name and email to allocate student credentials\nattendance: true\n# automatically installs Tower to control node\ncontrollerinstall: true\ncreate_cluster: false\ncode_server: true",
+               "extra_vars": "---\nec2_name_prefix: demo-workshop\n# creates student_total of workbenches for the workshop\nstudent_total: \"2\"\n# Set the right workshop type, like networking, rhel or f5 (see above)\nworkshop_type: windows\n# Required for podman authentication to registry.redhat.io\nredhat_username: \"{{ redhat.svcuser | trim }}\"\nredhat_password: \"{{ redhat.svcpass | trim }}\"\n# for rhel 8\n#ansible_python_interpreter: /usr/libexec/platform-python\n# set this to your dns\nworkshop_dns_zone: \"{{ workshop.dns_zone }}\"\n# for the redhat cdn api access, go to https://access.redhat.com/management/api\noffline_token: \"{{ redhat.offline_token | trim }}\"\n# Where to provision (Don't change: only testing ec2)\ninstance_loc: ec2\n# region where the nodes will live\nec2_region: us-east-1\n# name prefix for all the VMs\n# OPTIONAL VARIABLES\n# creates 2 windows instances per student instead of default 1\ndoubleup: false\n# password for Ansible control node, defaults to ansible\nadmin_password: \"ansible123\"\n# adds a form that prompts for name and email to allocate student credentials\nattendance: true\n# automatically installs Tower to control node\ncontrollerinstall: true\ncreate_cluster: false\ncode_server: true",
                "job_tags": "",
                "force_handlers": false,
                "skip_tags": "",
@@ -235,6 +235,249 @@
                          "type": "organization"
                     },
                     "name": "Destroy Workshop",
+                    "type": "job_template"
+               }
+          },
+          {
+               "name": "AWS - Launch Instances",
+               "description": "",
+               "job_type": "run",
+               "playbook": "launch-aws-vm.yml",
+               "scm_branch": "",
+               "forks": 0,
+               "limit": "",
+               "verbosity": 0,
+               "extra_vars": "---\n#aws_instance_tags:\n#  Name: dataylor-demo-vm-001\n#awsroles:\n#- section: default\n#  vars:\n#  - name: role\n#    value: haproxy\n#- section: secondary\n#  vars:\n#  - name: role\n#    value: satellite-oscap\n#- section: config\n#  vars:\n#  - name: environment\n#    value: production\n#  - name: dns_domain\n#    value: {{ workshop.dns_zone }}\n#  - name: sat6_location\n#    value: \"RTO AWS Location\"\naws_volume_size: 100\naws_key_name: dataylor-redhat-aws\naws_instance_type: t3.xlarge\n#aws_instance_type: m4.2xlarge\n#aws_instance_type: m4.xlarge\nhost_config_server: 11.22.33.77\naws_vpc_subnet_id: subnet-03960a62ece2d78dc",
+               "job_tags": "",
+               "force_handlers": false,
+               "skip_tags": "",
+               "start_at_task": "",
+               "timeout": 0,
+               "use_fact_cache": true,
+               "host_config_key": "",
+               "ask_scm_branch_on_launch": false,
+               "ask_diff_mode_on_launch": false,
+               "ask_variables_on_launch": false,
+               "ask_limit_on_launch": false,
+               "ask_tags_on_launch": false,
+               "ask_skip_tags_on_launch": false,
+               "ask_job_type_on_launch": false,
+               "ask_verbosity_on_launch": false,
+               "ask_inventory_on_launch": false,
+               "ask_credential_on_launch": false,
+               "survey_enabled": true,
+               "become_enabled": false,
+               "diff_mode": false,
+               "allow_simultaneous": true,
+               "custom_virtualenv": null,
+               "job_slice_count": 1,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Demo Inventory",
+                    "type": "inventory"
+               },
+               "project": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Workshops",
+                    "type": "project"
+               },
+               "related": {
+                    "labels": [],
+                    "credentials": [
+                         {
+                              "organization": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              },
+                              "name": "AWS creds",
+                              "credential_type": {
+                                   "name": "Amazon Web Services",
+                                   "kind": "cloud",
+                                   "type": "credential_type"
+                              },
+                              "type": "credential"
+                         }
+                    ],
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "survey_spec": {
+                         "name": "",
+                         "description": "",
+                         "spec": [
+                              {
+                                   "question_name": "Name?",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "aws_vmname",
+                                   "min": 0,
+                                   "max": 25,
+                                   "default": "dataylor-test",
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "Instance Size",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "aws_instance_type",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "t3.xlarge",
+                                   "choices": "t3.medium\nt3.xlarge\nm4.xlarge\nm4.2xlarge"
+                              },
+                              {
+                                   "question_name": "Disk Size?",
+                                   "question_description": "How big of a volume for the server, in GB",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "aws_volume_size",
+                                   "min": 0,
+                                   "max": 1024,
+                                   "default": "100",
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "Add a second disk?",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "aws_multivolumes",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "no",
+                                   "choices": "no\nyes",
+                                   "new_question": true
+                              },
+                              {
+                                   "question_name": "Size of second disk? In gb",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "aws_volume2_size",
+                                   "min": 0,
+                                   "max": 5,
+                                   "default": "10",
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "Role?",
+                                   "question_description": "What ansible role to apply",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "aws_role",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "firstboot",
+                                   "choices": "ansible-tower\nansible-cluster-node\nansible-isolated-node\nfirstboot\nhaproxy\njboss-standalone\nminikube\nnbde-tang-server\nnbde-clevis-client\nnfs-server\nopenfire\nopenstack\nopenshift\nrsyslog-client\nsatellite-capsule\nsatellite-server\nsatellite-oscap\nsatellite-reports\nsnmp-client\nwebconsole\nzenoss-monitoring"
+                              },
+                              {
+                                   "question_name": "Apply Secondary Role?",
+                                   "question_description": "Pick another role to apply, if desired",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "aws_secondary_role",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "None",
+                                   "choices": "None\naudit-stig\naudit-pci\naudit-tty\nsatellite-oscap\nzenoss-monitoring\nnfs-server\niscsi-server"
+                              },
+                              {
+                                   "question_name": "SDLC Environment?",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "sdlc_environment",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "production",
+                                   "choices": "development\ntest\nproduction"
+                              },
+                              {
+                                   "question_name": "Domain to use?",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "dns_domain",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "{{ workshop.dns_zone }}",
+                                   "choices": "dev.example.com\ntest.example.com\nprod.example.com"
+                              },
+                              {
+                                   "question_name": "AWS Account?",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "aws_location",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "RTO",
+                                   "choices": "TFOUND\nRTO"
+                              },
+                              {
+                                   "question_name": "Availability Zone?",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "az",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "us-east-1a",
+                                   "choices": "us-east-1a\nus-east-1b\nus-east-1-c",
+                                   "new_question": true
+                              },
+                              {
+                                   "question_name": "Which OS?",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "aws_ostype",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "rhel7",
+                                   "choices": "centos7\nrhel7\nrhel8",
+                                   "new_question": true
+                              },
+                              {
+                                   "question_name": "SSH Key to Use?",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "aws_key",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "dataylor-redhat-aws",
+                                   "choices": "dataylor-redhat-aws",
+                                   "new_question": true
+                              },
+                              {
+                                   "question_name": "Callback to which Tower Server?",
+                                   "question_description": "IP or FQDN to use",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "host_config_server",
+                                   "min": 0,
+                                   "max": 1024,
+                                   "default": "11.22.33.77",
+                                   "choices": "",
+                                   "new_question": true
+                              }
+                         ]
+                    }
+               },
+               "natural_key": {
+                    "name": "AWS - Launch Instances",
                     "type": "job_template"
                }
           }
