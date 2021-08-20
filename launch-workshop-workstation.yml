@@ -1,5 +1,5 @@
 ---
-# Creates a new instance with provisioning userdata using Cloud-Init
+# Creates a new workstation to deploy workshops 
 - name: launch an instance in ec2
   hosts: localhost
   gather_facts: no

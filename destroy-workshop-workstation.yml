@@ -1,10 +1,7 @@
 ---
-# Creates a new instance with provisioning userdata using Cloud-Init
-# Uses a while loop to sit and wait until a success response from tower/awx callback
-# Set the tower job id and callback key here, group_vars, or in tower/awx
-# Creates a fact in /etc/ansible/facts.d to determines which role to apply
-# Updates the tower/awx inventory
-- name: launch an instance in ec2
+# destroys the workshop created by launch-workshop-workstation.yml
+# deletes the keys, subnets, etc
+- name: destroy workshop resources
   hosts: localhost
   gather_facts: no
   vars:
