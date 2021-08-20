@@ -53,15 +53,25 @@ Do NOT use a password you use for anything else.
 Vault Password: 4nything.3lse
 Thanks! Saved in ./vault_secret.
 
-Give the workshop details.
-Workshop types are windows,rhel,security,etc
+Provide the workshop details.
+Workshop types are:
+- windows,
+- rhel,
+- rhel_90 (rhel in 90 minutes),
+- security,
+- network,
+- f5,
+- smart_mgmt,
+- demo (installs all ansible demos but fails at the end)
+The defaults will be displayed in [brackets]. Hit enter to accept.
 Press enter when ready
 
-Workshop Name: sears-catalog
-Workshop Type: windows
-Number of Students for this workshop: 2
-DNS Zone to use: example.com
-Default Password for students: ansible123
+Workshop Name [syspimp-workshop]: 
+Workshop Type [windows]: 
+Number of Students for this workshop [2]: 
+Required: AWS DNS Zone to use [none]: 
+Default Password for students [ansible123]: 
+Do you want to autolaunch this workshop when tower is installed [yes]? (yes or no) 
 Step 2 Done!
 
 I will now encrypt the manifest.
