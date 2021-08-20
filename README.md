@@ -129,6 +129,99 @@ Step 1 Done!
 
 _.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_
 
+Ansible Automation Platform uses Satellite-style entitlements manifests
+You need to visit the url below to create a Satellite 6.8 manifest. Add Ansible Automation Platform subscriptions to it.
+
+Download/export the manifest, name it manifest.zip and COPY it to ./roles/deploy-workshop-workstation/files/manifest.zip
+https://access.redhat.com/management/subscription_allocations
+
+Press enter when this is complete. I'll check again. Or Ctrl-C and start again when ready.
+^C
+[syspimp@yogac940 deploy-workshop-workstation]$
+(reverse-i-search)`mani': cp /home/syspimp/Downloads/manifest_ansible_20210811T145521Z.zip roles/deploy-workshop-workstation/files/manifest.zip
+[syspimp@yogac940 deploy-workshop-workstation]$ ./setup.sh
+
+
+                                                                  
+                               88 88                              
+                               88 88                       ,d     
+                               88 88                       88     
+8b,dPPYba,  ,adPPYba,  ,adPPYb,88 88,dPPYba,  ,adPPYYba, MM88MMM  
+88P'   "Y8 a8P_____88 a8"    `Y88 88P'    "8a ""     `Y8   88     
+88         8PP""""""" 8b       88 88       88 ,adPPPPP88   88     
+88         "8b,   ,aa "8a,   ,d88 88       88 88,    ,88   88,    
+88          `"Ybbd8"'  `"8bbdP"Y8 88       88 `"8bbdP"Y8   "Y888  
+                                                                  
+                                                                  
+
+You are rerunning the setup.sh script. If you want to run the ansible playbook 
+without changing the workshop setup or your credentials, then run 
+'./rerun-ansible.sh'
+You only need to run setup.sh to setup your credentials.
+
+If you want to edit your credentials or workshop setup in the group_vars/all file, then run
+'./edit-groupvars.sh'
+
+To continue, I need to restore the group_vars/all back to the original 
+and if the manifest has been encrypted, you should use the same vault password.
+
+If you don't want this, Ctrl-C now. Otherwise, press enter to continue
+
+
+I am the helper program. I will guide you to get everything setup and deployed.
+
+The ansible playbooks in this repo will:
+- create vpc, subnet, gateway, security group, and a workstation vm
+- clone the ansible/workshops repo and configure it per your settings
+- install the latest Ansible Automation Platform on the workstation
+- configure AAP with job templates, credentials, inventory, and surveys
+  to deploy workshops at the click of a button
+
+WORKSHOP DEPENDENCY: You will need a domain name configured in your AWS Route53 for the workshop deployment to succeed. You can still install just the workstation.
+
+There are six steps. It shouldn't take you more than 5 mins:
+1. Create manifest.zip file containing Ansible Automation Platform subscriptions and place it in roles/deploy-workshop-workstation/files/manifest.zip
+2. Collect your workshop details
+3. Collect AWS credentials
+4. Collect Redhat service account credentials
+5. Encrypt your sensitive information
+6. Deploy the workstation!
+
+WARNING: This will modify your group_vars/all file.
+Ready? Press enter to continue.
+
+
+Please type a password to use to vault encrypt your sensitive information.
+Do NOT use a password you use for anything else.
+Vault Password: for.github.readme
+Thanks! Saved in ./vault_secret.
+
+_.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~.
+
+
+Provide the workshop details.
+Workshop types are:
+- windows,
+- rhel,
+- rhel_90 (rhel in 90 minutes),
+- security,
+- network,
+- f5,
+- smart_mgmt,
+- demo (installs all ansible demos but fails at the end)
+The defaults will be displayed in [brackets]. Hit enter to accept.
+Press enter when ready
+
+Workshop Name [dataylor-workshop]: 
+Workshop Type [windows]: 
+Number of Students for this workshop [2]: 
+Required: AWS DNS Zone to use [none]: example.com
+Default Password for students [ansible123]: 
+Do you want to autolaunch this workshop when tower is installed [yes]? (yes or no) 
+Step 1 Done!
+
+_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_
+
 I will now encrypt the manifest.
 Encryption successful
 Step 2 Done!
