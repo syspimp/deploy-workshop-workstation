@@ -22,15 +22,6 @@ function check_workshop {
   grep 'workshop:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
-    if [[ -e 'group_vars-all.orig' ]]
-    then
-      echo "You are rerunning the script. I need to restore the group_vars/all back to the original"
-      echo "If you don't want this, Ctrl-C now. Otherwise, press enter to continue"
-      read
-      cp -f group_vars-all.orig group_vars/all
-    else
-      cp group_vars/all group_vars-all.orig
-    fi
     echo "Give the workshop details."
     echo "Workshop types are windows,rhel,security,etc"
     echo "Press enter when ready"
@@ -114,6 +105,23 @@ function encrypt_files {
 }
 
 function helper {
+  if [ -e "./group_vars-all.orig" ]
+  then
+    echo "You are rerunning the setup.sh script. If you want to run the ansible playbook "
+    echo "without changing the workshop setup or your credentials, then run "
+    echo "'./rerun-ansible.sh'"
+    echo "You only need to run setup.sh to setup your credentials."
+    echo 
+    echo "If you want to edit your credentials or workshop setup in the group_vars/all file, then run"
+    echo "'./edit-groupvars.sh'"
+    echo
+    echo "To continue, I need to restore the group_vars/all back to the original"
+    echo "If you don't want this, Ctrl-C now. Otherwise, press enter to continue"
+    read
+    cp -f group_vars-all.orig group_vars/all
+  else
+    cp group_vars/all group_vars-all.orig
+  fi
   echo "I am the helper program. I will guide you to get everything setup and deployed."
   echo
   echo "The ansible playbooks in this repo will:"
@@ -148,12 +156,12 @@ function helper {
 }
 
 helper
+check_workshop
 check_manifest
 while [[ "$?" -ne 0 ]]
 do
   check_manifest
 done
-check_workshop
 check_aws
 check_redhat
 encrypt_files
@@ -163,3 +171,21 @@ echo "Installing ansible collections ..."
 ansible-galaxy install -r ./requirements.yml
 echo "Executing: ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml"
 ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml
+if [[ $? -ne 0 ]]
+then
+  echo "There is only one known bug, t3.large is not available in us-east-1c,"
+  echo "and sometimes aws puts the network bits in there, so the instance tries to launch in us-east-1c and fails"
+  echo
+  echo "The only known fix is to try again. Run:"
+  echo "./destroy.sh && ./rerun-ansible.sh"
+  echo
+  echo "If you need to edit your configuration, run:"
+  echo "edit-groupvars.sh"
+else
+  echo "Success! A workshop is being built for you at the URL in the ansible output above."
+  echo "When you are finished with the workshop, delete everything by running:"
+  echo "./destroy.sh"
+  echo "You can redeploy the workshop again by running"
+  echo "./rerun-ansible.sh"
+  echo "Have fun!"
+fi

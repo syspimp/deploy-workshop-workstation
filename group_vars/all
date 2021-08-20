@@ -19,6 +19,8 @@ workshop:
   default_password: ansible123
   # do you want to install tower on the system?
   towerinstall: yes
+  # do you wan to auto-launch the workshop?
+  auto_launch: yes
 
 # you don't have to modify these
 # used as convenience for aws section
