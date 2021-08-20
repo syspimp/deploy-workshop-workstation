@@ -16,7 +16,7 @@ function check_manifest {
   fi
   echo "I will now encrypt the manifest."
   ansible-vault encrypt --vault-password-file ./vault_secret roles/deploy-workshop-workstation/files/manifest.zip
-  echo "Step 1 Done!"
+  echo "Step 2 Done!"
   echo
   return 0
 }
@@ -69,7 +69,7 @@ function check_workshop {
     fi
     sed -i -e "s/auto_launch: yes/auto_launch: $autolaunch/g" group_vars/all
   fi
-  echo "Step 2 Done!"
+  echo "Step 1 Done!"
   echo
   return 0
 }
@@ -195,15 +195,27 @@ function helper {
 }
 
 helper
+echo '_.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~._.~"~.'
+echo
 check_workshop
+echo '_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_.~"(_'
+echo
 check_manifest
 while [[ "$?" -ne 0 ]]
 do
   check_manifest
 done
+echo '//\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\     //\(oo)/\\'
+echo
 check_aws
+echo '[($)]          [($)]          [($)]          [($)]          [($)]          [($)]          [($)]          [($)]          [($)]'
+echo
 check_redhat
+echo '=^_^=          =^_^=          =^_^=          =^_^=          =^_^=          =^_^=          =^_^=          =^_^=          =^_^='
+echo
 encrypt_files
+echo '<3             <3             <3             <3             <3             <3             <3             <3             <3'
+echo
 echo "Step 6: Ready to deploy! Press enter to launch and configure your Workstation."
 read
 echo "Installing ansible collections ..."
@@ -226,5 +238,5 @@ else
   echo "./destroy.sh"
   echo "You can redeploy the workshop again by running"
   echo "./rerun-ansible.sh"
-  echo "Have fun!"
+  echo "Have fun! (^_^) [o_o] (^.^)  (\".\") ($.$)"
 fi
