@@ -275,38 +275,38 @@ TASK [Wait 2 to 11 mins for host to boot] **************************************
 [.......]
 
 TASK [deploy-workshop-workstation : import the workshop objects] *********************************************************************************************
-changed: [35.175.120.74] => (item=projects)
-changed: [35.175.120.74] => (item=credentials)
-changed: [35.175.120.74] => (item=job_templates)
-changed: [35.175.120.74] => (item=inventory)
-changed: [35.175.120.74] => (item=inventory_sources)
+changed: [35.175.xxx.xxx] => (item=projects)
+changed: [35.175.xxx.xxx] => (item=credentials)
+changed: [35.175.xxx.xxx] => (item=job_templates)
+changed: [35.175.xxx.xxx] => (item=inventory)
+changed: [35.175.xxx.xxx] => (item=inventory_sources)
 
 TASK [deploy-workshop-workstation : Reboot.] *****************************************************************************************************************
-changed: [35.175.120.74]
+changed: [35.175.xxx.xxx]
 
 TASK [deploy-workshop-workstation : idempotency for workshop] ************************************************************************************************
 [WARNING]: Consider using the file module with state=touch rather than running 'touch'.  If you need to use command because file is insufficient you can add
 'warn: false' to this command task or set 'command_warnings=False' in ansible.cfg to get rid of this message.
-changed: [35.175.120.74]
+changed: [35.175.xxx.xxx]
 
 TASK [deploy-workshop-workstation : Wait 5 to 11 mins for host to reboot] ************************************************************************************
-ok: [35.175.120.74]
+ok: [35.175.xxx.xxx]
 
 TASK [deploy-workshop-workstation : Finished! Tower instructions] ********************************************************************************************
-ok: [35.175.120.74] => 
-  msg: Visit https://35.175.120.74/ using user/pass admin/ansible123. There are two Job Templates, Deploy Workshop and Destroy Workshop pre-configured.
+ok: [35.175.xxx.xxx] => 
+  msg: Visit https://35.175.xxx.xxx/ using user/pass admin/ansible123. There are two Job Templates, Deploy Workshop and Destroy Workshop pre-configured.
 
 TASK [deploy-workshop-workstation : Finished! CLI instructions] **********************************************************************************************
-ok: [35.175.120.74] => 
-  msg: Your sshkey is keys/key.ppk. ssh -i keys/key.ppk ec2-user@35.175.120.74, cd to /home/ec2-user/workshops/provisioner, and execute ansible-playbook -e @workshop-demo-workshop.yml provision_lab.yml to launch your ansible workshop.
+ok: [35.175.xxx.xxx] => 
+  msg: Your sshkey is keys/key.ppk. ssh -i keys/key.ppk ec2-user@35.175.xxx.xxx, cd to /home/ec2-user/workshops/provisioner, and execute ansible-playbook -e @workshop-demo-workshop.yml provision_lab.yml to launch your ansible workshop.
 
 PLAY [Deploy the workshop] ***********************************************************************************************************************************
 
 TASK [Kick off the deployment from tower] ********************************************************************************************************************
-ok: [35.175.120.74]
+ok: [35.175.xxx.xxx]
 
 PLAY RECAP ***************************************************************************************************************************************************
-35.175.120.74              : ok=37   changed=28   unreachable=0    failed=0    skipped=0    rescued=1    ignored=0   
+35.175.xxx.xxx              : ok=37   changed=28   unreachable=0    failed=0    skipped=0    rescued=1    ignored=0   
 localhost                  : ok=17   changed=9    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
 
 Success! A workshop is being built for you at the URL in the ansible output above.
@@ -316,8 +316,8 @@ You can redeploy the workshop again by running
 ./rerun-ansible.sh
 Have fun! (^_^) [o_o] (^.^)  (".") ($.$)
 
-[syspimp@yogac940 deploy-workshop-workstation]$ ssh -i keys/key.ppk ec2-user@35.175.120.74
-Warning: Permanently added '35.175.120.74' (ECDSA) to the list of known hosts.
+[syspimp@yogac940 deploy-workshop-workstation]$ ssh -i keys/key.ppk ec2-user@35.175.xxx.xxx
+Warning: Permanently added '123.234.xxx.xxx' (ECDSA) to the list of known hosts.
 
                                88 88
                                88 88                       ,d
@@ -334,11 +334,11 @@ role=deploy-workshop-workstation
 This system is not registered to Red Hat Insights. See https://cloud.redhat.com/
 To register this system, run: insights-client --register
 
-Last login: Fri Aug 20 20:52:57 2021 from 173.15.218.102
+Last login: Fri Aug 20 20:52:57 2021 from 123.234.xxx.xxx
 [ec2-user@ip-11-22-33-154 ~]$ ls /home/ec2-user/
 workshops
 [ec2-user@ip-11-22-33-154 ~]$ logout
-Connection to 35.175.120.74 closed.
+Connection to 35.175.xxx.xxx closed.
 [sysimp@yogac940 deploy-workshop-workstation]$ ./destroy-workstation.sh
 
 PLAY [destroy workshop resources] ****************************************************************************************************************************
