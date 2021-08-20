@@ -13,7 +13,7 @@ fi
 warning="${1}"
 echo
 echo "WARNING: This is will REMOVE any workshop configuration you have in the following files:"
-echo -e "- ./vault_secret\n- group_vars/all\n- roles/deploy-workshop-workstation/files/manifest.zip\n"
+echo -e "- ./vault_secret\n- group_vars/all\n- roles/deploy-workshop-workstation/files/manifest.zip\n- keys/key.ppk"
 echo
 echo "The manifest.zip will be deleted! I hope you have an unencrypted copy."
 echo
