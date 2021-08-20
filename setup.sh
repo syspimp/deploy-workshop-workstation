@@ -22,8 +22,9 @@ function check_workshop {
   grep 'workshop:' group_vars/all > /dev/null
   if [ $? -ne 1 ]
   then
-    echo "Give the workshop details."
-    echo "Workshop types are windows,rhel,security,etc"
+    echo "Provide the workshop details."
+    echo -e "Workshop types are:\n- windows,\n- rhel,\n- rhel_90 (rhel in 90 minutes),\n- security,"
+    echo -e "- network,\n- f5,\n- smart_mgmt,\n- demo (installs all ansible demos but fails at the end)"
     echo "Press enter when ready"
     read
     read -p "Workshop Name: " wrkname
