@@ -229,7 +229,9 @@ then
   echo "There is only one known bug, t3.large is not available in us-east-1c,"
   echo "and sometimes aws puts the network bits in there, so the instance tries to launch in us-east-1c and fails"
   echo
-  echo "The only known fix is to try again. Run:"
+  echo "The only known fix is to try again."
+  echo "Or sometimes AWS throws errors for throttling or existing or whatever. Just try again. Run:"
+  echo
   echo "./destroy.sh && ./rerun-ansible.sh"
   echo
   echo "If you need to edit your configuration, run:"
