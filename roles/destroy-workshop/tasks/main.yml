@@ -33,9 +33,26 @@
     delegate_to: localhost
     #when: workshop.towerinstall|bool == true
   
-  - name: "Lets give it 5 mins to destory the workshop resources"
-    pause:
-      minutes: 5
+  - name: "Monitor the destruction job by polling the api every min for 6 mins. It usually takes about 4 minutes"
+    uri:
+      url: https://{{ inventory_hostname }}/api/v2/job_templates/10/jobs/
+      validate_certs: no
+      method: GET
+      user: "admin"
+      password: "{{ workshop.default_password }}"
+      force_basic_auth: yes
+      status_code: [200]
+      body_format: json
+    register: jobstatus
+    retries: 6
+    delay: 60
+    until: jobstatus.json.status != 'running'
+    delegate_to: localhost
+    when: workshop.auto_launch|bool == true
+
+  #- name: "Lets give it 5 mins to destory the workshop resources"
+  #  pause:
+  #    minutes: 5
 
   rescue:
   - name: "[rescue] run the teardown playbook from the cli"
