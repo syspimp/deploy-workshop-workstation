@@ -24,11 +24,7 @@
     rhel7_ami_id: ami-0315fe0b0bfdfedda
     rhel8_ami_id: ami-058f90e71a7d69115
     aws_instance_type: t3.medium
-  environment:
-    AWS_ACCESS_KEY_ID: "{{ aws.keyid }}"
-    AWS_SECRET_ACCESS_KEY: "{{ aws.secret }}"
   tasks:
-
     - name: Set the VM name
       set_fact:
         aws_instance_tags:
@@ -133,15 +129,10 @@
         region: "{{ aws.region }}"
       register: keypair
      
-    - name: "create key directory"
-      file:
-        path: "{{ ec2_key_directory }}/{{ aws_vmname}}"
-        state: directory
-
     - name: Copy EC2 Private Key locally so it can be later on used to SSH into the instance
       copy:
         content: "{{ keypair.key.private_key }}"
-        dest: "{{ ec2_key_directory }}/{{ aws_vmname}}/{{ aws_vmname}}-key.ppk"
+        dest: "{{ ec2_key_directory }}{{ aws_vmname}}-key.ppk"
         mode: 0600
       when: keypair.changed == true
      
@@ -161,7 +152,7 @@
       register: ec2results
       ec2:
         key_name: "{{ keypair.key.name }}"
-        instance_type: "{{ aws.instance_type }}"
+        instance_type: "{{ aws_instance_type }}"
         image: "{{ aws_image_ami }}"
         wait: yes
         group_id: "{{ security_group.group_id }}"
@@ -173,10 +164,10 @@
         volumes:
           - device_name: /dev/sda1
             volume_type: gp2
-            volume_size: "{{ aws.volume_size }}"
+            volume_size: "{{ aws_volume_size }}"
             delete_on_termination: true
         user_data: |
-          {{ lookup('template', './templates/cloud-config.yml.j2') }}
+          {{ lookup('template', 'cloud-config.yml.j2') }}
       when: wrkshop_instances.instances|length == 0
 
     - name: Save the public ip from the old deployment
@@ -207,4 +198,73 @@
 
     - name: "Finished!"
       debug:
-        msg: "Your sshkey is keys/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk. ssh -i keys/{ aws_vmname }}/{{ aws_vmname }}-key.ppk ec2-user@{{ inventory_hostname }}"
+        msg: "Your sshkey is {{ ec2_key_directory }}{{ aws_vmname}}-key.ppk. ssh -i {{ ec2_key_directory }}{{ aws_vmname}}-key.ppkk ec2-user@{{ inventory_hostname }}"
+
+- name: Configure workshop workstation
+  hosts: launched
+  become: no
+  vars:
+    ansible_user: "{{ aws.user }}"
+    ansible_ssh_private_key_file: "{{ ec2_key_directory }}{{ aws_vmname}}-key.ppk"
+    firstboot_deps:
+      rpms:
+      - git
+      - ansible
+      - python3-pip
+  gather_facts: True
+  tasks:
+  - name: entitlement block
+    block:
+    - name: "Fall back to RHSM, Check if we are registered"
+      shell: "subscription-manager status"
+      register: rhsm_reg
+      become: yes
+      when:
+      - ansible_distribution_major_version == '8'
+  
+#    rescue:
+#    - name: "[rescue] we will need to subscribe to the redat cdn."
+#      debug:
+#        msg: "subscribing to the redhat cdn"
+#        
+#    - name: "[rescue] subscribe to the cdn"
+#      shell: subscription-manager register --auto-attach --username "{{ redhat.cdnuser }}" --password "{{ redhat.cdnpass }}"
+#      become: yes
+#  
+#  - name: "list the enabled repos"
+#    shell: yum repolist
+#    register: repolist
+#  
+#  - name: "Enabling needed repos for rhel8"
+#    shell: "subscription-manager repos --enable={{ item }}"
+#    with_items: "{{ rh8_enabled_repos }}"
+#    when: item not in repolist.stdout
+#    become: true
+#    loop:
+#    - ansible-2.9-for-rhel-8-x86_64-rpms
+#    - rhel-8-for-x86_64-appstream-rpms
+#    - rhel-8-for-x86_64-baseos-rpms
+#  
+#  - name: "list the rpms installed"
+#    shell: rpm -qa
+#    register: rpmlist
+#  
+#  - name: "install rpms if needed"
+#    shell: yum -y install {{ item }}
+#    become: yes
+#    #when: item not in rpmlist.stdout
+#    loop: "{{ firstbooot_deps.rpms }}"
+#  
+  - name: "Updating MOTD"
+    template: 
+      src: motd.j2
+      dest: /etc/motd 
+      owner: root 
+      group: root 
+      mode: 0644
+    become: true
+
+  - name: "Put the role in the MOTD"
+    shell: |
+      cat /etc/ansible/facts.d/awsroles.fact >> /etc/motd
+    become: true

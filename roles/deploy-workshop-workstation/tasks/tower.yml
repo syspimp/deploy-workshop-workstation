@@ -6,16 +6,26 @@
     remote_src: yes
   become: yes
 
+- name: "find the directory name"
+  shell: |
+    ls /opt | grep ansible
+  register: optcontents
+
+- name: "Set fact with the tower directory name"
+  set_fact:
+    towerdir: "{{ optcontents.stdout }}"
+
 - name: "update the tower setup inventory file"
   template:
     src: tower-inventory.j2
-    dest: /opt/ansible-tower-setup-3.8.3-2/inventory
+    dest: /opt/{{ towerdir }}/inventory
   become: yes
 
 - name: "run the tower installer"
   shell: |
-    cd /opt/ansible-tower-setup-*
+    cd /opt/{{ towerdir }}
     ./setup.sh && touch /opt/.tower-setup
+  register: towerinstalled
   become: yes
   args:
     creates: /opt/.tower-setup
@@ -31,19 +41,12 @@
   args:
     creates: /opt/.tower-setup2
 
-#- name: Load manifest into variable
-#  local_action:
-#    module: slurp
-#    src: "{{ playbook_dir }}/roles/deploy-workshop-workstation/files/manifest.zip"
-#  register: manifest_file
-#  become: false
-
-- name: Load manifest into variable
+- name: Load vault decrypted manifest into variable
   slurp:
-    src: "/home/ec2-user/workshops/provisioner/manifest.zip"
+    src: "/home/{{ aws.user }}/workshops/provisioner/manifest.zip"
   register: manifest_file
 
-- name: Post manifest file
+- name: Post manifest file and accept the EULA
   uri:
     url: https://{{ inventory_hostname }}/api/v2/config/
     method: POST
@@ -54,14 +57,14 @@
     validate_certs: false
     force_basic_auth: true
 
-- name: "list the installed pip dependencies"
+- name: "list the installed pip dependencies for the awx user"
   shell: |
     source /var/lib/awx/venv/ansible/bin/activate
     umask 0022
     pip3 list
   register: piplist
 
-- name: "install needed pip dependencies"
+- name: "install needed pip dependencies for awx user"
   shell: |
     source /var/lib/awx/venv/ansible/bin/activate
     umask 0022
@@ -69,81 +72,73 @@
   when: item not in piplist.stdout
   loop: "{{ workshop_deps.pipmods }}"
 
-#- name: "install needed ansible collections"
-#  shell: |
-#    source /var/lib/awx/venv/ansible/bin/activate
-#    umask 0022
-#    ansible-galaxy collection install -p /usr/share/ansible/collections community.{{ item }}
-#  args:
-#    creates: /usr/share/ansible/collections/ansible_collections/community/general
-#  become: yes
-#  loop:
-#  - general
-#  - aws
+- name: "install needed ansible collections for awx user"
+  shell: |
+    source /var/lib/awx/venv/ansible/bin/activate
+    umask 0022
+    ansible-galaxy collection install community.{{ item }}
+  args:
+    creates: "/var/lib/awx/.ansible/collections/ansible_collections/community/{{ item }}"
+  loop:
+  - general
+  - aws
 
-- name: "clone the github repo"
+- name: "clone the workshop github repo to /var/lib/awx/projects"
   shell: |
     source /var/lib/awx/venv/ansible/bin/activate
     umask 0022
     cd /var/lib/awx/projects/
-    if [[ ! -e /var/lib/awx/projects/workshops ]]
-    then
-      git clone https://github.com/ansible/workshops
-    fi
+    git clone https://github.com/ansible/workshops
+    cd workshops
+    git checkout {{ workshop_revision }}
   become: yes
   args:
     executable: /bin/bash
     creates: /var/lib/awx/projects/workshops
 
-- name: "place the extra vars template"
+- name: "place your workshop extra vars template in /var/lib/awx/projects/workshops/provisioner/workshop-{{ workshop.name }}"
   template:
     src: workshop.yml.j2
     dest: "/var/lib/awx/projects/workshops/provisioner/workshop-{{ workshop.name }}"
   become: yes
 
-#- name: "create aws directory to store creds"
-#  file:
-#    path: /var/lib/awx/.aws
-#    state: directory
-#    owner: awx
-#    group: awx
-#  become: yes
-#
-#- name: "copy the aws credential template"
-#  template:
-#    src: aws-credentials.j2
-#    dest: /var/lib/awx/.aws/credentials
-#    owner: awx
-#    group: awx
-#    mode: '0400'
-#  become: yes
-#
-- name: "add the workshop provisioner to awx projects and copy in manifest.zip"
+- name: "cp the workshop manifest.zip to awx projects"
   shell: |
     source /var/lib/awx/venv/ansible/bin/activate
     umask 0022
     cd /var/lib/awx/projects/workshops
-    cp /home/ec2-user/workshops/provisioner/manifest.zip /var/lib/awx/projects/workshops/provisioner/
-    chown -R awx.awx /var/lib/awx/projects/
-    restorecon -rV /var/lib/awx/projects/
+    cp /home/{{ aws.user }}/workshops/provisioner/manifest.zip /var/lib/awx/projects/workshops/provisioner/
+    chown -R awx.awx /var/lib/awx/
+    restorecon -rV /var/lib/awx/
     deactivate
     touch /opt/.tower-setup3
   become: yes
   args:
     creates: /opt/.tower-setup3
 
-#- name: "install the awx/tower cli"
-#  shell: |
-#    pip3 install https://releases.ansible.com/ansible-tower/cli/ansible-tower-cli-latest.tar.gz && \
-#    touch /opt/.tower-setup4
-#  become: yes
-#  args:
-#    creates: /opt/.tower-setup4
+- name: "create the tower backup to json objects script"
+  template:
+    src: "backup-tower-config-into-json.sh.j2"
+    dest: "/home/{{ aws.user }}/backup-tower-config-into-json.sh"
+    mode: 0755
 
-- name: "create the workshop objects"
+- name: "copy some useful playbooks into the project"
+  copy:
+    src: "playbooks/"
+    dest: "/var/lib/awx/projects/workshops/"
+    mode: 0755
+    owner: 'awx'
+    group: 'awx'
+  become: yes
+  #loop:
+  #- start-aws-vms
+  #- stop-aws-vms
+  #- launch-aws-vm
+
+- name: "create the tower json objects"
   template:
     src: "{{ item }}.json.j2"
-    dest: "/opt/ansible-tower-setup-3.8.3-2/import-{{ item }}.json"
+    dest: "/opt/{{ towerdir }}/import-{{ item }}.json"
   become: yes
   loop:
   - projects
@@ -155,17 +150,22 @@
 - name: "import the workshop objects"
   shell: |
     $(TOWER_USERNAME=admin TOWER_PASSWORD={{ workshop.default_password }} /usr/local/bin/awx login -k -f human)
-    /usr/local/bin/awx -k import < /opt/ansible-tower-setup-3.8.3-2/import-{{ item }}.json
+    /usr/local/bin/awx -k import < /opt/{{ towerdir }}/import-{{ item }}.json
   args:
     executable: /bin/bash
+    creates: /opt/.tower-setup6
   loop:
   - projects
   - credentials
   - job_templates
   - inventory
   - inventory_sources
-  args:
-    creates: /opt/.tower-setup6
+
+- name: "Fix permissions in /var/lib/awx/projects"
+  shell: |
+    chown -r awx.awx /var/lib/awx/projects/*
+    restorecon -r /var/lib/awx/projects/*
+  become: true
 
 - name: "Reboot."
   shell: |
@@ -199,4 +199,4 @@
 
 - name: "Finished! CLI instructions"
   debug:
-    msg: "Your sshkey is keys/key.ppk. ssh -i keys/key.ppk ec2-user@{{ inventory_hostname }}, cd to /home/ec2-user/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."
+    msg: "Your sshkey is keys/key.ppk. ssh -i keys/key.ppk {{ aws.user }}@{{ inventory_hostname }}, cd to /home/{{ aws.user }}/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."

@@ -1,0 +1,7 @@
+#!/bin/bash -x
+$(TOWER_USERNAME=admin TOWER_PASSWORD={{ workshop.default_password }} awx login -k -f human)
+mkdir -p backups
+for r in users organizations teams credential_types credentials notification_templates projects inventory inventory_sources job_templates workflow_job_templates;
+do
+  awx -k export --${r} > backups/${r}.json;
+done

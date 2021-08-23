@@ -4,8 +4,8 @@ student_total: {{ workshop.how_many_students }}
 # Set the right workshop type, like networking, rhel or f5 (see above)
 workshop_type: {{ workshop.type }}
 # Required for podman authentication to registry.redhat.io
-redhat_username: "{{ redhat.svcuser }}"
-redhat_password: "{{ redhat.svcpass }}"
+redhat_username: "{{ redhat.svcuser|trim }}"
+redhat_password: "{{ redhat.svcpass|trim }}"
 {% if ansible_distribution_major_version == '8' %}
 # for rhel 8
 ansible_python_interpreter: /usr/libexec/platform-python
@@ -13,7 +13,7 @@ ansible_python_interpreter: /usr/libexec/platform-python
 # set this to your dns
 workshop_dns_zone: {{ workshop.dns_zone }}
 # for the redhat cdn api access, go to https://access.redhat.com/management/api
-offline_token: "{{ redhat.offline_token }}"
+offline_token: "{{ redhat.offline_token|trim }}"
 # Where to provision (Don't change: only testing ec2)
 instance_loc: ec2
 # region where the nodes will live

@@ -1,13 +1,10 @@
 ---
-- name: stop all resources in the workshop vpc
+- name: start all resources in the workshop vpc
   hosts: localhost
   gather_facts: no
   vars:
     aws_workstation_vpc: "{{ workshop.name }} vpc"
     aws_workshop_vpc: "{{ workshop.name }}-vpc"
-  environment:
-    AWS_ACCESS_KEY_ID: "{{ aws.keyid }}"
-    AWS_SECRET_ACCESS_KEY: "{{ aws.secret }}"
   tasks:
     - name: "get the vpc ids"
       amazon.aws.ec2_vpc_net_info:
@@ -27,18 +24,18 @@
         region: "{{ aws.region }}"
         filters:
           vpc-id: "{{ item.vpc_id }}"
-          instance-state-name: [ "running"]
+          instance-state-name: [ "stopped"]
       register: wrkshop_instances1
       when:
       - vpc.results[0].vpcs|length > 0
       loop: "{{ vpc.results[0].vpcs }}"
-
+ 
     - name: Gather information about any instances running in the workstation vpc
       community.aws.ec2_instance_info:
         region: "{{ aws.region }}"
         filters:
           vpc-id: "{{ item.vpc_id }}"
-          instance-state-name: [ "running"]
+          instance-state-name: [ "stopped"]
       register: wrkshop_instances2
       when:
       - vpc.results[1].vpcs|length > 0
@@ -50,25 +47,25 @@
     - name: dump var
       debug: var=wrkshop_instances2
 
-    - name: "stop all running ec2 instance(s) in the {{ aws_workshop_vpc }} vpc"
+    - name: "start all stopped ec2 instance(s) in {{ aws_workshop_vpc }}the vpc subnet"
       amazon.aws.ec2:
         region: "{{ aws.region }}"
         instance_ids: 
           - "{{ item.instance_id }}"
-        state: stopped
+        state: running
       loop: "{{ wrkshop_instances1.results[0].instances }}"
       when:
       - vpc.results[0].vpcs|length > 0
       - wrkshop_instances1.results[0].instances|length > 0
-
-    - name: "stop all running ec2 instance(s) in the {{ aws_workstation_vpc }} vpc"
+ 
+    - name: "start all stopped ec2 instance(s) in the {{ aws_workstation_vpc }} vpc"
       amazon.aws.ec2:
         region: "{{ aws.region }}"
         instance_ids: 
           - "{{ item.instance_id }}"
-        state: stopped
+        state: running
       loop: "{{ wrkshop_instances2.results[0].instances }}"
       when:
       - vpc.results[1].vpcs|length > 0
       - wrkshop_instances2.results[0].instances|length > 0
-
+      - "item.tags.Name != '{{ workshop.name }}-workstation'"

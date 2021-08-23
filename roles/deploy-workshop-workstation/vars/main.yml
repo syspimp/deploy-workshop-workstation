@@ -1,14 +1,8 @@
 ---
 ## https://github.com/ansible/workshops/tree/devel/provisioner#requirements
 ## don't forget to go to https://access.redhat.com/management/subscription_allocations to create a manifest.zip and place in the files directory
-workshop:
-  name: demo-workshop
-  how_many_students: 2
-  type: windows
-  dns_zone: prod.maskedadmins.com
-  default_password: ansible123
-  # do you want to install tower on the system?
-  towerinstall: yes
+# locked the repo version to guarantee success
+workshop_revision: 2b0940c7bf7e24fb7cafc0aac40e6b989ac18e6d
 workshop_deps:
   pipmods: 
   - boto
@@ -18,7 +12,6 @@ workshop_deps:
   - pywinrm
   - requests
   - requests-credssp
-#  - ansible-tower-cli
   - https://releases.ansible.com/ansible-tower/cli/ansible-tower-cli-latest.tar.gz
   rpms:
   - git

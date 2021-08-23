@@ -1,0 +1,4 @@
+# exporting removes encrypted information, like passwords
+# to import, you will need to edit the files and add passwords back in
+# check out roles/deploy-workhop-workstation/ for examples and how to import
+

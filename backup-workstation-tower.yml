@@ -1,0 +1,33 @@
+---
+- name: backup tower into json objects
+  hosts: workstation
+  gather_facts: no
+  tasks:
+  - name: "Make the playbooks backups/{{ workshop.name }} directory"
+    file:
+      path: "{{ playbook_dir }}/backups/{{ workshop.name }}"
+      state: directory
+    delegate_to: localhost
+
+  - name: "Export the tower config into json objects on the tower server"
+    shell: |
+      ./backup-tower-config-into-json.sh
+
+  - name: "Copy the files to the playbook backups/{{ workshop.name }} directory"
+    ansible.builtin.fetch:
+      src: "backups/{{ item }}.json"
+      dest: "{{ playbook_dir }}/backups/{{ workshop.name }}/{{ item }}.json"
+      flat: yes
+    loop:
+    - projects
+    - credentials
+    - credential_types
+    - job_templates
+    - workflow_job_templates
+    - notification_templates
+    - organizations
+    - teams
+    - users
+    - inventory
+    - inventory_sources
+    

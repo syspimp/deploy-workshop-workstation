@@ -26,7 +26,6 @@
     AWS_ACCESS_KEY_ID: "{{ aws.keyid }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws.secret }}"
   tasks:
-
     - name: Set the VM name
       set_fact:
         aws_instance_tags:
@@ -68,9 +67,9 @@
         state: present
       register: vpc
 
-    - name: debug vpc
-      debug:
-        var: vpc
+    #- name: debug vpc
+    #  debug:
+    #    var: vpc
  
     - name: associate subnet to the VPC
       ec2_vpc_subnet:
@@ -198,11 +197,17 @@
       become: false
       when: wrkshop_instances.instances|length == 0
 
+    - name: "Create ./workstation-inventory file"
+      template:
+        src: workstation-inventory.j2
+        dest: "{{ playbook_dir }}/workstation-inventory"
+        mode: 0644
+
 - name: Configure workshop workstation
   hosts: launched
-  become: True
+  become: no
   vars:
-    ansible_user: ec2-user
+    ansible_user: "{{ aws.user }}"
     ansible_ssh_private_key_file: keys/key.ppk
   gather_facts: True
   roles:
@@ -245,3 +250,63 @@
           }
       delegate_to: localhost
       when: workshop.auto_launch|bool == true
+
+    - name: "Finished Deploying Workshop {{ workshop.name }}"
+      debug:
+        msg: "Visit https://{{ inventory_hostname }}/ using user/pass admin/{{ workshop.default_password }}. Check the Jobs log to get your workshop information for the students."
+
+    - name: "This last task is polling the API to see when the deployment is finished, and then it will grab the stdout with the workshop information"
+      debug:
+        msg: "You don't have to wait. It will take 40 mins or so. You can view the same in tower at https://{{ inventory_hostname }}/#/jobs/playbook/1 . "
+
+    - name: "Monitor the deployment by polling the api every min for 60 mins"
+      uri:
+        url: https://{{ inventory_hostname }}/api/v2/jobs/1/
+        validate_certs: no
+        method: GET
+        user: "admin"
+        password: "{{ workshop.default_password }}"
+        force_basic_auth: yes
+        status_code: [200]
+        body_format: json
+      register: jobstatus
+      retries: 60
+      delay: 60
+      until: jobstatus.json.status != 'running'
+      delegate_to: localhost
+      when: workshop.auto_launch|bool == true
+
+    - name: Grab the stdout from the job
+      uri:
+        url: https://{{ inventory_hostname }}/api/v2/jobs/1/stdout/?format=txt
+        validate_certs: no
+        method: GET
+        user: "admin"
+        password: "{{ workshop.default_password }}"
+        force_basic_auth: yes
+        status_code: [200]
+        body_format: json
+        return_content: yes
+      register: joboutput
+      delegate_to: localhost
+      when: workshop.auto_launch|bool == true
+
+    - name: "Grabbing the provisioning summary from the job stdout"
+      vars:
+       raw: "{{ item | replace('\"msg\": \"','') | replace('\\\\n','\n') | trim }}"
+      set_fact:
+       summary: "{{ raw }}"
+      when: "'PROVISIONER SUMMARY' in item"
+      no_log: yes
+      with_items: "{{ joboutput.content.split('\n') }}"
+    
+    - name: Save the workshop details in ./workshop-details
+      template:
+        src: workshop-details.j2
+        dest: "{{ playbook_dir }}/workshop-details"
+      delegate_to: localhost
+
+    - name: "Finished Deploying Workshop {{ workshop.name }}"
+      debug:
+        msg: "Visit https://{{ inventory_hostname }}/ using user/pass admin/{{ workshop.default_password }}. Check the Jobs log to get your workshop information for the students. Check out the workshop-details file for more information."
+
