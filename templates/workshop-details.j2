@@ -1,7 +1,7 @@
 The workstation inventory is in ./workstation-inventory. Your sshkey is keys/key.ppk.
 
 # connect to your workstation
-ssh -i keys/key.ppk ec2-user@3.234.223.36
+ssh -i keys/key.ppk ec2-user@{{ inventory_hostname }}
 
 # deploying a workstation via cli
 cd to /home/ec2-user/workshops/provisioner 
