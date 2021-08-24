@@ -11,4 +11,4 @@ ansible-playbook -e @workshop-dataylor-workshop.yml provision_lab.yml
 Visit https://{{ inventory_hostname }}/ using user/pass admin/{{ workshop.default_password }}. There are two Job Templates, Deploy Workshop and Destroy Workshop pre-configured.
 
 # {{ workshop.name }} that was deployed from tower details
-{{ summary }}
+{{ summary | default('None',true) }}

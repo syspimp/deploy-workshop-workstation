@@ -22,7 +22,6 @@
     rhel7_ami_id: ami-0315fe0b0bfdfedda
     rhel8_ami_id: ami-058f90e71a7d69115
     aws_instance_type: t3.medium
-    summary: ""
   environment:
     AWS_ACCESS_KEY_ID: "{{ aws.keyid }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws.secret }}"
@@ -255,10 +254,12 @@
     - name: "Finished Deploying Workshop {{ workshop.name }}"
       debug:
         msg: "Visit https://{{ inventory_hostname }}/ using user/pass admin/{{ workshop.default_password }}. Check the Jobs log to get your workshop information for the students."
+      when: workshop.auto_launch|bool == true
 
     - name: "This last task is polling the API to see when the deployment is finished, and then it will grab the stdout with the workshop information"
       debug:
         msg: "You don't have to wait. It will take 40 mins or so. You can view the same in tower at https://{{ inventory_hostname }}/#/jobs/playbook/1 . "
+      when: workshop.auto_launch|bool == true
 
     - name: "Monitor the deployment by polling the api every min for 60 mins"
       uri:
@@ -297,9 +298,12 @@
        raw: "{{ item | replace('\"msg\": \"','') | replace('\\\\n','\n') | trim }}"
       set_fact:
        summary: "{{ raw }}"
-      when: "'PROVISIONER SUMMARY' in item"
       no_log: yes
       with_items: "{{ joboutput.content.split('\n') }}"
+      when:
+      - joboutput is defined
+      - "'PROVISIONER SUMMARY' in item"
+      - workshop.auto_launch|bool == true
     
     - name: Save the workshop details in ./workshop-details
       template:
