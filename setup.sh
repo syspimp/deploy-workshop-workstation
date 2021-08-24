@@ -1,13 +1,27 @@
 #!/bin/bash
 clear
 function check_manifest {
+  # are we on aws?
+  curl --connect-timeout 1 http://169.254.169.254/latest/meta-data/public-ipv4 > /dev/null 2> /dev/null
+  if [ $? -ne 0 ]
+  then
+    aws_ip=$(curl --connect-timeout 1 http://169.254.169.254/latest/meta-data/public-ipv4)
+  fi
   if [ ! -e "roles/deploy-workshop-workstation/files/manifest.zip" ]
   then
     echo
     echo "Ansible Automation Platform uses Satellite-style entitlements manifests"
     echo "You need to visit the url below to create a Satellite 6.8 manifest. Add Ansible Automation Platform subscriptions to it."
     echo
-    echo "Download/export the manifest, name it manifest.zip and COPY it to ./roles/deploy-workshop-workstation/files/manifest.zip"
+    echo "Download/export the manifest, name it manifest.zip and COPY it to "
+    echo "${PWD}/roles/deploy-workshop-workstation/files/manifest.zip"
+    if [[ ! -z "${aws_ip}" ]]
+    then
+      echo
+      echo "For your convenience, here is an example command to copy and paste if you've launched an image on aws:"
+      echo "scp ~/Downloads/manifest_*zip ${USER}@${aws_ip}:${PWD}/roles/deploy-workshop-workstation/files/manifest.zip"
+      echo
+    fi
     echo "https://access.redhat.com/management/subscription_allocations"
     echo
     echo "Press enter when this is complete. I'll check again. Or Ctrl-C and start again when ready."
@@ -173,7 +187,8 @@ function helper {
   echo "WORKSHOP DEPENDENCY: You will need a domain name configured in your AWS Route53 for the workshop deployment to succeed. You can still install just the workstation."
   echo 
   echo "There are six steps. It shouldn't take you more than 5 mins:"
-  echo "1. Create manifest.zip file containing Ansible Automation Platform subscriptions and place it in roles/deploy-workshop-workstation/files/manifest.zip"
+  echo "1. Create manifest.zip file containing Ansible Automation Platform subscriptions and place it in "
+  echo "${PWD}/roles/deploy-workshop-workstation/files/manifest.zip"
   echo "2. Collect your workshop details"
   echo "3. Collect AWS credentials"
   echo "4. Collect Redhat service account credentials"
