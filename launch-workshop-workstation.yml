@@ -301,7 +301,7 @@
       no_log: yes
       with_items: "{{ joboutput.content.split('\n') }}"
       when:
-      - joboutput is defined
+      - joboutput.content is defined
       - "'PROVISIONER SUMMARY' in item"
       - workshop.auto_launch|bool == true
     
