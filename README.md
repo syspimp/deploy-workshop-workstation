@@ -11,8 +11,8 @@ It takes 5 mins worth of work to have a fully usable AAP/Tower.
 This should get you started on a RHEL8 system:
 
 ```shell
-subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
-yum -y install git ansible python3-pip
+sudo subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
+sudo yum -y install git ansible python3-pip
 pip3 install boto boto3
 git clone https://github.com/syspimp/deploy-workshop-workstation
 cd deploy-workshop-workstation
