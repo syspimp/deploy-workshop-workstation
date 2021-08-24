@@ -1,11 +1,9 @@
 The workstation inventory is in ./workstation-inventory. Your sshkey is keys/key.ppk.
 
-# connect to your workstation
+# connect to your workstation and deploy a workshop, you can copy and paste
 ssh -i keys/key.ppk ec2-user@{{ inventory_hostname }}
-
-# deploying a workstation via cli
-cd to /home/ec2-user/workshops/provisioner 
-ansible-playbook -e @workshop-dataylor-workshop.yml provision_lab.yml
+cd /home/ec2-user/workshops/provisioner 
+ansible-playbook -e @workshop-{{ workshop.name }}-workshop.yml provision_lab.yml
 
 # tower details
 Visit https://{{ inventory_hostname }}/ using user/pass admin/{{ workshop.default_password }}. There are two Job Templates, Deploy Workshop and Destroy Workshop pre-configured.
