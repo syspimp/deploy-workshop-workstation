@@ -221,7 +221,7 @@ echo
 echo "Step 6: Ready to deploy! Press enter to launch and configure your Workstation."
 read
 echo "Installing ansible collections ..."
-ansible-galaxy install -r ./requirements.yml
+ansible-galaxy collection install -r ./requirements.yml
 echo "Executing: ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml"
 ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml
 if [[ $? -ne 0 ]]
