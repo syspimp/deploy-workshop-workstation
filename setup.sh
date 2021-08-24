@@ -258,4 +258,8 @@ else
   echo "You can redeploy the workshop again by running"
   echo "./rerun-ansible.sh"
   echo "Have fun! (^_^) [o_o] (^.^)  (\".\") ($.$)"
+  if [[ -e workshop-details ]]
+  then
+    cat workshop-details
+  fi
 fi
