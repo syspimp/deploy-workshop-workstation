@@ -2,10 +2,10 @@
 clear
 function check_manifest {
   # are we on aws?
-  curl --connect-timeout 1 http://169.254.169.254/latest/meta-data/public-ipv4 > /dev/null 2> /dev/null
+  curl --connect-timeout 2 http://169.254.169.254/latest/meta-data/public-ipv4 > /dev/null 2> /dev/null
   if [ $? -ne 0 ]
   then
-    aws_ip=$(curl --connect-timeout 1 http://169.254.169.254/latest/meta-data/public-ipv4)
+    aws_ip=$(curl --connect-timeout 2 http://169.254.169.254/latest/meta-data/public-ipv4)
   fi
   if [ ! -e "roles/deploy-workshop-workstation/files/manifest.zip" ]
   then

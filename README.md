@@ -13,7 +13,7 @@ This should get you started on a RHEL8 system:
 ```shell
 sudo subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
 sudo yum -y install git ansible python3-pip
-pip3 install boto boto3
+sudo pip3 install boto boto3
 git clone https://github.com/syspimp/deploy-workshop-workstation
 cd deploy-workshop-workstation
 chmod +x ./setup.sh
