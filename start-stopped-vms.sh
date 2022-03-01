@@ -1,2 +1,2 @@
 #!/bin/bash
-ansible-playbook --vault-password-file ./vault_secret start-aws-vms.yml
+ansible-playbook --vault-password-file ./vault_secret tasks/start-aws-vms.yml

@@ -146,13 +146,8 @@
    name: "{{ workshop.name }} SG"
    region: "{{ aws.region }}"
    
-- name: Destroy ec2 key pair
-  ec2_key:
-    state: absent
-    name: "{{ workshop.name }}_keypair"
-    region: "{{ aws.region }}"
- 
 - name: Destroy the VPC
+  ignore_errors: yes
   ec2_vpc_net:
     name: "{{ aws_vpc_name }}"
     cidr_block: "{{ aws_vpc_cidr }}"
@@ -161,7 +156,13 @@
   when:
   - vpc.vpcs|length > 0
 
-- name: Remove the inventory file
-  file:
-    path: workstation-inventory
-    state: absent
+#- name: Destroy ec2 key pair
+#  ec2_key:
+#    state: absent
+#    name: "{{ workshop.name }}_keypair"
+#    region: "{{ aws.region }}"
+ 
+#- name: Remove the inventory file
+#  file:
+#    path: workstation-inventory
+#    state: absent

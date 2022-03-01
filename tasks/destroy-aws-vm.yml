@@ -1,0 +1,28 @@
+---
+- name: destroy aws vm by tag
+  hosts: localhost
+  vars:
+    destroy_awsvm: no
+    aws_vmname: 202201151200vm
+  tasks:
+  - name: "Gather information about any instance with a tag key Name: {{ aws_vmname }}"
+    community.aws.ec2_instance_info:
+      region: "{{ aws.region }}"
+      filters:
+        "tag:Name": "{{ aws_vmname }}"
+    register: wrkshop_instances
+
+  - name: dump var
+    debug: var=wrkshop_instances
+  
+  - name: terminate ec2 instance
+    amazon.aws.ec2:
+      region: "{{ aws.region }}"
+      instance_ids: 
+        - "{{ item.instance_id }}"
+      state: absent
+    loop: "{{ wrkshop_instances.instances }}"
+    when:
+    - wrkshop_instances.instances|length > 0
+    - destroy_awsvm|bool == true
+

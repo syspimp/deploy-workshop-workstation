@@ -1,0 +1,23 @@
+---
+cockpit_rpms:
+- cockpit-composer
+- cockpit-storaged
+- cockpit-podman
+- cockpit-networkmanager
+- cockpit-selinux
+- cockpit-sosreport
+- cockpit-kdump
+- cockpit-packagekit
+- cockpit-session-recording
+- cockpit-pcp
+
+sambashares: yes
+samba_rpms:
+- samba
+- wget
+
+firstboot_deps:
+  rpms:
+  - git
+  - ansible
+  - python3-pip

@@ -2,10 +2,14 @@
 clear
 function check_manifest {
   # are we on aws?
+  echo -n "testing for an cloud-config api to see if we are on AWS/Openstack Cloud ..."
   curl --connect-timeout 2 http://169.254.169.254/latest/meta-data/public-ipv4 > /dev/null 2> /dev/null
-  if [ $? -ne 0 ]
+  if [ $? -eq 0 ]
   then
     aws_ip=$(curl --connect-timeout 2 http://169.254.169.254/latest/meta-data/public-ipv4)
+    echo " we are on a cloud."
+  else
+    echo " we are not on a cloud."
   fi
   if [ ! -e "roles/deploy-workshop-workstation/files/manifest.zip" ]
   then
@@ -233,12 +237,12 @@ echo
 encrypt_files
 echo '<3             <3             <3             <3             <3             <3             <3             <3             <3'
 echo
-echo "Step 6: Ready to deploy! Press enter to launch and configure your Workstation."
+echo "Step 6: Ready to deploy! Press enter to launch and configure your Workstation. Run ./rerun-ansible.sh if things fail at this point."
 read
 echo "Installing ansible collections ..."
 ansible-galaxy collection install -r ./requirements.yml
-echo "Executing: ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml"
-ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml
+echo "Executing: ansible-playbook --vault-password-file ./vault_secret tasks/launch-workshop-workstation.yml"
+ansible-playbook --vault-password-file ./vault_secret tasks/launch-workshop-workstation.yml
 if [[ $? -ne 0 ]]
 then
   echo "There is only one known bug, t3.large is not available in us-east-1c,"

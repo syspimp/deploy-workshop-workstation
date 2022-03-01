@@ -1,0 +1,7 @@
+#!/bin/bash
+cd /home/{{ aws.user }}/workshops/provisioner
+ansible-playbook -e @workshop-test20220116old.yml teardown_lab.yml
+{% if workshop.ifttt == 'yes' %}
+curl -X POST https://maker.ifttt.com/trigger/{{ workshop.iftttevent }}/with/key/{{ workshop.iftttkey }}
+{% endif %}
+

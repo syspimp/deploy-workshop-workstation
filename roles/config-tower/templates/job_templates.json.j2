@@ -1,0 +1,522 @@
+{
+     "job_templates": [
+          {
+               "name": "Deploy Workshop",
+               "description": "",
+               "job_type": "run",
+               "playbook": "provisioner/provision_lab.yml",
+               "scm_branch": "",
+               "forks": 0,
+               "limit": "",
+               "verbosity": 0,
+               "extra_vars": "---\nec2_name_prefix: demo-workshop\n# creates student_total of workbenches for the workshop\nstudent_total: \"2\"\n# Set the right workshop type, like networking, rhel or f5 (see above)\nworkshop_type: windows\n# Required for podman authentication to registry.redhat.io\nredhat_username: \"{{ redhat.svcuser| trim }}\"\nredhat_password: \"{{ redhat.svcpass| trim }}\"\n# for rhel 8\n#ansible_python_interpreter: /usr/libexec/platform-python\n# set this to your dns\nworkshop_dns_zone: \"{{ workshop.dns_zone }}\"\n# for the redhat cdn api access, go to https://access.redhat.com/management/api\noffline_token: \"{{ redhat.offline_token | trim }}\"\n# Where to provision (Don't change: only testing ec2)\ninstance_loc: ec2\n# region where the nodes will live\nec2_region: {{ aws.region }}\n# name prefix for all the VMs\n# OPTIONAL VARIABLES\n# creates 2 windows instances per student instead of default 1\ndoubleup: false\n# password for Ansible control node, defaults to ansible\nadmin_password: \"ansible123\"\n# adds a form that prompts for name and email to allocate student credentials\nattendance: true\n# automatically install Tower to control node\ncontrollerinstall: true\ncreate_cluster: false\ncode_server: true",
+               "job_tags": "",
+               "force_handlers": false,
+               "skip_tags": "",
+               "start_at_task": "",
+               "timeout": 0,
+               "use_fact_cache": false,
+               "host_config_key": "",
+               "ask_scm_branch_on_launch": false,
+               "ask_diff_mode_on_launch": false,
+               "ask_variables_on_launch": false,
+               "ask_limit_on_launch": false,
+               "ask_tags_on_launch": false,
+               "ask_skip_tags_on_launch": false,
+               "ask_job_type_on_launch": false,
+               "ask_verbosity_on_launch": false,
+               "ask_inventory_on_launch": false,
+               "ask_credential_on_launch": false,
+               "survey_enabled": true,
+               "become_enabled": true,
+               "diff_mode": false,
+               "allow_simultaneous": false,
+               "custom_virtualenv": null,
+               "job_slice_count": 1,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Demo Inventory",
+                    "type": "inventory"
+               },
+               "project": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Workshops",
+                    "type": "project"
+               },
+               "related": {
+                    "labels": [],
+                    "credentials": [
+                         {
+                              "organization": null,
+                              "name": "AWS creds",
+                              "credential_type": {
+                                   "name": "Amazon Web Services",
+                                   "kind": "cloud",
+                                   "type": "credential_type"
+                              },
+                              "type": "credential"
+                         }
+                    ],
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "survey_spec": {
+                         "name": "",
+                         "description": "",
+                         "spec": [
+                              {
+                                   "question_name": "Name of Workshop",
+                                   "question_description": "No spaces, used as a prefix in fqdn name",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "ec2_name_prefix",
+                                   "min": 0,
+                                   "max": 1024,
+                                   "default": "demo-workshop2",
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "How many students",
+                                   "question_description": "Number",
+                                   "required": true,
+                                   "type": "integer",
+                                   "variable": "student_total",
+                                   "min": 0,
+                                   "max": 100,
+                                   "default": 2,
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "Workshop Type",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "workshop_type",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "windows",
+                                   "choices": "rhel\nwindows\nnetwork\nsecurity\nf5\nrhel_90",
+                                   "new_question": true
+                              }
+                         ]
+                    }
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Deploy Workshop",
+                    "type": "job_template"
+               }
+          },
+          {
+               "name": "Destroy Workshop",
+               "description": "",
+               "job_type": "run",
+               "playbook": "provisioner/teardown_lab.yml",
+               "scm_branch": "",
+               "forks": 0,
+               "limit": "",
+               "verbosity": 0,
+               "extra_vars": "---\nec2_name_prefix: {{ workshop.name }}\n# creates student_total of workbenches for the workshop\nstudent_total: \"2\"\n# Set the right workshop type, like networking, rhel or f5 (see above)\nworkshop_type: windows\n# Required for podman authentication to registry.redhat.io\nredhat_username: \"{{ redhat.svcuser | trim }}\"\nredhat_password: \"{{ redhat.svcpass | trim }}\"\n# for rhel 8\n#ansible_python_interpreter: /usr/libexec/platform-python\n# set this to your dns\nworkshop_dns_zone: \"{{ workshop.dns_zone }}\"\n# for the redhat cdn api access, go to https://access.redhat.com/management/api\noffline_token: \"{{ redhat.offline_token | trim }}\"\n# Where to provision (Don't change: only testing ec2)\ninstance_loc: ec2\n# region where the nodes will live\nec2_region: {{ aws.region }}\n# name prefix for all the VMs\n# OPTIONAL VARIABLES\n# creates 2 windows instances per student instead of default 1\ndoubleup: false\n# password for Ansible control node, defaults to ansible\nadmin_password: \"{{ workshop.default_password }}\"\n# adds a form that prompts for name and email to allocate student credentials\nattendance: true\n# automatically installs Tower to control node\ncontrollerinstall: true\ncreate_cluster: false\ncode_server: true",
+               "job_tags": "",
+               "force_handlers": false,
+               "skip_tags": "",
+               "start_at_task": "",
+               "timeout": 0,
+               "use_fact_cache": false,
+               "host_config_key": "",
+               "ask_scm_branch_on_launch": false,
+               "ask_diff_mode_on_launch": false,
+               "ask_variables_on_launch": false,
+               "ask_limit_on_launch": false,
+               "ask_tags_on_launch": false,
+               "ask_skip_tags_on_launch": false,
+               "ask_job_type_on_launch": false,
+               "ask_verbosity_on_launch": false,
+               "ask_inventory_on_launch": false,
+               "ask_credential_on_launch": false,
+               "survey_enabled": true,
+               "become_enabled": true,
+               "diff_mode": false,
+               "allow_simultaneous": false,
+               "custom_virtualenv": null,
+               "job_slice_count": 1,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Demo Inventory",
+                    "type": "inventory"
+               },
+               "project": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Workshops",
+                    "type": "project"
+               },
+               "related": {
+                    "labels": [],
+                    "credentials": [
+                         {
+                              "organization": null,
+                              "name": "AWS creds",
+                              "credential_type": {
+                                   "name": "Amazon Web Services",
+                                   "kind": "cloud",
+                                   "type": "credential_type"
+                              },
+                              "type": "credential"
+                         }
+                    ],
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "survey_spec": {
+                         "name": "",
+                         "description": "",
+                         "spec": [
+                              {
+                                   "question_name": "Name of Workshop",
+                                   "question_description": "No spaces, used as a prefix in fqdn name",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "ec2_name_prefix",
+                                   "min": 0,
+                                   "max": 1024,
+                                   "default": "{{ workshop.name }}",
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "How many students",
+                                   "question_description": "Number",
+                                   "required": true,
+                                   "type": "integer",
+                                   "variable": "student_total",
+                                   "min": 0,
+                                   "max": 100,
+                                   "default": {{ workshop.how_many_students|int }},
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "Workshop Type",
+                                   "question_description": "",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "workshop_type",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "{{ workshop.type }}",
+                                   "choices": "rhel\nwindows\nnetwork\nsecurity\nf5\nrhel_90",
+                                   "new_question": true
+                              }
+                         ]
+                    }
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Destroy Workshop",
+                    "type": "job_template"
+               }
+          },
+          {
+               "name": "Launch AWS Instance",
+               "description": "",
+               "job_type": "run",
+               "playbook": "launch-aws-vm.yml",
+               "scm_branch": "",
+               "forks": 0,
+               "limit": "",
+               "verbosity": 0,
+               "extra_vars": "---\nworkshop:\n  name: {{ workshop.name }}\naws:\n  region: {{ aws.region }}\n  root_password: {{ aws.root_password }}\naws_vmname: \"{{ workshop.name }}-customvm\"\naws_volume_size: 20 \naws_instance_type: {{ aws.instance_type }}",
+               "job_tags": "",
+               "force_handlers": false,
+               "skip_tags": "",
+               "start_at_task": "",
+               "timeout": 0,
+               "use_fact_cache": false,
+               "host_config_key": "",
+               "ask_scm_branch_on_launch": false,
+               "ask_diff_mode_on_launch": false,
+               "ask_variables_on_launch": false,
+               "ask_limit_on_launch": false,
+               "ask_tags_on_launch": false,
+               "ask_skip_tags_on_launch": false,
+               "ask_job_type_on_launch": false,
+               "ask_verbosity_on_launch": false,
+               "ask_inventory_on_launch": false,
+               "ask_credential_on_launch": false,
+               "survey_enabled": true,
+               "become_enabled": false,
+               "diff_mode": false,
+               "allow_simultaneous": false,
+               "custom_virtualenv": null,
+               "job_slice_count": 1,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Demo Inventory",
+                    "type": "inventory"
+               },
+               "project": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Workshops",
+                    "type": "project"
+               },
+               "related": {
+                    "labels": [],
+                    "credentials": [
+                         {
+                              "organization": null,
+                              "name": "AWS creds",
+                              "credential_type": {
+                                   "name": "Amazon Web Services",
+                                   "kind": "cloud",
+                                   "type": "credential_type"
+                              },
+                              "type": "credential"
+                         }
+                    ],
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "survey_spec": {
+                         "name": "",
+                         "description": "",
+                         "spec": [
+                              {
+                                   "question_name": "Name of VM?",
+                                   "question_description": "This will be the Name tag in AWS.",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "aws_vmname",
+                                   "min": 0,
+                                   "max": 128,
+                                   "default": "{{ workshop.name }}-customvm",
+                                   "choices": ""
+                              },
+                              {
+                                   "question_name": "Vm size and type?",
+                                   "question_description": "What is the instance type you want?",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "aws_instance_type",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "{{ aws.instance_type }}",
+                                   "choices": "t3.micro\nt3.medium\nt3.large\nm4.medium\nm4.large\nm4.xlarge",
+                                   "new_question": true
+                              },
+                              {
+                                   "question_name": "What size disk?",
+                                   "question_description": "In gigabytes",
+                                   "required": true,
+                                   "type": "text",
+                                   "variable": "aws_volume_size",
+                                   "min": 0,
+                                   "max": 4,
+                                   "default": "20",
+                                   "choices": "",
+                                   "new_question": true
+                              }
+                         ]
+                    }
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Launch AWS Instance",
+                    "type": "job_template"
+               }
+          },
+          {
+               "name": "Start all Workshop VMs except Tower/Workstation",
+               "description": "",
+               "job_type": "run",
+               "playbook": "start-aws-vms.yml",
+               "scm_branch": "",
+               "forks": 0,
+               "limit": "",
+               "verbosity": 0,
+               "extra_vars": "---\nworkshop:\n  name: {{ workshop.name }}\naws:\n  region: {{ aws.region }}",
+               "job_tags": "",
+               "force_handlers": false,
+               "skip_tags": "",
+               "start_at_task": "",
+               "timeout": 0,
+               "use_fact_cache": false,
+               "host_config_key": "",
+               "ask_scm_branch_on_launch": false,
+               "ask_diff_mode_on_launch": false,
+               "ask_variables_on_launch": false,
+               "ask_limit_on_launch": false,
+               "ask_tags_on_launch": false,
+               "ask_skip_tags_on_launch": false,
+               "ask_job_type_on_launch": false,
+               "ask_verbosity_on_launch": false,
+               "ask_inventory_on_launch": false,
+               "ask_credential_on_launch": false,
+               "survey_enabled": false,
+               "become_enabled": false,
+               "diff_mode": false,
+               "allow_simultaneous": false,
+               "custom_virtualenv": null,
+               "job_slice_count": 1,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Demo Inventory",
+                    "type": "inventory"
+               },
+               "project": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Workshops",
+                    "type": "project"
+               },
+               "related": {
+                    "labels": [],
+                    "credentials": [
+                         {
+                              "organization": null,
+                              "name": "AWS creds",
+                              "credential_type": {
+                                   "name": "Amazon Web Services",
+                                   "kind": "cloud",
+                                   "type": "credential_type"
+                              },
+                              "type": "credential"
+                         }
+                    ],
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "survey_spec": {}
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Start all Workshop VMs except Tower/Workstation",
+                    "type": "job_template"
+               }
+          },
+          {
+               "name": "Stop all Workshop VMs except Tower/Workstation",
+               "description": "",
+               "job_type": "run",
+               "playbook": "stop-aws-vms.yml",
+               "scm_branch": "",
+               "forks": 0,
+               "limit": "",
+               "verbosity": 0,
+               "extra_vars": "---\nworkshop:\n  # this is used as a filter/prefix for your workshop\n  name: {{ workshop.name }}\naws:\n  region: {{ aws.region }}",
+               "job_tags": "",
+               "force_handlers": false,
+               "skip_tags": "",
+               "start_at_task": "",
+               "timeout": 0,
+               "use_fact_cache": false,
+               "host_config_key": "",
+               "ask_scm_branch_on_launch": false,
+               "ask_diff_mode_on_launch": false,
+               "ask_variables_on_launch": false,
+               "ask_limit_on_launch": false,
+               "ask_tags_on_launch": false,
+               "ask_skip_tags_on_launch": false,
+               "ask_job_type_on_launch": false,
+               "ask_verbosity_on_launch": false,
+               "ask_inventory_on_launch": false,
+               "ask_credential_on_launch": false,
+               "survey_enabled": false,
+               "become_enabled": false,
+               "diff_mode": false,
+               "allow_simultaneous": false,
+               "custom_virtualenv": null,
+               "job_slice_count": 1,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Demo Inventory",
+                    "type": "inventory"
+               },
+               "project": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Workshops",
+                    "type": "project"
+               },
+               "related": {
+                    "labels": [],
+                    "credentials": [
+                         {
+                              "organization": null,
+                              "name": "AWS creds",
+                              "credential_type": {
+                                   "name": "Amazon Web Services",
+                                   "kind": "cloud",
+                                   "type": "credential_type"
+                              },
+                              "type": "credential"
+                         }
+                    ],
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "survey_spec": {}
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Stop all Workshop VMs except Tower/Workstation",
+                    "type": "job_template"
+               }
+          }
+     ]
+}

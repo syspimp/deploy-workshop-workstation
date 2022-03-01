@@ -31,7 +31,7 @@
            }
         }
     delegate_to: localhost
-    #when: workshop.towerinstall|bool == true
+    when: workshop.towerinstall|bool == true
   
   - name: "Monitor the destruction job by polling the api every min for 6 mins. It usually takes about 4 minutes"
     uri:
@@ -62,5 +62,5 @@
 
 - name: "remove the unneeded workshop-details file"
   file:
-    path: "{{ playbook_dir }}/workshop-details"
+    path: "{{ playbook_dir }}/../workshop-details"
     state: absent

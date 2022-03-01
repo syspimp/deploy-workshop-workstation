@@ -18,9 +18,12 @@ workshop:
   # password used for all workshop logins
   default_password: ansible123
   # do you want to install tower on the system?
-  towerinstall: yes
+  towerinstall: no
   # do you wan to auto-launch the workshop?
-  auto_launch: yes
+  auto_launch: no
+  ifttt: no
+  iftttkey: None
+  iftttevent: None
 
 # you don't have to modify these
 # used as convenience for aws section
@@ -39,7 +42,9 @@ aws:
   region: us-east-1
   # Optional: all below this line for aws, you may change as desired 
   # you can customize your remote user and key user, optional
-  user: ec2-user
+  #user: ec2-user
+  ## for fedora
+  user: fedora
   # paste in your custom public key here to add to aws instance, or leave to None to use the aws key only
   user_pubkey: None
   # set a password that will need to be changed on first login, or leave to None for ssh key access only

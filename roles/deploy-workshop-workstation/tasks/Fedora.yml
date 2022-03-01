@@ -1,0 +1,61 @@
+---
+- name: "install git"
+  yum: 
+    name: git
+    state: latest
+  become: yes
+
+- name: "get pip installer"
+  shell: curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+
+- name: "install pip"
+  shell: python get-pip.py
+  become: yes
+
+#- name: "install ansible"
+#  yum:
+#    name: ansible
+#    state: latest
+#  become: yes
+
+- name: "install ansible, paramiko from pip"
+  #shell: python -m pip install --user {{ item }}
+  shell: python -m pip install {{ item }}
+  become: yes
+  loop:
+  - ansible
+  - paramiko
+
+- name: "install ansible, paramiko from pip"
+  shell: python -m pip install {{ item }}
+  become: yes
+  loop: "{{ workshop_deps.pipmods }}"
+
+#
+#- name: "install needed pip dependencies"
+#  shell: python -m pip install --user {{ item }}
+#  #shell: python -m pip install {{ item }}
+#  #become: yes
+#  loop: "{{ workshop_deps.pipmods }}"
+
+- name: wrapper to install cockpit
+  block:
+  - name: "[Cockpit] Installing rpms"
+    yum:
+      #name: ["cockpit","cockpit-dashboard"]
+      name: ["cockpit","cockpit-storaged","cockpit-networkmanager","cockpit-podman","cockpit-selinux","cockpit-sosreport","cockpit-session-recording","cockpit-navigator"]
+      state: latest
+    become: true
+
+  - name: "[Cockpit] Activate!"
+    shell:  systemctl enable --now cockpit.socket
+    become: true
+
+  - name: "set the fedora user password so cockpit works"
+    shell: echo {{ workshop.default_password }} | passwd --stdin {{ aws.user }}
+    become: yes
+
+  rescue:
+  - name:
+    debug:
+      msg: "Welp, that didn't work"

@@ -1,78 +1,6 @@
 ---
-- name: entitlement block
-  block:
-  - name: "Fall back to RHSM, Check if we are registered"
-    shell: "subscription-manager status"
-    register: rhsm_reg
-    become: yes
-  when:
-  - ansible_distribution_major_version == '8'
-
-  rescue:
-  - name: "[rescue] we will need to subscribe to the redat cdn."
-    debug:
-      msg: "subscribing to the redhat cdn"
-      
-  - name: "[rescue] subscribe to the cdn"
-    shell: subscription-manager register --auto-attach --username "{{ redhat.cdnuser }}" --password "{{ redhat.cdnpass }}"
-    become: yes
-
-- name: "list the enabled repos"
-  shell: yum repolist
-  register: repolist
-
-- name: "Enabling needed repos for rhel8"
-  shell: "subscription-manager repos --enable={{ item }}"
-  with_items: "{{ rh8_enabled_repos }}"
-  when: item not in repolist.stdout
-  become: true
-  loop:
-  - ansible-2.9-for-rhel-8-x86_64-rpms
-  - rhel-8-for-x86_64-appstream-rpms
-  - rhel-8-for-x86_64-baseos-rpms
-
-- name: "list the rpms installed"
-  shell: rpm -qa
-  register: rpmlist
-
-- name: "install rpms if needed"
-  shell: yum -y install {{ item }}
-  become: yes
-  #when: item not in rpmlist.stdout
-  loop: "{{ workshop_deps.rpms }}"
-
-- name: "list the installed pip dependencies"
-  shell: pip3 list
-  become: yes
-  register: piplist
-
-- name: "install needed pip dependencies"
-  shell: pip3 install {{ item }}
-  become: yes
-  when: item not in piplist.stdout
-  loop: "{{ workshop_deps.pipmods }}"
-
-- name: "install needed ansible collections"
-  shell: ansible-galaxy collection install -p /usr/share/ansible/collections community.{{ item }}
-  args:
-    creates: "/usr/share/ansible/collections/ansible_collections/community/{{ item }}"
-  become: yes
-  loop:
-  - general
-  - aws
-
-- name: "clone the github repo"
-  shell: |
-    git clone https://github.com/ansible/workshops
-    cd workshops
-    git checkout {{ workshop_revision }}
-  args:
-    creates: /home/{{ aws.user }}/workshops
-
-- name: "place the extra vars template"
-  template:
-    src: workshop.yml.j2
-    dest: "/home/{{ aws.user }}/workshops/provisioner/workshop-{{ workshop.name }}.yml"
+- name: "Include distribution specific config"
+  include: "{{ ansible_distribution }}.yml"
 
 - name: "create aws directory to store creds"
   file:
@@ -83,6 +11,32 @@
   template:
     src: aws-credentials.j2
     dest: /home/{{ aws.user }}/.aws/credentials
+
+- name: "install needed ansible collections"
+  shell: ansible-galaxy collection install community.{{ item }}
+  #shell: ansible-galaxy collection install -p /usr/share/ansible/collections community.{{ item }}
+  args:
+    creates: "/home/{{ aws.user }}/.ansible/collections/ansible_collections/community/{{ item }}"
+    #creates: "/usr/share/ansible/collections/ansible_collections/community/{{ item }}"
+  #become: yes
+  loop:
+  - general
+  - aws
+
+- name: "clone the github repo"
+  shell: |
+    git clone https://github.com/ansible/workshops
+    cd workshops/provisioner
+    #ansible-galaxy collection build --verbose --force --output-path build/ ./..
+    #ansible-galaxy collection install --verbose --force-with-deps build/*.tar.gz -p workshop_collections
+    #git checkout {{ workshop_revision }}
+  args:
+    creates: /home/{{ aws.user }}/workshops
+
+- name: "place the extra vars template"
+  template:
+    src: workshop.yml.j2
+    dest: "/home/{{ aws.user }}/workshops/provisioner/workshop-{{ workshop.name }}.yml"
 
 - name: "copy up the entitlement manifest"
   copy:
@@ -98,9 +52,32 @@
     mode: 0644
   become: true
 
+- name: "Add workshop service"
+  template: 
+    src: workshop.service.j2
+    dest: /etc/systemd/system/workshop.service
+    owner: root 
+    group: root 
+    mode: 0644
+  become: true
+
+- name: "Add workshop service files"
+  template: 
+    src: "{{ item }}.sh.j2"
+    dest: "/home/{{ aws.user }}/workshops/provisioner/{{ item }}.sh"
+    owner: "{{ aws.user }}" 
+    group: "{{ aws.user }}"
+    mode: 0755
+  become: true
+  loop:
+  - provision
+  - teardown
+
 - name: "Put the role in the MOTD"
   shell: |
     cat /etc/ansible/facts.d/awsroles.fact >> /etc/motd
+    echo -e "The workstation inventory is in /home/{{ aws.user }}/workshops/provisioner/workstation-inventory.\n\ncd to /home/{{ aws.user }}/workshops/provisioner, and execute:\n\n1) 'provision.sh' or\n2) 'ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml', or\n3) sudo 'systemctl start workshop' and check the logs to launch your ansible workshop.\n\n exectue teardown.sh or systemctl stop workshop to destroy the workshop.\n\n" >> /etc/motd
+    echo -e "\n\n- Auto-Assignment website located at http://{{ workshop.name }}.{{ workshop.dns_zone }}, instructor can see workbench assignments at http://{{ workshop.name }}.{{ workshop.dns_zone }}/list.php\n- Private key is located at /home/{{ aws.user }}/workshops/provisioner/{{ workshop.name }}/{{ workshop.name }}-private.pem\n- Instructor inventory is located at  /home/{{ aws.user }}/workshops/provisioner/{{ workshop.name }}/instructor_inventory.txt\n" >> /etc/motd
   become: true
 
 - name: "Fix permissions in /home/{{ aws.user }}"
@@ -109,9 +86,14 @@
     restorecon -r /home/{{ aws.user }}
   become: true
 
+- name: "systemctl daemon-reload"
+  shell: |
+    systemctl daemon-reload
+  become: true
+
 - name: "Finished! CLI instructions"
   debug:
-    msg: "The workstation inventory is in ./workstation-inventory. Your sshkey is keys/key.ppk. ssh -i keys/key.ppk {{ aws.user }}@{{ inventory_hostname }}, cd to /home/{{ aws.user }}/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."
+    msg: "The workstation inventory is in ./workstation-inventory. Your sshkey is keys/{{ workshop.name }}-workstation/{{ workshop.name }}-workstation-key.ppk. ssh -i keys/{{ workshop.name }}-workstation/{{ workshop.name }}-workstation-key.ppk {{ aws.user }}@{{ inventory_hostname }}, cd to /home/{{ aws.user }}/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."
 
 - name: "Install Tower to deploy from GUI, if desired"
   include: "tower.yml"

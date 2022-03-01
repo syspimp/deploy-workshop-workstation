@@ -1,0 +1,26 @@
+---
+- name: Push tower configs to host
+  hosts: launched
+  become: no
+  vars_files: ../group_vars/all
+  vars:
+    ec2_key_directory: "{{ playbook_dir }}/../keys/"
+    ansible_user: "{{ aws.user }}"
+    ansible_ssh_private_key_file: "{{ ec2_key_directory }}/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk"
+  gather_facts: True
+  roles:
+    - ../roles/config-tower
+
+- name: Show instructions
+  hosts: launched
+  become: no
+  vars_files: ../group_vars/all
+  gather_facts: no
+  tasks:
+    - name: "CLI instructions"
+      debug:
+        msg: "Your sshkey is keys/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk. ssh -i keys/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk {{ aws.user }}@{{ inventory_hostname }}"
+
+    - name: "Web browser instructions"
+      debug:
+        msg: "Visit https://{{ inventory_hostname }}:9090 and login using username/password {{ aws.user }}/{{ aws.root_password }}"

@@ -1,0 +1,133 @@
+---
+- name: "install rpms"
+  yum: 
+    name: "{{ item }}"
+    state: latest
+  become: yes
+  loop:
+  - git
+  - ansible
+  - ansible-pcp
+  - grafana
+  - grafana-pcp
+  - pcp
+  - pcp-zeroconf
+
+- name: wrapper to activate services
+  block:
+#  - name: "[Galaxy] Install collections"
+#    shell:  "ansible-galaxy collection install {{ item }}"
+#    become: true
+#    loop:
+#    - "performancecopilot.metrics"
+
+  - name: "[pmlogger] Activate!"
+    shell:  systemctl enable --now pmlogger
+    become: true
+
+  - name: "[pmproxy] Activate!"
+    shell:  systemctl enable --now pmproxy
+    become: true
+
+  - name: "[grafana] Activate!"
+    shell:  systemctl enable --now grafana-server
+    become: true
+
+  rescue:
+  - name:
+    debug:
+      msg: "Welp, that didn't work"
+
+- name: wrapper to install cockpit
+  block:
+  - name: "[Cockpit] Installing rpms"
+    yum:
+      name: "{{ item }}"
+      state: latest
+    become: true
+    loop: "{{ cockpit_rpms }}"
+
+  - name: "[Cockpit] Activate!"
+    shell:  systemctl enable --now cockpit.socket
+    become: true
+
+  - name: "set the fedora user password so cockpit works"
+    shell: echo {{ workshop.default_password }} | passwd --stdin {{ aws.user }}
+    become: yes
+
+  rescue:
+  - name:
+    debug:
+      msg: "Welp, that didn't work"
+
+- name: wrapper to install samba
+  block:
+  - name: "[Samba] Installing rpms"
+    yum:
+      name: "{{ item }}"
+      state: latest
+    become: true
+    loop: "{{ samba_rpms }}"
+
+  - name: "[Samba] Activate!"
+    shell:  "systemctl enable --now {{ item }}"
+    become: true
+    loop:
+    - smb
+    - nmb
+
+  - name: "[Samba] add cockpit panel"
+    shell:  "wget -O - https://raw.githubusercontent.com/enira/cockpit-smb-plugin/master/install.sh | bash"
+    become: true
+    #command_warnings: False
+  #when: "sambashares == 'yes'"
+
+  rescue:
+  - name:
+    debug:
+      msg: "Welp, that didn't work"
+
+- name: "sssd.conf local config"
+  template: 
+    src: sssd.conf.j2
+    dest: /etc/sssd/sssd.conf 
+    owner: root 
+    group: root 
+    mode: 0444
+  become: true
+
+- name: "Updating MOTD"
+  template: 
+    src: motd.j2
+    dest: /etc/motd 
+    owner: root 
+    group: root 
+    mode: 0644
+  become: true
+
+- name: "Put the role in the MOTD"
+  shell: |
+    cat /etc/ansible/facts.d/awsroles.fact >> /etc/motd
+  become: true
+
+#- name: "get pip installer"
+#  shell: curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+#
+#- name: "install pip"
+#  shell: python get-pip.py
+#  become: yes
+#
+#- name: "list the installed pip dependencies"
+#  shell: python -m pip install --user {{ item }}
+#  #shell: python -m pip install {{ item }}
+#  #become: yes
+#  loop:
+#  - ansible
+#  - paramiko
+#
+#- name: "install needed pip dependencies"
+#  shell: python -m pip install --user {{ item }}
+#  #shell: python -m pip install {{ item }}
+#  #become: yes
+#  loop: "{{ workshop_deps.pipmods }}"
+#

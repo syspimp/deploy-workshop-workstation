@@ -1,8 +1,10 @@
-The workstation inventory is in ./workstation-inventory. Your sshkey is keys/key.ppk.
-
+The workstation inventory is in ./workstation-inventory. Your sshkey is keys/{{ workshop.name }}-workstation/{{ workshop.name }}-key.ppk
+name: {{ workshop.name }}
+ip: {{ inventory_hostname }}
+auto_launch: {{ workshop.auto_launch }}
 # connect to your workstation and deploy a workshop, you can copy and paste
-ssh -i keys/key.ppk ec2-user@{{ inventory_hostname }}
-cd /home/ec2-user/workshops/provisioner 
+ssh -t -i keys/{{ workshop.name }}-workstation/{{ workshop.name }}-workstation-key.ppk {{ aws.user }}@{{ inventory_hostname }}
+cd workshops/provisioner 
 ansible-playbook -e @workshop-{{ workshop.name }}-workshop.yml provision_lab.yml
 
 # tower details

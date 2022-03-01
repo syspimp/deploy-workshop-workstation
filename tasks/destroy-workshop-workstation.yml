@@ -3,12 +3,13 @@
   hosts: workstation
   gather_facts: no
   become: no
+  vars_files: ../group_vars/all
   vars:
     destroy_workshop: no
   tasks:
   - name: destroy workshop
     include_role:
-      name: destroy-workshop
+      name: ../roles/destroy-workshop
     when: destroy_workshop|bool == true
 
 # destroys the workstation created by launch-workshop-workstation.yml
@@ -16,6 +17,7 @@
 - name: destroy workstation resources
   hosts: localhost
   gather_facts: no
+  vars_files: ../group_vars/all
   vars:
     destroy_workstation: no
     aws_vpc_name: "{{ workshop.name }} vpc"
@@ -42,5 +44,5 @@
   tasks:
   - name: destroy workstation
     include_role:
-      name: destroy-workstation
+      name: ../roles/destroy-workstation
     when: destroy_workstation|bool == true

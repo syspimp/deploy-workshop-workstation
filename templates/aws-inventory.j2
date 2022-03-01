@@ -3,5 +3,5 @@ ansible_port=22
 ansible_user={{ aws.user }}
 ansible_ssh_private_key_file="keys/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk"
 
-[workstation]
+[launched]
 {{ public_ip }}

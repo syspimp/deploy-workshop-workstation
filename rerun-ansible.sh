@@ -11,4 +11,26 @@
 #
 # for debugging
 #ansible-playbook -vvv --vault-password-file ./vault_secret launch-workshop-workstation.yml
-ansible-playbook --vault-password-file ./vault_secret launch-workshop-workstation.yml
+ansible-playbook --vault-password-file ./vault_secret tasks/launch-workshop-workstation.yml
+
+if [[ -e "workshop-details" ]]
+then
+  grep 'auto_launch: no' ./workshop-details > /dev/null && exit 0
+  sshcmd=$(grep -- '-i key' ./workshop-details)
+  workshop=$(grep -- 'name:' ./workshop-details)
+  workshop="${workshop##name: }"
+  ipaddy=$(grep -- 'ip:' ./workshop-details)
+  ipaddy="${ipaddy##ip: }"
+  if [[ ! -z "${sshcmd}" ]]
+  then
+    echo "CTRL-C WITHIN 5 SECS TO CANCEL. Running the provisioning command twice, first time to install the collections."
+    sleep 5
+    set -x
+    ${sshcmd} "sudo systemctl start workshop.service"
+    #${sshcmd} "cd workshops/provisioner/ ; ansible-playbook -e @workshop-${workshop}.yml provision_lab.yml" || \
+    #${sshcmd} "cd workshops/provisioner/ ; ansible-playbook -e @workshop-${workshop}.yml provision_lab.yml"
+    set +x
+    echo "Visit https://${ipaddy}:9090/system/services#/workshop.service to watch the status. Log in with the user and default password you set, ie fedora/ansible123"
+  fi
+fi
+

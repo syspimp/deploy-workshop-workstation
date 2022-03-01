@@ -1,9 +1,10 @@
 ---
-- name: start all resources in the workshop vpc
+- name: stop all resources in the workshop vpc
   hosts: localhost
   gather_facts: no
+  vars_files: ../group_vars/all
   vars:
-    aws_vpc_name: "{{ workshop.name }} vpc"
+    aws_workstation_vpc: "{{ workshop.name }} vpc"
     aws_workshop_vpc: "{{ workshop.name }}-vpc"
   environment:
     AWS_ACCESS_KEY_ID: "{{ aws.keyid }}"
@@ -17,7 +18,7 @@
       register: vpc
       loop:
       - "{{ aws_workshop_vpc }}"
-      - "{{ aws_vpc_name }}"
+      - "{{ aws_workstation_vpc }}"
 
     - name: dump var
       debug: var=vpc
@@ -27,18 +28,18 @@
         region: "{{ aws.region }}"
         filters:
           vpc-id: "{{ item.vpc_id }}"
-          instance-state-name: [ "stopped"]
+          instance-state-name: [ "running"]
       register: wrkshop_instances1
       when:
       - vpc.results[0].vpcs|length > 0
       loop: "{{ vpc.results[0].vpcs }}"
- 
+
     - name: Gather information about any instances running in the workstation vpc
       community.aws.ec2_instance_info:
         region: "{{ aws.region }}"
         filters:
           vpc-id: "{{ item.vpc_id }}"
-          instance-state-name: [ "stopped"]
+          instance-state-name: [ "running"]
       register: wrkshop_instances2
       when:
       - vpc.results[1].vpcs|length > 0
@@ -50,26 +51,25 @@
     - name: dump var
       debug: var=wrkshop_instances2
 
-    - name: "start all stopped ec2 instance(s) in {{ aws_workshop_vpc }}the vpc subnet"
+    - name: "stop all running ec2 instance(s) in the {{ aws_workshop_vpc }} workshop vpc"
       amazon.aws.ec2:
         region: "{{ aws.region }}"
         instance_ids: 
           - "{{ item.instance_id }}"
-        state: running
+        state: stopped
       loop: "{{ wrkshop_instances1.results[0].instances }}"
       when:
       - vpc.results[0].vpcs|length > 0
       - wrkshop_instances1.results[0].instances|length > 0
- 
-    - name: "start all stopped ec2 instance(s) in the {{ aws_vpc_name }} vpc"
+
+    - name: "stop all running ec2 instance(s) in the {{ aws_workstation_vpc }} workstation vpc"
       amazon.aws.ec2:
         region: "{{ aws.region }}"
         instance_ids: 
           - "{{ item.instance_id }}"
-        state: running
+        state: stopped
       loop: "{{ wrkshop_instances2.results[0].instances }}"
       when:
       - vpc.results[1].vpcs|length > 0
       - wrkshop_instances2.results[0].instances|length > 0
-
 

@@ -1,0 +1,354 @@
+---
+# Creates a new workstation to deploy workshops 
+- name: launch an instance in ec2
+  hosts: localhost
+  gather_facts: no
+  vars_files: ../group_vars/all
+  vars:
+    aws_workstation_vpc: "{{ workshop.name }} vpc"
+    aws_vpc_cidr: "11.22.33.0/24"
+    aws_subnet_name: "{{ workshop.name }} subnet"
+    aws_igw_name: "{{ workshop.name }} igw"
+    aws_route_name: "{{ workshop.name }} route"
+    ec2_key_directory: "{{ playbook_dir }}/../keys"
+    aws_role: deploy-workshop-workstation
+    aws_ostype: fedora35
+    #aws_ostype: rhel8
+    aws_vmname: "{{ workshop.name }}-workstation"
+    aws_assign_public_ip: yes
+    aws_volume_size: 150
+    aws_security_group_name: "{{ workshop.name }}-sg-ansible"
+    aws_security_group_allow_cidr: "0.0.0.0/0"
+    rhel6_ami_id: ami-1643ff7e
+    centos7_ami_id: ami-0affd4508a5d2481b
+    rhel7_ami_id: ami-0315fe0b0bfdfedda
+    rhel8_ami_id: ami-058f90e71a7d69115
+    fedora35_ami_id: ami-08b4ee602f76bff79
+    aws_instance_type: t3.medium
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ aws.keyid }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aws.secret }}"
+  tasks:
+    - name: Set the VM name
+      set_fact:
+        aws_instance_tags:
+          Name: "{{ aws_vmname }}"
+
+    - name: Set the AMI to CentOS7
+      set_fact:
+        aws_image_ami: "{{ centos7_ami_id }}"
+      when: "'centos7' in aws_ostype"
+
+    - name: Set the AMI to RHEL6
+      set_fact:
+        aws_image_ami: "{{ rhel6_ami_id }}"
+      when: "'rhel6' in aws_ostype"
+
+    - name: Set the AMI to RHEL7
+      set_fact:
+        aws_image_ami: "{{ rhel7_ami_id }}"
+      when: "'rhel7' in aws_ostype"
+
+    - name: Set the AMI to RHEL8
+      set_fact:
+        aws_image_ami: "{{ rhel8_ami_id }}"
+      when: "'rhel8' in aws_ostype"
+
+    - name: Set the AMI to Fedora 35
+      set_fact:
+        aws_image_ami: "{{ fedora35_ami_id }}"
+      when: "'fedora' in aws_ostype"
+
+
+    - name: Set the VM roles
+      set_fact:
+        awsroles:
+          - section: default
+            vars:
+            - name: role
+              value: "{{ aws_role }}"
+    
+    - name: See if workstation instance exists already
+      community.aws.ec2_instance_info:
+        region: "{{ aws.region }}"
+        filters:
+          "tag:Name": "{{ workshop.name }}-workstation"
+          instance-state-name: [ "running"]
+      register: wrkshop_instances
+
+    - name: debug instances
+      debug:
+        var: wrkshop_instances
+ 
+    - name: create vm block
+      block: 
+      - name: create VPC
+        ec2_vpc_net:
+          name: "{{ aws_workstation_vpc }}"
+          cidr_block: "{{ aws_vpc_cidr }}"
+          region: "{{ aws.region }}"
+          state: present
+        register: vpc
+  
+      #- name: debug vpc
+      #  debug:
+      #    var: vpc
+   
+      - name: associate subnet to the VPC
+        ec2_vpc_subnet:
+         state: present
+         vpc_id: "{{ vpc.vpc.id }}"
+         region: "{{ aws.region }}"
+         cidr: "{{ aws_vpc_cidr }}"
+         map_public: yes
+         resource_tags:
+           Name: "{{ aws_subnet_name }}"
+        register: subnet
+       
+      - name: create IGW
+        ec2_vpc_igw:
+         vpc_id: "{{ vpc.vpc.id }}"
+         region: "{{ aws.region }}"
+         state: "present"
+         tags:
+           Name: "{{ aws_igw_name }}"
+        register: igw
+        
+      - name: Route IGW
+        ec2_vpc_route_table:
+         vpc_id: "{{ vpc.vpc.id }}"
+         region: "{{ aws.region }}"
+         subnets:
+           - "{{ subnet.subnet.id }}"
+         routes:
+           - dest: 0.0.0.0/0
+             gateway_id: "{{ igw.gateway_id  }}"
+         tags:
+           Name: "{{ aws_route_name }}"
+      
+      - name: Create Security Group
+        ec2_group:
+         name: "{{ workshop.name }} SG"
+         description: "{{ workshop.name }} Security Group, created by ansible"
+         vpc_id: "{{ vpc.vpc.id }}"
+         region: "{{ aws.region }}"
+         rules:
+           - proto: tcp
+             from_port: 1
+             to_port: 65535
+             cidr_ip: "{{ aws_security_group_allow_cidr }}"
+           - proto: udp
+             from_port: 161
+             to_port: 161
+             cidr_ip: "{{ aws_security_group_allow_cidr }}"
+           - proto: udp
+             from_port: 30514
+             to_port: 30514
+             cidr_ip: "{{ aws_security_group_allow_cidr }}"
+        register: security_group
+     
+      - name: create a new ec2 key pair
+        ec2_key:
+          name: "{{ workshop.name }}_keypair"
+          region: "{{ aws.region }}"
+        register: keypair
+       
+      - name: "create key directory"
+        file:
+          path: "{{ ec2_key_directory }}/{{ aws_vmname}}"
+          state: directory
+  
+      - name: Copy EC2 Private Key locally so it can be later on used to SSH into the instance
+        copy:
+          content: "{{ keypair.key.private_key }}"
+          dest: "{{ ec2_key_directory }}/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk"
+          mode: 0600
+        when: keypair.changed == true
+       
+      - name: launch an ec2 instance in a vpc subnet
+        register: ec2results
+        ec2:
+          key_name: "{{ keypair.key.name }}"
+          instance_type: "{{ aws.instance_type }}"
+          image: "{{ aws_image_ami }}"
+          wait: yes
+          group_id: "{{ security_group.group_id }}"
+          count: 1
+          vpc_subnet_id:  "{{ subnet.subnet.id }}"
+          assign_public_ip: yes
+          region: "{{ aws.region }}"
+          instance_tags: "{{ aws_instance_tags }}"
+          volumes:
+            - device_name: /dev/sda1
+              volume_type: gp2
+              volume_size: "{{ aws.volume_size }}"
+              delete_on_termination: true
+          user_data: |
+            {{ lookup('template', '{{playbook_dir }}/../templates/cloud-config.yml.j2') }}
+      when: wrkshop_instances.instances|length == 0
+      # end create vm block
+
+    - name: Save the public ip from the old deployment
+      set_fact:
+        public_ip: "{{ wrkshop_instances.instances[0].public_ip_address }}"
+      when: wrkshop_instances.instances|length == 1
+
+    - name: Save the public ip from the new deployment
+      set_fact:
+        public_ip: "{{ ec2results.instances[0].public_ip }}"
+      when: wrkshop_instances.instances|length == 0
+
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ public_ip }}"
+        groupname: launched
+
+    - name: "Wait 2 to 11 mins for host to boot"
+      wait_for:
+        port: 22
+        host: "{{ public_ip }}"
+        search_regex: OpenSSH
+        delay: 120
+        timeout: 660
+      delegate_to: localhost
+      become: false
+      when: wrkshop_instances.instances|length == 0
+
+    - name: "Create ./workstation-inventory file"
+      template:
+        src: "{{ playbook_dir }}/../templates/workstation-inventory.j2"
+        dest: "{{ playbook_dir }}/../workstation-inventory"
+        mode: 0644
+
+- name: Configure workshop workstation
+  hosts: launched
+  become: no
+  vars_files: ../group_vars/all
+  vars:
+    ec2_key_directory: "{{ playbook_dir }}/../keys"
+    ansible_user: "{{ aws.user }}"
+    ansible_ssh_private_key_file: "{{ ec2_key_directory }}/{{ workshop.name }}-workstation/{{ workshop.name }}-workstation-key.ppk"
+  gather_facts: True
+  roles:
+    - ../roles/deploy-workshop-workstation
+
+- name: Deploy the workshop
+  hosts: launched
+  gather_facts: no
+  become: no
+  vars_files: ../group_vars/all
+  tasks:
+    - name: "block for tower installation"
+      block:
+      - name: Kick off the deployment from tower
+        uri:
+          url: https://{{ inventory_hostname }}/api/v2/job_templates/9/launch/
+          validate_certs: no
+          method: POST
+          user: "admin"
+          password: "{{ workshop.default_password }}"
+          force_basic_auth: yes
+          status_code: [201,202]
+          body_format: json
+          body: >
+            { 
+               "extra_vars": {
+                 "ec2_name_prefix": "{{ workshop.name }}",
+                 "student_total": {{ workshop.how_many_students|int }},
+                 "workshop_type": "{{ workshop.type }}",
+                 "redhat_username": "{{ redhat.svcuser| trim }}",
+                 "redhat_password": "{{ redhat.svcpass| trim }}",
+                 "workshop_dns_zone": "{{ workshop.dns_zone }}",
+                 "offline_token": "{{ redhat.offline_token | trim }}",
+                 "instance_loc": "ec2",
+                 "ec2_region": "{{ aws.region }}",
+                 "doubleup": "false",
+                 "admin_password": "{{ workshop.default_password }}",
+                 "attendance": "true",
+                 "controllerinstall": "true",
+                 "create_cluster": "false",
+                 "code_server": "true"
+               }
+            }
+        delegate_to: localhost
+        when:
+        - workshop.auto_launch|bool == true
+        - workshop.towerinstall|bool == true
+  
+      - name: "Finished Deploying Workshop {{ workshop.name }}"
+        debug:
+          msg: "Visit https://{{ inventory_hostname }}/ using user/pass admin/{{ workshop.default_password }}. Check the Jobs log to get your workshop information for the students."
+        when: workshop.auto_launch|bool == true
+  
+      - name: "This last task is polling the API to see when the deployment is finished, and then it will grab the stdout with the workshop information"
+        debug:
+          msg: "You don't have to wait. It will take 40 mins or so. You can view the same in tower at https://{{ inventory_hostname }}/#/jobs/playbook/1 . "
+        when: workshop.auto_launch|bool == true
+  
+      - name: "Monitor the deployment by polling the api every min for 60 mins"
+        uri:
+          url: https://{{ inventory_hostname }}/api/v2/jobs/1/
+          validate_certs: no
+          method: GET
+          user: "admin"
+          password: "{{ workshop.default_password }}"
+          force_basic_auth: yes
+          status_code: [200]
+          body_format: json
+        register: jobstatus
+        retries: 60
+        delay: 60
+        until: jobstatus.json.status != 'running'
+        delegate_to: localhost
+        when: workshop.auto_launch|bool == true
+  
+      - name: Grab the stdout from the job
+        uri:
+          url: https://{{ inventory_hostname }}/api/v2/jobs/1/stdout/?format=txt
+          validate_certs: no
+          method: GET
+          user: "admin"
+          password: "{{ workshop.default_password }}"
+          force_basic_auth: yes
+          status_code: [200]
+          body_format: json
+          return_content: yes
+        register: joboutput
+        delegate_to: localhost
+        when: workshop.auto_launch|bool == true
+  
+      - name: "Grabbing the provisioning summary from the job stdout"
+        vars:
+         raw: "{{ item | replace('\"msg\": \"','') | replace('\\\\n','\n') | trim }}"
+        set_fact:
+         summary: "{{ raw }}"
+        no_log: yes
+        with_items: "{{ joboutput.content.split('\n') }}"
+        when:
+        - joboutput.content is defined
+        - "'PROVISIONER SUMMARY' in item"
+        - workshop.auto_launch|bool == true
+    
+      when:
+      - workshop.auto_launch|bool == true
+      - workshop.towerinstall|bool == true
+      # end block for towerinstall
+
+      rescue:
+      - name: this is handled after the rerun script
+        shell: echo
+
+    - name: Save the workshop details in ./workshop-details
+      template:
+        src: "{{ playbook_dir }}/../templates/workshop-details.j2"
+        dest: "{{ playbook_dir }}/../workshop-details"
+      delegate_to: localhost
+
+    - name: "Finished Deploying Workshop {{ workshop.name }}"
+      debug:
+        msg: "Visit https://{{ inventory_hostname }}/ using user/pass admin/{{ workshop.default_password }}. Check the Jobs log to get your workshop information for the students. Check out the workshop-details file for more information."
+
+    - name: "Finished! CLI instructions"
+      debug:
+        msg: "The workstation inventory is in ./workstation-inventory. Your sshkey is keys/{{ workshop.name }}-workstation/{{ workshop.name }}-workstation-key.ppk. ssh -i keys/{{ workshop.name }}-workstation/{{ workshop.name }}-workstation-key.ppk {{ aws.user }}@{{ inventory_hostname }}, cd to /home/{{ aws.user }}/workshops/provisioner, and execute ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml to launch your ansible workshop."
+

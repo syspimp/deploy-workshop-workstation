@@ -1,0 +1,56 @@
+---
+- name: entitlement block
+  block:
+  - name: "Fall back to RHSM, Check if we are registered"
+    shell: "subscription-manager status"
+    register: rhsm_reg
+    become: yes
+  when:
+  - ansible_distribution_major_version == '8'
+
+  rescue:
+  - name: "[rescue] we will need to subscribe to the redat cdn."
+    debug:
+      msg: "subscribing to the redhat cdn"
+      
+  - name: "[rescue] subscribe to the cdn"
+    shell: subscription-manager register --auto-attach --username "{{ redhat.cdnuser }}" --password "{{ redhat.cdnpass }}"
+    become: yes
+
+- name: "list the enabled repos"
+  shell: yum repolist
+  register: repolist
+
+- name: "Enabling needed repos for rhel8"
+  shell: "subscription-manager repos --enable={{ item }}"
+  with_items: "{{ rh8_enabled_repos }}"
+  when: item not in repolist.stdout
+  become: true
+  loop:
+  - ansible-2.9-for-rhel-8-x86_64-rpms
+  - rhel-8-for-x86_64-appstream-rpms
+  - rhel-8-for-x86_64-baseos-rpms
+
+- name: "list the rpms installed"
+  shell: rpm -qa
+  register: rpmlist
+
+- name: "install rpms if needed"
+  yum: 
+    name: "{{ firstboot_deps.rpms }}"
+    state: latest
+  become: yes
+
+- name: "Updating MOTD"
+  template: 
+    src: motd.j2
+    dest: /etc/motd 
+    owner: root 
+    group: root 
+    mode: 0644
+  become: true
+
+- name: "Put the role in the MOTD"
+  shell: |
+    cat /etc/ansible/facts.d/awsroles.fact >> /etc/motd
+  become: true
