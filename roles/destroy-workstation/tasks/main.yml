@@ -117,6 +117,7 @@
     - route_table.route_tables|length > 0
   
   - name: "[rescue] disassociate subnet to the VPC"
+    ignore_errors: yes
     ec2_vpc_subnet:
      state: absent
      vpc_id: "{{ vpc.vpcs[0].id }}"
@@ -131,6 +132,7 @@
     - vpc.vpcs|length > 0
 
 - name: destroy IGW
+  ignore_errors: yes
   ec2_vpc_igw:
    region: "{{ aws.region }}"
    vpc_id: "{{ vpc.vpcs[0].id }}"
@@ -141,6 +143,7 @@
   - vpc.vpcs|length > 0
 
 - name: Destroy Security Group
+  ignore_errors: yes
   ec2_group:
    state: absent
    name: "{{ workshop.name }} SG"

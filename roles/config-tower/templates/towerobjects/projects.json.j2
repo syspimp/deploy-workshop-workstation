@@ -1,0 +1,230 @@
+{
+     "projects": [
+          {
+               "name": "Demo Project",
+               "description": "",
+               "local_path": "_4__demo_project",
+               "scm_type": "git",
+               "scm_url": "https://github.com/ansible/ansible-tower-samples",
+               "scm_branch": "",
+               "scm_refspec": "",
+               "scm_clean": false,
+               "scm_delete_on_update": false,
+               "credential": null,
+               "timeout": 0,
+               "scm_update_on_launch": true,
+               "scm_update_cache_timeout": 0,
+               "allow_override": false,
+               "custom_virtualenv": null,
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": []
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Demo Project",
+                    "type": "project"
+               }
+          },
+          {
+               "name": "Redhat_Lab",
+               "description": "",
+               "local_path": "_8__redhat_lab",
+               "scm_type": "git",
+               "scm_url": "https://github.com/syspimp/ansible-repo",
+               "scm_branch": "",
+               "scm_refspec": "",
+               "scm_clean": false,
+               "scm_delete_on_update": true,
+               "credential": null,
+               "timeout": 0,
+               "scm_update_on_launch": false,
+               "scm_update_cache_timeout": 0,
+               "allow_override": false,
+               "custom_virtualenv": null,
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": []
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Redhat_Lab",
+                    "type": "project"
+               }
+          },
+          {
+               "name": "Provisioning",
+               "description": "",
+               "local_path": "_9__provisioning",
+               "scm_type": "git",
+               "scm_url": "https://github.com/syspimp/ansible-repo",
+               "scm_branch": "",
+               "scm_refspec": "",
+               "scm_clean": false,
+               "scm_delete_on_update": false,
+               "credential": null,
+               "timeout": 0,
+               "scm_update_on_launch": false,
+               "scm_update_cache_timeout": 0,
+               "allow_override": false,
+               "custom_virtualenv": null,
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "schedules": [
+                         {
+                              "rrule": "DTSTART;TZID=America/New_York:20200130T000000 RRULE:FREQ=DAILY;INTERVAL=1",
+                              "name": "Update provisioning repo",
+                              "description": "every day",
+                              "extra_data": "",
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "enabled": true,
+                              "unified_job_template": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Provisioning",
+                                   "type": "project"
+                              },
+                              "related": {
+                                   "credentials": []
+                              },
+                              "natural_key": {
+                                   "unified_job_template": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "Provisioning",
+                                        "type": "project"
+                                   },
+                                   "name": "Update provisioning repo",
+                                   "type": "schedule"
+                              }
+                         }
+                    ],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": []
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Provisioning",
+                    "type": "project"
+               }
+          },
+          {
+               "name": "Applications",
+               "description": "",
+               "local_path": "_10__applications",
+               "scm_type": "git",
+               "scm_url": "https://github.com/syspimp/ansible-repo",
+               "scm_branch": "",
+               "scm_refspec": "",
+               "scm_clean": true,
+               "scm_delete_on_update": true,
+               "credential": null,
+               "timeout": 0,
+               "scm_update_on_launch": false,
+               "scm_update_cache_timeout": 0,
+               "allow_override": false,
+               "custom_virtualenv": null,
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": []
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Applications",
+                    "type": "project"
+               }
+          },
+          {
+               "name": "Insights Project Demo",
+               "description": "",
+               "local_path": "_36__insights_project_demo",
+               "scm_type": "insights",
+               "scm_url": "https://cloud.redhat.com",
+               "scm_branch": "",
+               "scm_refspec": "",
+               "scm_clean": false,
+               "scm_delete_on_update": false,
+               "timeout": 0,
+               "scm_update_on_launch": true,
+               "scm_update_cache_timeout": 0,
+               "allow_override": false,
+               "custom_virtualenv": null,
+               "credential": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Insights Demo",
+                    "credential_type": {
+                         "name": "Insights",
+                         "kind": "insights",
+                         "type": "credential_type"
+                    },
+                    "type": "credential"
+               },
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": []
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Insights Project Demo",
+                    "type": "project"
+               }
+          }
+     ]
+}

@@ -1,10 +1,10 @@
 ---
 - name: "upgrade boto3 for awx user for workshop deployments"
   shell: |
-    source /var/lib/awx/venv/awx/bin/activate
-    umask 0022
+    #source /var/lib/awx/venv/awx/bin/activate
+    #umask 0022
     pip3 install --upgrade boto3 || python -m pip install --user --upgrade boto3 || true
-    deactivate
+    #deactivate
     touch /opt/.tower-setup2
   become: yes
   args:
@@ -12,17 +12,17 @@
 
 - name: "list the installed pip dependencies for the awx user"
   shell: |
-    source /var/lib/awx/venv/awx/bin/activate
-    umask 0022
+    #source /var/lib/awx/venv/awx/bin/activate
+    #umask 0022
     pip3 list
   ignore_errors: yes
   register: piplist
 
 - name: "install needed pip dependencies for awx user"
   shell: |
-    source /var/lib/awx/venv/awx/bin/activate
-    umask 0022
-    pip3 install {{ item }} || python -m pip install --user {{ item }} || true
+    #source /var/lib/awx/venv/awx/bin/activate
+    #umask 0022
+    pip3 install --user {{ item }}
   when: item not in piplist.stdout
   ignore_errors: yes
   loop: "{{ workshop_deps.pipmods }}"
@@ -77,7 +77,7 @@
   #- stop-aws-vms
   #- launch-aws-vm
 
-- name: "create the tower json objects"
+- name: "create the tower json workshop objects"
   template:
     src: "{{ item }}.json.j2"
     dest: "import-{{ item }}.json"
@@ -91,8 +91,8 @@
 
 - name: "import the workshop objects"
   shell: |
-    $(TOWER_USERNAME=admin TOWER_PASSWORD={{ workshop.default_password }} /usr/local/bin/awx login -k -f human)
-    /usr/local/bin/awx -k import < import-{{ item }}.json
+    $(TOWER_USERNAME=admin TOWER_PASSWORD={{ tower_password }} /home/{{ aws.user }}/.local/bin/awx login -k -f human)
+    /home/{{ aws.user }}/.local/bin/awx -k import < import-{{ item }}.json
   args:
     executable: /bin/bash
     creates: /opt/.tower-setup6
@@ -103,6 +103,48 @@
   - inventory
   - inventory_sources
 
+- name: "idempotency for workshop"
+  shell: touch /opt/.tower-setup6
+  become: yes
+
+- name: "create the advanced tower objects"
+  template:
+    src: "towerobjects/{{ item }}.json.j2"
+    dest: "tower-{{ item }}.json"
+  become: yes
+  loop:
+  - notification_templates
+  - organizations
+  - projects
+  - teams
+  - users
+  - workflow_job_templates
+  - credentials
+  - credential_types
+  - job_templates
+  - inventory
+  - inventory_sources
+
+- name: "import the workshop objects"
+  shell: |
+    $(TOWER_USERNAME=admin TOWER_PASSWORD={{ tower_password }} /home/{{ aws.user }}/.local/bin/awx login -k -f human)
+    /home/{{ aws.user }}/.local/bin/awx -k import < tower-{{ item }}.json
+  args:
+    executable: /bin/bash
+    creates: /opt/.tower-setup7
+  loop:
+  - notification_templates
+  - organizations
+  - projects
+  - credential_types
+  - credentials
+  - inventory
+  - inventory_sources
+  - job_templates
+  - teams
+  - users
+  - workflow_job_templates
+
 - name: "Fix permissions in /var/lib/awx/projects"
   shell: |
     chown -r awx.awx /var/lib/awx/projects/*
@@ -110,7 +152,7 @@
   become: true
 
 - name: "idempotency for workshop"
-  shell: touch /opt/.tower-setup6
+  shell: touch /opt/.tower-setup7
   become: yes
 
 - name: "Finished! Tower instructions"

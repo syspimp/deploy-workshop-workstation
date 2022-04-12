@@ -1,0 +1,194 @@
+{
+     "inventory": [
+          {
+               "name": "Localhost",
+               "description": "",
+               "kind": "",
+               "host_filter": null,
+               "variables": "---",
+               "insights_credential": null,
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "hosts": [
+                         {
+                              "name": "localhost",
+                              "description": "",
+                              "enabled": true,
+                              "instance_id": "",
+                              "variables": "ansible_connection: local\nansible_python_interpreter: '{{ ansible_playbook_python }}'",
+                              "inventory": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Localhost",
+                                   "type": "inventory"
+                              },
+                              "related": {
+                                   "groups": []
+                              },
+                              "natural_key": {
+                                   "name": "localhost",
+                                   "inventory": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "Localhost",
+                                        "type": "inventory"
+                                   },
+                                   "type": "host"
+                              }
+                         }
+                    ],
+                    "groups": []
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Localhost",
+                    "type": "inventory"
+               }
+          },
+          {
+               "name": "Smart Inventory for Firstboots",
+               "description": "",
+               "kind": "smart",
+               "host_filter": "inventory__name=\"All Hosts\"",
+               "variables": "",
+               "insights_credential": null,
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "hosts": [
+                         {
+                              "name": "10.55.102.158",
+                              "description": "",
+                              "enabled": false,
+                              "instance_id": "",
+                              "variables": "",
+                              "inventory": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "All Hosts",
+                                   "type": "inventory"
+                              },
+                              "related": {
+                                   "groups": [
+                                        {
+                                             "name": "osp10-computes",
+                                             "inventory": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "All Hosts",
+                                                  "type": "inventory"
+                                             },
+                                             "type": "group"
+                                        }
+                                   ]
+                              },
+                              "natural_key": {
+                                   "name": "10.55.102.158",
+                                   "inventory": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "All Hosts",
+                                        "type": "inventory"
+                                   },
+                                   "type": "host"
+                              }
+                         },
+                         {
+                              "name": "10.55.102.159",
+                              "description": "",
+                              "enabled": false,
+                              "instance_id": "",
+                              "variables": "",
+                              "inventory": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "All Hosts",
+                                   "type": "inventory"
+                              },
+                              "related": {
+                                   "groups": [
+                                        {
+                                             "name": "osp10-controllers",
+                                             "inventory": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "All Hosts",
+                                                  "type": "inventory"
+                                             },
+                                             "type": "group"
+                                        },
+                                        {
+                                             "name": "osp10-network",
+                                             "inventory": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "All Hosts",
+                                                  "type": "inventory"
+                                             },
+                                             "type": "group"
+                                        },
+                                        {
+                                             "name": "osp10-storage",
+                                             "inventory": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "All Hosts",
+                                                  "type": "inventory"
+                                             },
+                                             "type": "group"
+                                        }
+                                   ]
+                              },
+                              "natural_key": {
+                                   "name": "10.55.102.159",
+                                   "inventory": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "All Hosts",
+                                        "type": "inventory"
+                                   },
+                                   "type": "host"
+                              }
+                         }
+                    ],
+                    "groups": []
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Smart Inventory for Firstboots",
+                    "type": "inventory"
+               }
+          }
+     ]
+}

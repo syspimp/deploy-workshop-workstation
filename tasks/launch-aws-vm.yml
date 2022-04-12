@@ -49,16 +49,19 @@
     - name: Set the AMI to RHEL7
       set_fact:
         aws_image_ami: "{{ rhel7_ami_id }}"
+        aws_user: "ec2-user"
       when: "'rhel7' in aws_ostype"
 
     - name: Set the AMI to RHEL8
       set_fact:
         aws_image_ami: "{{ rhel8_ami_id }}"
+        aws_user: "ec2-user"
       when: "'rhel8' in aws_ostype"
 
     - name: Set the AMI to Fedora 35
       set_fact:
         aws_image_ami: "{{ fedora35_ami_id }}"
+        aws_user: "fedora"
       when: "'fedora' in aws_ostype"
 
     - name: Set the VM roles
@@ -232,7 +235,7 @@
   vars_files: ../group_vars/all
   vars:
     ec2_key_directory: "{{ playbook_dir }}/../keys/"
-    ansible_user: "{{ aws.user }}"
+    ansible_user: "{{ aws_user }}"
     ansible_ssh_private_key_file: "{{ ec2_key_directory }}/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk"
   gather_facts: True
   roles:
@@ -244,7 +247,7 @@
   gather_facts: True
   vars:
     ec2_key_directory: "{{ playbook_dir }}/../keys/"
-    ansible_user: "{{ aws.user }}"
+    ansible_user: "{{ aws_user }}"
     ansible_ssh_private_key_file: "{{ ec2_key_directory }}/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk"
   roles:
     - role: performancecopilot.metrics.grafana

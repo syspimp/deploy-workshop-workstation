@@ -13,20 +13,22 @@
     dest: /home/{{ aws.user }}/.aws/credentials
 
 - name: "install needed ansible collections"
-  shell: ansible-galaxy collection install community.{{ item }}
+  shell: ansible-galaxy collection install {{ item }}
   #shell: ansible-galaxy collection install -p /usr/share/ansible/collections community.{{ item }}
-  args:
-    creates: "/home/{{ aws.user }}/.ansible/collections/ansible_collections/community/{{ item }}"
-    #creates: "/usr/share/ansible/collections/ansible_collections/community/{{ item }}"
+  #args:
+  #  creates: "/home/{{ aws.user }}/.ansible/collections/ansible_collections/community/{{ item }}"
+  #  #creates: "/usr/share/ansible/collections/ansible_collections/community/{{ item }}"
   #become: yes
   loop:
-  - general
-  - aws
+  - "community.general"
+  - "community.aws"
+  - "redhat_cop.controller_configuration"
 
-- name: "clone the github repo"
+- name: "clone the github repo, fix the hosts file"
   shell: |
     git clone https://github.com/ansible/workshops
     cd workshops/provisioner
+    python3 -V | grep 3.10 && sed -i -e 's/python3.9/python3.10/g' ./hosts
     #ansible-galaxy collection build --verbose --force --output-path build/ ./..
     #ansible-galaxy collection install --verbose --force-with-deps build/*.tar.gz -p workshop_collections
     #git checkout {{ workshop_revision }}

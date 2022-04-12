@@ -1,0 +1,306 @@
+{
+     "inventory_sources": [
+          {
+               "name": "Aws Hosts",
+               "description": "",
+               "source": "ec2",
+               "source_path": "",
+               "source_script": null,
+               "source_vars": "---\n#all_instances: 'True'\nvpc_destination_variable: private_ip_address\n#destination_format: \"{0}\"\n#destination_format_tags: \"DNS\"",
+               "source_regions": "",
+               "instance_filters": "",
+               "group_by": "",
+               "overwrite": true,
+               "overwrite_vars": false,
+               "custom_virtualenv": null,
+               "timeout": 0,
+               "verbosity": 2,
+               "update_on_launch": false,
+               "update_cache_timeout": 0,
+               "source_project": null,
+               "update_on_project_update": false,
+               "credential": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Tfound AWS",
+                    "credential_type": {
+                         "name": "Amazon Web Services",
+                         "kind": "cloud",
+                         "type": "credential_type"
+                    },
+                    "type": "credential"
+               },
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "All Hosts",
+                    "type": "inventory"
+               },
+               "related": {
+                    "schedules": [
+                         {
+                              "rrule": "DTSTART;TZID=America/New_York:20200203T000000 RRULE:FREQ=DAILY;INTERVAL=1",
+                              "name": "Recheck",
+                              "description": "every day",
+                              "extra_data": "",
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "enabled": true,
+                              "inventory": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "All Hosts",
+                                   "type": "inventory"
+                              },
+                              "unified_job_template": {
+                                   "name": "Aws Hosts",
+                                   "inventory": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "All Hosts",
+                                        "type": "inventory"
+                                   },
+                                   "type": "inventory_source"
+                              },
+                              "related": {
+                                   "credentials": []
+                              },
+                              "natural_key": {
+                                   "unified_job_template": {
+                                        "name": "Aws Hosts",
+                                        "inventory": {
+                                             "organization": {
+                                                  "name": "Default",
+                                                  "type": "organization"
+                                             },
+                                             "name": "All Hosts",
+                                             "type": "inventory"
+                                        },
+                                        "type": "inventory_source"
+                                   },
+                                   "name": "Recheck",
+                                   "type": "schedule"
+                              }
+                         }
+                    ],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": []
+               },
+               "natural_key": {
+                    "name": "Aws Hosts",
+                    "inventory": {
+                         "organization": {
+                              "name": "Default",
+                              "type": "organization"
+                         },
+                         "name": "All Hosts",
+                         "type": "inventory"
+                    },
+                    "type": "inventory_source"
+               }
+          },
+          {
+               "name": "RTO AWS Account",
+               "description": "",
+               "source": "ec2",
+               "source_path": "",
+               "source_script": null,
+               "source_vars": "---\n#all_instances: 'True'\nvpc_destination_variable: private_ip_address\n#destination_format: \"{0}\"\n#destination_format_tags: \"DNS\"",
+               "source_regions": "",
+               "instance_filters": "tag:Name=*dataylor*",
+               "group_by": "",
+               "overwrite": true,
+               "overwrite_vars": false,
+               "custom_virtualenv": null,
+               "timeout": 0,
+               "verbosity": 1,
+               "update_on_launch": false,
+               "update_cache_timeout": 0,
+               "source_project": null,
+               "update_on_project_update": false,
+               "credential": {
+                    "organization": null,
+                    "name": "RTO AWS Creds",
+                    "credential_type": {
+                         "name": "Amazon Web Services",
+                         "kind": "cloud",
+                         "type": "credential_type"
+                    },
+                    "type": "credential"
+               },
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "All Hosts",
+                    "type": "inventory"
+               },
+               "related": {
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": []
+               },
+               "natural_key": {
+                    "name": "RTO AWS Account",
+                    "inventory": {
+                         "organization": {
+                              "name": "Default",
+                              "type": "organization"
+                         },
+                         "name": "All Hosts",
+                         "type": "inventory"
+                    },
+                    "type": "inventory_source"
+               }
+          },
+          {
+               "name": "Openstack",
+               "description": "",
+               "source": "openstack",
+               "source_path": "",
+               "source_script": null,
+               "source_vars": "",
+               "source_regions": "",
+               "instance_filters": "",
+               "group_by": "",
+               "overwrite": false,
+               "overwrite_vars": false,
+               "custom_virtualenv": null,
+               "timeout": 0,
+               "verbosity": 1,
+               "update_on_launch": true,
+               "update_cache_timeout": 0,
+               "source_project": null,
+               "update_on_project_update": false,
+               "credential": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Openstack Infra",
+                    "credential_type": {
+                         "name": "OpenStack",
+                         "kind": "cloud",
+                         "type": "credential_type"
+                    },
+                    "type": "credential"
+               },
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Infrastructure",
+                    "type": "inventory"
+               },
+               "related": {
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": []
+               },
+               "natural_key": {
+                    "name": "Openstack",
+                    "inventory": {
+                         "organization": {
+                              "name": "Default",
+                              "type": "organization"
+                         },
+                         "name": "Infrastructure",
+                         "type": "inventory"
+                    },
+                    "type": "inventory_source"
+               }
+          },
+          {
+               "name": "Satellite Dynamic Source",
+               "description": "",
+               "source": "satellite6",
+               "source_path": "",
+               "source_script": null,
+               "source_vars": "",
+               "source_regions": "",
+               "instance_filters": "",
+               "group_by": "",
+               "overwrite": false,
+               "overwrite_vars": false,
+               "custom_virtualenv": null,
+               "timeout": 0,
+               "verbosity": 1,
+               "update_on_launch": false,
+               "update_cache_timeout": 0,
+               "source_project": null,
+               "update_on_project_update": false,
+               "credential": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Satellite Secret",
+                    "credential_type": {
+                         "name": "Red Hat Satellite 6",
+                         "kind": "cloud",
+                         "type": "credential_type"
+                    },
+                    "type": "credential"
+               },
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Satellite Inventory",
+                    "type": "inventory"
+               },
+               "related": {
+                    "schedules": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "credentials": [
+                         {
+                              "organization": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              },
+                              "name": "Satellite Secret",
+                              "credential_type": {
+                                   "name": "Red Hat Satellite 6",
+                                   "kind": "cloud",
+                                   "type": "credential_type"
+                              },
+                              "type": "credential"
+                         }
+                    ]
+               },
+               "natural_key": {
+                    "name": "Satellite Dynamic Source",
+                    "inventory": {
+                         "organization": {
+                              "name": "Default",
+                              "type": "organization"
+                         },
+                         "name": "Satellite Inventory",
+                         "type": "inventory"
+                    },
+                    "type": "inventory_source"
+               }
+          }
+     ]
+}

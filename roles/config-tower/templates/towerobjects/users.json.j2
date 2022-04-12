@@ -1,0 +1,608 @@
+{
+     "users": [
+          {
+               "username": "jbarlow",
+               "first_name": "Jim",
+               "last_name": "Barlow",
+               "email": "jbarlow@redhat.com",
+               "is_superuser": true,
+               "is_system_auditor": false,
+               "last_login": null,
+               "related": {
+                    "roles": [
+                         {
+                              "name": "Member",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              }
+                         },
+                         {
+                              "name": "Member",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "RTO",
+                                   "type": "team"
+                              }
+                         },
+                         {
+                              "name": "System Administrator",
+                              "type": "role"
+                         }
+                    ]
+               },
+               "natural_key": {
+                    "username": "jbarlow",
+                    "type": "user"
+               }
+          },
+          {
+               "username": "tosin",
+               "first_name": "Tosin",
+               "last_name": "Akinosho",
+               "email": "tosin@redhat.com",
+               "is_superuser": true,
+               "is_system_auditor": false,
+               "last_login": null,
+               "related": {
+                    "roles": [
+                         {
+                              "name": "Member",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              }
+                         },
+                         {
+                              "name": "Member",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "RTO",
+                                   "type": "team"
+                              }
+                         },
+                         {
+                              "name": "System Administrator",
+                              "type": "role"
+                         }
+                    ]
+               },
+               "natural_key": {
+                    "username": "tosin",
+                    "type": "user"
+               }
+          },
+          {
+               "username": "msolberg",
+               "first_name": "Michael",
+               "last_name": "Solberg",
+               "email": "msolberg@redhat.com",
+               "is_superuser": true,
+               "is_system_auditor": false,
+               "last_login": null,
+               "related": {
+                    "roles": [
+                         {
+                              "name": "Member",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              }
+                         },
+                         {
+                              "name": "Member",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "RTO",
+                                   "type": "team"
+                              }
+                         },
+                         {
+                              "name": "System Administrator",
+                              "type": "role"
+                         }
+                    ]
+               },
+               "natural_key": {
+                    "username": "msolberg",
+                    "type": "user"
+               }
+          },
+          {
+               "username": "admin",
+               "first_name": "",
+               "last_name": "",
+               "email": "admin@example.com",
+               "is_superuser": true,
+               "is_system_auditor": false,
+               "last_login": "2021-06-28T19:23:54.861907Z",
+               "related": {
+                    "roles": [
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": null,
+                                   "name": "Demo Credential",
+                                   "credential_type": {
+                                        "name": "Machine",
+                                        "kind": "ssh",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Infra User Creds",
+                                   "credential_type": {
+                                        "name": "Machine",
+                                        "kind": "ssh",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Openstack User Creds",
+                                   "credential_type": {
+                                        "name": "Machine",
+                                        "kind": "ssh",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Unlock Vault",
+                                   "credential_type": {
+                                        "name": "Vault",
+                                        "kind": "vault",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Openstack Infra",
+                                   "credential_type": {
+                                        "name": "OpenStack",
+                                        "kind": "cloud",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite Secret",
+                                   "credential_type": {
+                                        "name": "Red Hat Satellite 6",
+                                        "kind": "cloud",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "AWS Creds",
+                                   "credential_type": {
+                                        "name": "Amazon Web Services",
+                                        "kind": "cloud",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Insights Creds",
+                                   "credential_type": {
+                                        "name": "Insights",
+                                        "kind": "insights",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Satellite - Launch Openstack VM",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Firstboot",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Openstack - Launch Satellite 6.6",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Openstack - Launch Openshift 3.11 cluster",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Firstboot for Physicals",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "IPMI Server Control",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "IP Power 9258 PDU Get Outlet Status",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "IP Power 9258 PDU Control Outlet State",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Openstack - Launch VM",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Satellite - Promote Content View through several environments",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Network - Open port on router",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "DNS - Update dns entry",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Firstboot for Capsule Loadbalancer",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "AWS - Find Instances",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "AWS - Power-off instances",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "AWS - Power-on Instances",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Maintenance - Monthly Yum Update",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Satellite - Reconfigure Capsule LB",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Pause 45 mins",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Pause X minutes",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Satellite - Register to Capsule Load Balancer",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Satellite Clean Group Inventories",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Satellite - Generate Reports",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Inventory Update",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Aws - Delete Instance",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "NBDE Clean Group Inventories",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Satellite - Wait for Repo Sync to Complete",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Satellite - Wait for Task to Complete",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Satellite - Make Backup for Server and Capsules",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "AWS - Find AMIs",
+                                   "type": "job_template"
+                              }
+                         },
+                         {
+                              "name": "System Administrator",
+                              "type": "role"
+                         }
+                    ]
+               },
+               "natural_key": {
+                    "username": "admin",
+                    "type": "user"
+               }
+          },
+          {
+               "username": "efx",
+               "first_name": "EFX",
+               "last_name": "Equifax",
+               "email": "efx@redhat.com",
+               "is_superuser": false,
+               "is_system_auditor": true,
+               "last_login": "2020-09-16T14:29:31.631324Z",
+               "related": {
+                    "roles": [
+                         {
+                              "name": "Member",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              }
+                         },
+                         {
+                              "name": "System Auditor",
+                              "type": "role"
+                         }
+                    ]
+               },
+               "natural_key": {
+                    "username": "efx",
+                    "type": "user"
+               }
+          },
+          {
+               "username": "noc",
+               "first_name": "NOC",
+               "last_name": "User",
+               "email": "noc@ups.com",
+               "is_superuser": false,
+               "is_system_auditor": false,
+               "last_login": "2021-01-27T21:19:07.172934Z",
+               "related": {
+                    "roles": [
+                         {
+                              "name": "Use",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Openstack User Creds",
+                                   "credential_type": {
+                                        "name": "Machine",
+                                        "kind": "ssh",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Member",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              }
+                         },
+                         {
+                              "name": "Read",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "AWS - Find Instances",
+                                   "type": "job_template"
+                              }
+                         }
+                    ]
+               },
+               "natural_key": {
+                    "username": "noc",
+                    "type": "user"
+               }
+          }
+     ]
+}

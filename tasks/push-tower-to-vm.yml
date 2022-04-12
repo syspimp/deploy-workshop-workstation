@@ -4,9 +4,9 @@
   become: no
   vars_files: ../group_vars/all
   vars:
-    ec2_key_directory: "{{ playbook_dir }}/../keys/"
-    ansible_user: "{{ aws.user }}"
-    ansible_ssh_private_key_file: "{{ ec2_key_directory }}/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk"
+    #ec2_key_directory: "{{ playbook_dir }}/../keys/"
+    #ansible_user: "{{ aws.user }}"
+    #ansible_ssh_private_key_file: "{{ ec2_key_directory }}/{{ aws_vmname }}/{{ aws_vmname }}-key.ppk"
   gather_facts: True
   roles:
     - ../roles/config-tower

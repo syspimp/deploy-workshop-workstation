@@ -1,0 +1,72 @@
+{
+     "notification_templates": [
+          {
+               "name": "IFTTT",
+               "description": "",
+               "notification_type": "webhook",
+               "notification_configuration": {
+                    "username": "",
+                    "password": "",
+                    "url": "https://maker.ifttt.com/trigger/{{ workshop.iftttevent }}/with/key/{{ workshop.iftttkey }}",
+{%- raw %}
+                    "disable_ssl_verification": false,
+                    "headers": {},
+                    "http_method": "POST",
+                    "started_body": "{ \"value1\": \"{{ job_metadata }}\" }",
+                    "success_body": "{{ job_metadata }}",
+                    "error_body": "{{ job_metadata }}",
+                    "approved_body": "{\"body\": \"The approval node \\\"{{ approval_node_name }}\\\" was approved. {{ workflow_url }}\"}",
+                    "denied_body": "{\"body\": \"The approval node \\\"{{ approval_node_name }}\\\" was denied. {{ workflow_url }}\"}",
+                    "running_body": "{\"body\": \"The approval node \\\"{{ approval_node_name }}\\\" needs review. This node can be viewed at: {{ workflow_url }}\"}",
+                    "timed_out_body": "{\"body\": \"The approval node \\\"{{ approval_node_name }}\\\" has timed out. {{ workflow_url }}\"}",
+                    "use_ssl": false,
+                    "use_tls": false
+               },
+               "messages": {
+                    "started": {
+                         "message": null,
+                         "body": "{ \"value1\": \"{{ job_metadata }}\" }"
+                    },
+{% endraw %}
+                    "success": {
+                         "message": null,
+                         "body": null
+                    },
+                    "error": {
+                         "message": null,
+                         "body": null
+                    },
+                    "workflow_approval": {
+                         "approved": {
+                              "message": null,
+                              "body": null
+                         },
+                         "denied": {
+                              "message": null,
+                              "body": null
+                         },
+                         "running": {
+                              "message": null,
+                              "body": null
+                         },
+                         "timed_out": {
+                              "message": null,
+                              "body": null
+                         }
+                    }
+               },
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "IFTTT",
+                    "type": "notification_template"
+               }
+          }
+     ]
+}

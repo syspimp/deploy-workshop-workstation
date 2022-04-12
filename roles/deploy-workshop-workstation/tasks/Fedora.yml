@@ -1,9 +1,18 @@
 ---
-- name: "install git"
+- name: "install rpms"
   yum: 
-    name: git
+    name: "{{ workshop_deps.rpms }}"
     state: latest
   become: yes
+
+- name: "sssd.conf local config"
+  template: 
+    src: sssd.conf.j2
+    dest: /etc/sssd/sssd.conf 
+    owner: root 
+    group: root 
+    mode: 0600
+  become: true
 
 - name: "get pip installer"
   shell: curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -31,21 +40,39 @@
   become: yes
   loop: "{{ workshop_deps.pipmods }}"
 
-#
-#- name: "install needed pip dependencies"
-#  shell: python -m pip install --user {{ item }}
-#  #shell: python -m pip install {{ item }}
-#  #become: yes
-#  loop: "{{ workshop_deps.pipmods }}"
+- name: wrapper to activate services
+  block:
+#  - name: "[Galaxy] Install collections"
+#    shell:  "ansible-galaxy collection install {{ item }}"
+#    become: true
+#    loop:
+#    - "performancecopilot.metrics"
+
+  - name: "[pmlogger] Activate!"
+    shell:  systemctl enable --now pmlogger
+    become: true
+
+  - name: "[pmproxy] Activate!"
+    shell:  systemctl enable --now pmproxy
+    become: true
+
+  - name: "[grafana] Activate on port 3000!"
+    shell:  systemctl enable --now grafana-server
+    become: true
+
+  rescue:
+  - name:
+    debug:
+      msg: "Welp, that didn't work"
 
 - name: wrapper to install cockpit
   block:
   - name: "[Cockpit] Installing rpms"
     yum:
-      #name: ["cockpit","cockpit-dashboard"]
-      name: ["cockpit","cockpit-storaged","cockpit-networkmanager","cockpit-podman","cockpit-selinux","cockpit-sosreport","cockpit-session-recording","cockpit-navigator"]
+      name: "{{ item }}"
       state: latest
     become: true
+    loop: "{{ cockpit_rpms }}"
 
   - name: "[Cockpit] Activate!"
     shell:  systemctl enable --now cockpit.socket
@@ -59,3 +86,30 @@
   - name:
     debug:
       msg: "Welp, that didn't work"
+
+#- name: wrapper to install samba
+#  block:
+#  - name: "[Samba] Installing rpms"
+#    yum:
+#      name: "{{ item }}"
+#      state: latest
+#    become: true
+#    loop: "{{ samba_rpms }}"
+#
+#  - name: "[Samba] Activate!"
+#    shell:  "systemctl enable --now {{ item }}"
+#    become: true
+#    loop:
+#    - smb
+#    - nmb
+#
+#  - name: "[Samba] add cockpit panel"
+#    shell:  "wget -O - https://raw.githubusercontent.com/enira/cockpit-smb-plugin/master/install.sh | bash"
+#    become: true
+#    #command_warnings: False
+#  #when: "sambashares == 'yes'"
+#
+#  rescue:
+#  - name:
+#    debug:
+#      msg: "Welp, that didn't work"

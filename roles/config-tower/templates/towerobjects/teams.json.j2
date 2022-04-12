@@ -1,0 +1,141 @@
+{
+     "teams": [
+          {
+               "name": "Architects",
+               "description": "",
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "roles": [
+                         {
+                              "name": "Admin",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite Secret",
+                                   "credential_type": {
+                                        "name": "Red Hat Satellite 6",
+                                        "kind": "cloud",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         }
+                    ]
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Architects",
+                    "type": "team"
+               }
+          },
+          {
+               "name": "NOC",
+               "description": "",
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "roles": [
+                         {
+                              "name": "Use",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Unlock Vault",
+                                   "credential_type": {
+                                        "name": "Vault",
+                                        "kind": "vault",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Use",
+                              "type": "role",
+                              "content_object": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "AWS Creds",
+                                   "credential_type": {
+                                        "name": "Amazon Web Services",
+                                        "kind": "cloud",
+                                        "type": "credential_type"
+                                   },
+                                   "type": "credential"
+                              }
+                         },
+                         {
+                              "name": "Execute",
+                              "type": "role",
+                              "content_object": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              }
+                         }
+                    ]
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "NOC",
+                    "type": "team"
+               }
+          },
+          {
+               "name": "Provisioning",
+               "description": "",
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "roles": []
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Provisioning",
+                    "type": "team"
+               }
+          },
+          {
+               "name": "RTO",
+               "description": "",
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "roles": []
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "RTO",
+                    "type": "team"
+               }
+          }
+     ]
+}

@@ -7,7 +7,8 @@ do
       ;;
     n) vmname=$OPTARG
       ;;
-    *) echo "Usage: $0 -n 'name of vm to manage'"
+    *) echo "Usage: $0 -n 'name of vm to manage'"; exit 1
+      ;;
   esac
 done
 if [[ ! -z "$vmname" ]]

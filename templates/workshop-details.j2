@@ -3,12 +3,16 @@ name: {{ workshop.name }}
 ip: {{ inventory_hostname }}
 auto_launch: {{ workshop.auto_launch }}
 # connect to your workstation and deploy a workshop, you can copy and paste
-ssh -t -i keys/{{ workshop.name }}-workstation/{{ workshop.name }}-workstation-key.ppk {{ aws.user }}@{{ inventory_hostname }}
+ssh -t -i keys/{{ workshop.name }}-workstation/{{ workshop.name }}-workstation-key.ppk {{ aws_user }}@{{ inventory_hostname }}
 cd workshops/provisioner 
-ansible-playbook -e @workshop-{{ workshop.name }}-workshop.yml provision_lab.yml
+ansible-playbook -e @workshop-{{ workshop.name }}.yml provision_lab.yml
 
-# tower details
-Visit https://{{ inventory_hostname }}/ using user/pass admin/{{ workshop.default_password }}. There are two Job Templates, Deploy Workshop and Destroy Workshop pre-configured.
+# Fedora Cockpit details
+Visit https://{{ inventory_hostname }}:9090/ using user/pass {{ aws_user }}/{{ workshop.default_password }} to use Cockpit. 
+
+# Automatino Platform details
+
+There are two Job Templates, Deploy Workshop and Destroy Workshop pre-configured.
 
 # {{ workshop.name }} that was deployed from tower details
 {{ summary | default('None',true) }}

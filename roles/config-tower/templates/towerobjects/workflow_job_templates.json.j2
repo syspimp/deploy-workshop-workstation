@@ -1,0 +1,1911 @@
+{
+     "workflow_job_templates": [
+          {
+               "name": "job number 1",
+               "description": "",
+               "extra_vars": "",
+               "organization": null,
+               "survey_enabled": false,
+               "allow_simultaneous": false,
+               "ask_variables_on_launch": false,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "All Hosts",
+                    "type": "inventory"
+               },
+               "limit": null,
+               "scm_branch": null,
+               "ask_inventory_on_launch": false,
+               "ask_scm_branch_on_launch": false,
+               "ask_limit_on_launch": false,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "related": {
+                    "schedules": [],
+                    "workflow_nodes": [],
+                    "labels": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "notification_templates_approvals": [],
+                    "survey_spec": {}
+               },
+               "natural_key": {
+                    "organization": null,
+                    "name": "job number 1",
+                    "type": "workflow_job_template"
+               }
+          },
+          {
+               "name": "NBDE - Create Tang infrastructure and a client",
+               "description": "",
+               "extra_vars": "",
+               "organization": null,
+               "survey_enabled": false,
+               "allow_simultaneous": false,
+               "ask_variables_on_launch": false,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Smart Inventory for Firstboots",
+                    "type": "inventory"
+               },
+               "limit": null,
+               "scm_branch": null,
+               "ask_inventory_on_launch": false,
+               "ask_scm_branch_on_launch": false,
+               "ask_limit_on_launch": false,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "related": {
+                    "schedules": [],
+                    "workflow_nodes": [
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-tang-server-1",
+                                   "aws_instance_type": "t3.xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "no",
+                                   "aws_volume2_size": "10",
+                                   "aws_role": "nbde-tang-server",
+                                   "aws_secondary_role": "None",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel7",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "NBDE - Create Tang infrastructure and a client",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "NBDE - Create Tang infrastructure and a client",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "NBDE - Create Tang infrastructure and a client",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-tang-server-2",
+                                   "aws_instance_type": "t3.xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "no",
+                                   "aws_volume2_size": "10",
+                                   "aws_role": "nbde-tang-server",
+                                   "aws_secondary_role": "None",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel7",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "NBDE - Create Tang infrastructure and a client",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "NBDE - Create Tang infrastructure and a client",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "NBDE - Create Tang infrastructure and a client",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-clevis-client",
+                                   "aws_instance_type": "t3.xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "yes",
+                                   "aws_volume2_size": "200",
+                                   "aws_role": "nbde-clevis-client",
+                                   "aws_secondary_role": "None",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel7",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "NBDE - Create Tang infrastructure and a client",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "NBDE - Create Tang infrastructure and a client",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "x": "5"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "NBDE - Create Tang infrastructure and a client",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Pause X minutes",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "NBDE - Create Tang infrastructure and a client",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "NBDE - Create Tang infrastructure and a client",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "NBDE - Create Tang infrastructure and a client",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "NBDE Clean Group Inventories",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [],
+                                   "failure_nodes": [],
+                                   "always_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "NBDE - Create Tang infrastructure and a client",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ]
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "NBDE - Create Tang infrastructure and a client",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         }
+                    ],
+                    "labels": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "notification_templates_approvals": [],
+                    "survey_spec": {}
+               },
+               "natural_key": {
+                    "organization": null,
+                    "name": "NBDE - Create Tang infrastructure and a client",
+                    "type": "workflow_job_template"
+               }
+          },
+          {
+               "name": "new stuff",
+               "description": "",
+               "extra_vars": "",
+               "organization": null,
+               "survey_enabled": false,
+               "allow_simultaneous": false,
+               "ask_variables_on_launch": false,
+               "inventory": null,
+               "limit": null,
+               "scm_branch": null,
+               "ask_inventory_on_launch": false,
+               "ask_scm_branch_on_launch": false,
+               "ask_limit_on_launch": false,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "related": {
+                    "schedules": [],
+                    "workflow_nodes": [],
+                    "labels": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "notification_templates_approvals": [],
+                    "survey_spec": {}
+               },
+               "natural_key": {
+                    "organization": null,
+                    "name": "new stuff",
+                    "type": "workflow_job_template"
+               }
+          },
+          {
+               "name": "Satellite - Deploy Full Infrastructure",
+               "description": "",
+               "extra_vars": "",
+               "organization": null,
+               "survey_enabled": true,
+               "allow_simultaneous": true,
+               "ask_variables_on_launch": false,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Smart Inventory for Firstboots",
+                    "type": "inventory"
+               },
+               "limit": null,
+               "scm_branch": null,
+               "ask_inventory_on_launch": false,
+               "ask_scm_branch_on_launch": false,
+               "ask_limit_on_launch": false,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "related": {
+                    "schedules": [],
+                    "workflow_nodes": [
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-satellite-wf",
+                                   "aws_instance_type": "m4.2xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "no",
+                                   "aws_volume2_size": "10",
+                                   "aws_role": "satellite-server",
+                                   "aws_secondary_role": "satellite-oscap",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel7",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "x": "25",
+                                   "msg": "Waiting to deploy capsules"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Pause X minutes",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                   "type": "workflow_job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "content_view": "Base",
+                                   "environments": [
+                                        "production"
+                                   ],
+                                   "publish": "yes"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Promote Content View through several environments",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "task": "Synchronize repository",
+                                   "attempts": "120",
+                                   "delay": "60"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Wait for Task to Complete",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Reconfigure Capsule LB",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite Clean Group Inventories",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [],
+                                   "failure_nodes": [],
+                                   "always_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ]
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Inventory Update",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Inventory Update",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "task": "Synchronize capsule",
+                                   "attempts": "120",
+                                   "delay": "60"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Wait for Task to Complete",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "x": "25",
+                                   "msg": "Wait for satellite-installer/fusor-installer to finish"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Pause X minutes",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-openfire",
+                                   "aws_instance_type": "t3.xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "no",
+                                   "aws_volume2_size": "10",
+                                   "aws_role": "openfire",
+                                   "aws_secondary_role": "None",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel8",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-zenoss",
+                                   "aws_instance_type": "t3.xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "no",
+                                   "aws_volume2_size": "10",
+                                   "aws_role": "minikube",
+                                   "aws_secondary_role": "zenoss-monitoring",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel8",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "organization": null,
+                                   "name": "NBDE - Create Tang infrastructure and a client",
+                                   "type": "workflow_job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-nfs-server",
+                                   "aws_instance_type": "t3.xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "no",
+                                   "aws_volume2_size": "10",
+                                   "aws_role": "nfs-server",
+                                   "aws_secondary_role": "None",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel7",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "x": "15",
+                                   "msg": "Wait for all systems to provision"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Pause X minutes",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Deploy Full Infrastructure",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Deploy Full Infrastructure",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Register to Capsule Load Balancer",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Deploy Full Infrastructure",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         }
+                    ],
+                    "labels": [],
+                    "notification_templates_started": [
+                         {
+                              "organization": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              },
+                              "name": "IFTTT",
+                              "type": "notification_template"
+                         }
+                    ],
+                    "notification_templates_success": [
+                         {
+                              "organization": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              },
+                              "name": "IFTTT",
+                              "type": "notification_template"
+                         }
+                    ],
+                    "notification_templates_error": [
+                         {
+                              "organization": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              },
+                              "name": "IFTTT",
+                              "type": "notification_template"
+                         }
+                    ],
+                    "notification_templates_approvals": [],
+                    "survey_spec": {
+                         "name": "",
+                         "description": "",
+                         "spec": [
+                              {
+                                   "question_name": "This will deploy a Satellite Server, Capsule, and Loadbalancer. Make sure the Tower satellite-server and capsules group are empty.",
+                                   "question_description": "It will take 60 mins for the Satellite Server before is ready to login, and 2 hours total to sync repo content and serve clients. Do want to continue?",
+                                   "required": true,
+                                   "type": "multiplechoice",
+                                   "variable": "imsure",
+                                   "min": null,
+                                   "max": null,
+                                   "default": "no",
+                                   "choices": "yes\nno"
+                              }
+                         ]
+                    }
+               },
+               "natural_key": {
+                    "organization": null,
+                    "name": "Satellite - Deploy Full Infrastructure",
+                    "type": "workflow_job_template"
+               }
+          },
+          {
+               "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+               "description": "",
+               "extra_vars": "",
+               "survey_enabled": false,
+               "allow_simultaneous": true,
+               "ask_variables_on_launch": false,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Smart Inventory for Firstboots",
+                    "type": "inventory"
+               },
+               "limit": "",
+               "scm_branch": null,
+               "ask_inventory_on_launch": false,
+               "ask_scm_branch_on_launch": false,
+               "ask_limit_on_launch": false,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "organization": {
+                    "name": "Default",
+                    "type": "organization"
+               },
+               "related": {
+                    "schedules": [],
+                    "workflow_nodes": [
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-capsule-lb",
+                                   "aws_instance_type": "t3.xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "no",
+                                   "aws_volume2_size": "10",
+                                   "aws_role": "haproxy",
+                                   "aws_secondary_role": "None",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel7",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-capsule-wf-3",
+                                   "aws_instance_type": "t3.xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "no",
+                                   "aws_volume2_size": "10",
+                                   "aws_role": "satellite-capsule",
+                                   "aws_secondary_role": "satellite-oscap",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel7",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "x": "15"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Pause X minutes",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "aws_vmname": "dataylor-capsule-wf-2",
+                                   "aws_instance_type": "t3.xlarge",
+                                   "aws_volume_size": "100",
+                                   "aws_multivolumes": "no",
+                                   "aws_volume2_size": "10",
+                                   "aws_role": "satellite-capsule",
+                                   "aws_secondary_role": "satellite-oscap",
+                                   "sdlc_environment": "production",
+                                   "dns_domain": "prod.maskedadmins.com",
+                                   "aws_location": "TFOUND",
+                                   "az": "us-east-1a",
+                                   "aws_ostype": "rhel7",
+                                   "aws_key_name": "tfound-ec2",
+                                   "host_config_server": "10.0.0.50"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "AWS - Launch Instances",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "x": "5"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Pause X minutes",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "publish": "yes",
+                                   "content_view": "Base",
+                                   "environments": [
+                                        "production"
+                                   ]
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Promote Content View through several environments",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [],
+                                   "failure_nodes": [],
+                                   "always_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ]
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": {
+                                        "name": "Default",
+                                        "type": "organization"
+                                   },
+                                   "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Wait for Repo Sync to Complete",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": {
+                                                       "name": "Default",
+                                                       "type": "organization"
+                                                  },
+                                                  "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": {
+                                             "name": "Default",
+                                             "type": "organization"
+                                        },
+                                        "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         }
+                    ],
+                    "labels": [],
+                    "notification_templates_started": [
+                         {
+                              "organization": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              },
+                              "name": "IFTTT",
+                              "type": "notification_template"
+                         }
+                    ],
+                    "notification_templates_success": [
+                         {
+                              "organization": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              },
+                              "name": "IFTTT",
+                              "type": "notification_template"
+                         }
+                    ],
+                    "notification_templates_error": [
+                         {
+                              "organization": {
+                                   "name": "Default",
+                                   "type": "organization"
+                              },
+                              "name": "IFTTT",
+                              "type": "notification_template"
+                         }
+                    ],
+                    "notification_templates_approvals": [],
+                    "survey_spec": {}
+               },
+               "natural_key": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "Satellite - Deploy Initial Capsule and Load Balancer",
+                    "type": "workflow_job_template"
+               }
+          },
+          {
+               "name": "Satellite - Wait for Capsule Sync then Promote",
+               "description": "",
+               "extra_vars": "",
+               "organization": null,
+               "survey_enabled": false,
+               "allow_simultaneous": false,
+               "ask_variables_on_launch": false,
+               "inventory": {
+                    "organization": {
+                         "name": "Default",
+                         "type": "organization"
+                    },
+                    "name": "All Hosts",
+                    "type": "inventory"
+               },
+               "limit": null,
+               "scm_branch": null,
+               "ask_inventory_on_launch": false,
+               "ask_scm_branch_on_launch": false,
+               "ask_limit_on_launch": false,
+               "webhook_service": "",
+               "webhook_credential": null,
+               "related": {
+                    "schedules": [],
+                    "workflow_nodes": [
+                         {
+                              "extra_data": {
+                                   "task": "Capsule repository",
+                                   "attempts": "120",
+                                   "delay": "60"
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Wait for Capsule Sync then Promote",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Wait for Task to Complete",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Wait for Capsule Sync then Promote",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Wait for Capsule Sync then Promote",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {
+                                   "publish": "yes",
+                                   "content_view": "Base",
+                                   "environments": [
+                                        "production"
+                                   ]
+                              },
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Wait for Capsule Sync then Promote",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Promote Content View through several environments",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [],
+                                   "failure_nodes": [],
+                                   "always_nodes": []
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Wait for Capsule Sync then Promote",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         },
+                         {
+                              "extra_data": {},
+                              "inventory": null,
+                              "scm_branch": null,
+                              "job_type": null,
+                              "job_tags": null,
+                              "skip_tags": null,
+                              "limit": null,
+                              "diff_mode": null,
+                              "verbosity": null,
+                              "workflow_job_template": {
+                                   "organization": null,
+                                   "name": "Satellite - Wait for Capsule Sync then Promote",
+                                   "type": "workflow_job_template"
+                              },
+                              "unified_job_template": {
+                                   "name": "Satellite - Wait for Repo Sync to Complete",
+                                   "type": "job_template"
+                              },
+                              "related": {
+                                   "credentials": [],
+                                   "success_nodes": [],
+                                   "failure_nodes": [],
+                                   "always_nodes": [
+                                        {
+                                             "workflow_job_template": {
+                                                  "organization": null,
+                                                  "name": "Satellite - Wait for Capsule Sync then Promote",
+                                                  "type": "workflow_job_template"
+                                             },
+                                             "type": "workflow_job_template_node"
+                                        }
+                                   ]
+                              },
+                              "natural_key": {
+                                   "workflow_job_template": {
+                                        "organization": null,
+                                        "name": "Satellite - Wait for Capsule Sync then Promote",
+                                        "type": "workflow_job_template"
+                                   },
+                                   "type": "workflow_job_template_node"
+                              }
+                         }
+                    ],
+                    "labels": [],
+                    "notification_templates_started": [],
+                    "notification_templates_success": [],
+                    "notification_templates_error": [],
+                    "notification_templates_approvals": [],
+                    "survey_spec": {}
+               },
+               "natural_key": {
+                    "organization": null,
+                    "name": "Satellite - Wait for Capsule Sync then Promote",
+                    "type": "workflow_job_template"
+               }
+          }
+     ]
+}

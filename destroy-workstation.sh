@@ -9,7 +9,7 @@ then
     echo "CTRL-C WITHIN 5 SECS TO CANCEL. Running the teardown command."
     sleep 5
     set -x
-    timeout 10 ${sshcmd} "cd workshops/provisioner/ ; ansible-playbook -e @workshop-${workshopname}.yml teardown_lab.yml"
+    timeout --foreground 10 ${sshcmd} "cd workshops/provisioner/ ; ansible-playbook -e @workshop-${workshopname}.yml teardown_lab.yml"
     set +x
   fi
   #ansible-playbook --vault-password-file ./vault_secret -i workstation-inventory -e "destroy_workshop=yes" tasks/destroy-workshop-workstation.yml

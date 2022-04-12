@@ -2,6 +2,7 @@
 ## https://github.com/ansible/workshops/tree/devel/provisioner#requirements
 ## don't forget to go to https://access.redhat.com/management/subscription_allocations to create a manifest.zip and place in the files directory
 # locked the repo version to guarantee success
+aws_user: fedora
 workshop_revision: 2b0940c7bf7e24fb7cafc0aac40e6b989ac18e6d
 workshop_deps:
   pipmods: 
@@ -14,6 +15,23 @@ workshop_deps:
   - requests-credssp
   - https://releases.ansible.com/ansible-tower/cli/ansible-tower-cli-latest.tar.gz
   rpms:
+#  - ansible
+#  - ansible-pcp
+#  - python3-pip
+  - grafana
+  - grafana-pcp
+  - pcp
+  - pcp-zeroconf
   - git
-  - ansible
-  - python3-pip
+cockpit_rpms:
+#- cockpit-pcp
+- cockpit-composer
+- cockpit-storaged
+- cockpit-podman
+- cockpit-networkmanager
+- cockpit-selinux
+- cockpit-sosreport
+- cockpit-kdump
+- cockpit-packagekit
+- cockpit-session-recording
+- cockpit-navigator

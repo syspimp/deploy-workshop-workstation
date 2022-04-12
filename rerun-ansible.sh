@@ -11,8 +11,10 @@
 #
 # for debugging
 #ansible-playbook -vvv --vault-password-file ./vault_secret launch-workshop-workstation.yml
-ansible-playbook --vault-password-file ./vault_secret tasks/launch-workshop-workstation.yml
-
+aws_user=fedora
+ansible-playbook --vault-password-file ./vault_secret \
+    -e "aws_user=${aws_user}" \
+    tasks/launch-workshop-workstation.yml
 if [[ -e "workshop-details" ]]
 then
   grep 'auto_launch: no' ./workshop-details > /dev/null && exit 0
